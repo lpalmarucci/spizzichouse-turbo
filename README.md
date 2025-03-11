@@ -72,6 +72,6 @@ If you want to contribute, **fork** the project, create a **branch** for your ch
 
 ---
 
-**Author**: [Your Name](https://github.com/lpalmarucci)\
+**Author**: [Luca Palmarucci](https://github.com/lpalmarucci)\
 **License**: MIT
 
