@@ -16,7 +16,7 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-4">
               <SignedOut>
-                <Button asChild>
+                <Button asChild className='cursor-pointer'>
                   <SignInButton mode="redirect" />
                 </Button>
               </SignedOut>
@@ -41,7 +41,7 @@ export default function Page() {
                   </p>
                 </div>
                 <SignedOut>
-                  <Button asChild>
+                  <Button asChild className='cursor-pointer'>
                     <SignInButton mode="redirect">Get started</SignInButton>
                   </Button>
                 </SignedOut>
