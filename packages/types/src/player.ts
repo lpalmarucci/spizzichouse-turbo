@@ -8,12 +8,12 @@ export type Player = {
 };
 
 export enum PlayerLevel {
-  BEGINNER,
-  INTERMEDIATE,
-  EXPERT,
+  BEGINNER = "BEGINNER",
+  INTERMEDIATE = "INTERMEDIATE",
+  EXPERT = "EXPERT",
 }
 
 export enum PlayerStatus {
-  ACTIVE,
-  INACTIVE,
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
 }
