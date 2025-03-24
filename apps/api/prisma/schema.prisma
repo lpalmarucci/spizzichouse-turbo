@@ -15,12 +15,13 @@ datasource db {
 }
 
 model Player {
-  id     String       @id @default(uuid())
-  name   String
-  email  String
-  bio    String
-  level  PlayerLevel
-  status PlayerStatus
+  id        String       @id @default(uuid())
+  name      String
+  email     String
+  bio       String
+  createdAt DateTime     @default(now())
+  level     PlayerLevel
+  status    PlayerStatus
 }
 
 enum PlayerLevel {

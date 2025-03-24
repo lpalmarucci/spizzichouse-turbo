@@ -10,6 +10,7 @@ CREATE TABLE "Player" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "bio" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "level" "PlayerLevel" NOT NULL,
     "status" "PlayerStatus" NOT NULL,
 
