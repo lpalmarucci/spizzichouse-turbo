@@ -7,6 +7,7 @@ CREATE TYPE "PlayerStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 -- CreateTable
 CREATE TABLE "Player" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "bio" TEXT NOT NULL,
     "level" "PlayerLevel" NOT NULL,
