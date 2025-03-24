@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from '@nestjs/class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength } from '@nestjs/class-validator';
 import { PlayerLevel, PlayerStatus } from '@workspace/types';
 
 export class CreatePlayerDto {
@@ -12,7 +12,6 @@ export class CreatePlayerDto {
 
   @IsString()
   @MaxLength(500)
-  @IsOptional()
   bio: string;
 
   @IsEnum(PlayerLevel)

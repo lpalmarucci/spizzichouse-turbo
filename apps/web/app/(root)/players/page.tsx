@@ -280,7 +280,7 @@ const mockPlayers = [
     status: "active",
     lastActive: "2025-03-20",
     avatar: null,
-    bio: "Giocatrice equilibrata che eccelle sia in difesa che in attacco. Ottima team player.",
+    bio: "Giocatrice equilibrata che eccelle sia in difesa che in attacco. Ottima team players.",
     achievements: ["Miglior Giocatrice di Squadra", "Premio Versatilità"],
   },
 ];
