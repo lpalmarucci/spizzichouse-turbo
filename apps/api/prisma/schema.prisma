@@ -12,3 +12,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Player {
+  id     String       @id @default(uuid())
+  email  String
+  bio    String
+  level  PlayerLevel
+  status PlayerStatus
+}
+
+enum PlayerLevel {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+enum PlayerStatus {
+  ACTIVE
+  INACTIVE
+}
