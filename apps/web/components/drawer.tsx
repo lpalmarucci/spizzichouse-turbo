@@ -41,7 +41,7 @@ export function Drawer() {
       title: "Matches",
     },
     {
-      href: "/player",
+      href: "/players",
       icon: Users,
       title: "Players",
     },
