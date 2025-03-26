@@ -29,7 +29,7 @@ export default function LayoutDashboardPage({
             </Tooltip>
           </div>
           <Separator />
-          <div>{children}</div>
+          <div className="py-4">{children}</div>
         </section>
       </main>
     </SidebarProvider>
