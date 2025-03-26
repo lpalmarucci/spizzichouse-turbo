@@ -22,7 +22,6 @@ import {
   MoreHorizontal,
   Pencil,
   Star,
-  Trash2,
   Trophy,
 } from "lucide-react";
 import Link from "next/link";
@@ -67,13 +66,7 @@ const getStatusText = (status: PlayerStatus) => {
   }
 };
 
-export function PlayerCard({
-  player,
-  onDelete,
-}: {
-  player: Player;
-  onDelete: (id: string) => void;
-}) {
+export function PlayerCard({ player }: { player: Player }) {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -112,10 +105,6 @@ export function PlayerCard({
                   <Pencil className="mr-2 h-4 w-4" />
                   Modifica
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onDelete(player.id)}>
-                <Trash2 className="mr-2 h-4 w-4" />
-                Elimina
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
