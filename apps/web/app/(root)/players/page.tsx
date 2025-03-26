@@ -8,6 +8,12 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getPlayers } from "@/features/player/player.actions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
+import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 
 const mockPlayers = [
   {
@@ -247,12 +253,12 @@ export default async function PlayersPage() {
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <div>
             <div className="flex flex-row items-center gap-1">
-              {/*<Tooltip delayDuration={700}>*/}
-              {/*  <TooltipTrigger asChild>*/}
-              {/*    <SidebarTrigger className="cursor-pointer" />*/}
-              {/*  </TooltipTrigger>*/}
-              {/*  <TooltipContent side="bottom">Toggle drawer</TooltipContent>*/}
-              {/*</Tooltip>*/}
+              <Tooltip delayDuration={700}>
+                <TooltipTrigger asChild>
+                  <SidebarTrigger className="cursor-pointer" />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Toggle drawer</TooltipContent>
+              </Tooltip>
               <h1 className="text-3xl font-bold tracking-tight">Giocatori</h1>
             </div>
             <p className="text-muted-foreground">
