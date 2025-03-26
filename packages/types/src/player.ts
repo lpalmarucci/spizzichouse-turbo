@@ -5,6 +5,7 @@ export type Player = {
   bio?: string;
   level: PlayerLevel;
   status: PlayerStatus;
+  createdAt: Date;
 };
 
 export enum PlayerLevel {
