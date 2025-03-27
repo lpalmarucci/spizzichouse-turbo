@@ -1,3 +1,5 @@
+import type React from "react";
+import { PlayerEdit } from "@/features/player/components/edit/player-edit";
 import {
   dehydrate,
   HydrationBoundary,
@@ -5,9 +7,8 @@ import {
 } from "@tanstack/react-query";
 import { getPlayerById } from "@/features/player/player.actions";
 import { PLAYER_QUERY_KEY } from "@/features/player/player.query";
-import { PlayerDetail } from "@/features/player/components/player-detail";
 
-export default async function PlayerDetailPage({
+export default async function EditPlayerPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -23,7 +24,7 @@ export default async function PlayerDetailPage({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PlayerDetail id={id} />
+      <PlayerEdit id={id} />
     </HydrationBoundary>
   );
 }

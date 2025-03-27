@@ -36,9 +36,11 @@ export function PlayerDetail({ id }: PlayerDetailProps) {
               Profilo giocatore e statistiche
             </p>
           </div>
-          <Button className="gap-4 cursor-pointer">
-            <Edit />
-            Modifica
+          <Button asChild className="gap-4 cursor-pointer">
+            <Link href={`/players/${id}/edit`}>
+              <Edit />
+              Modifica
+            </Link>
           </Button>
         </div>
       </div>
