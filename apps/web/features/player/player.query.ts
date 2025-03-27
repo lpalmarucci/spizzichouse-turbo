@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Player } from "@workspace/types";
+import { Player } from "@workspace/db";
 import { getPlayerById, getPlayers } from "@/features/player/player.actions";
 
 export const PLAYER_QUERY_KEY = "player";

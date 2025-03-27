@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength } from '@nestjs/class-validator';
-import { PlayerLevel, PlayerStatus } from '@workspace/types';
+import { PlayerLevel, PlayerStatus } from '@workspace/db';
 
 export class CreatePlayerDto {
   @IsString()

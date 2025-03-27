@@ -27,7 +27,7 @@ import {
 import Link from "next/link";
 import { Badge } from "@workspace/ui/components/badge";
 import { Progress } from "@workspace/ui/components/progress";
-import { Player } from "@workspace/types";
+import { Player } from "@workspace/db";
 import { getStatusColor, getStatusText } from "@/features/player/utils";
 
 export function PlayerCard({ player }: { player: Player }) {
