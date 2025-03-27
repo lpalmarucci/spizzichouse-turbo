@@ -1,9 +1,8 @@
 "use server";
 
 import { getAxiosInstance } from "@/api/axios";
-import { AxiosRequestConfig } from "axios";
-import { auth } from "@clerk/nextjs/server";
-import { clerkClient } from "@clerk/clerk-sdk-node";
+import { AxiosRequestConfig, HttpStatusCode } from "axios";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function handleRequest<T>(
   method: AxiosRequestConfig["method"],
@@ -12,6 +11,7 @@ export async function handleRequest<T>(
 ) {
   const { sessionId, redirectToSignIn } = await auth();
   const axios = await getAxiosInstance();
+  const client = await clerkClient();
   try {
     const response = await axios<T>({
       method,
@@ -19,9 +19,9 @@ export async function handleRequest<T>(
       url: endpoint,
     });
     return response.data;
-  } catch (e) {
-    if (sessionId) {
-      await clerkClient.sessions.revokeSession(sessionId);
+  } catch (e: any) {
+    if (sessionId && e.response.status === HttpStatusCode.Unauthorized) {
+      await client.sessions.revokeSession(sessionId);
       redirectToSignIn();
     }
   }
