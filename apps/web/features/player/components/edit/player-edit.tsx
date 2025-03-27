@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import {
   Card,
@@ -18,7 +17,16 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetPlayerById } from "@/features/player/player.query";
-import { Player } from "@workspace/db";
+import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
+import { Separator } from "@workspace/ui/components/separator";
+import { Switch } from "@workspace/ui/components/switch";
 
 interface PlayerEditProps {
   id: string;
@@ -69,13 +77,14 @@ export function PlayerEdit({ id }: PlayerEditProps) {
       .join("")
       .toUpperCase();
   };
+
+  if (!player) return;
+
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <Button variant="outline" size="icon" asChild>
-          <Link href={`/players/${id}`}>
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
+        <Button variant="outline" size="icon" onClick={() => router.back()}>
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
           <h1 className="text-3xl font-bold tracking-tight">
@@ -141,6 +150,61 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                     setPlayer({ ...player, bio: e.target.value })
                   }
                   className="min-h-[100px] border-primary/20 focus-visible:ring-primary/30"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Livello e Stato</CardTitle>
+              <CardDescription>
+                Aggiorna il livello e lo stato del giocatore
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="level">Livello</Label>
+                <Select
+                  value={player.level}
+                  onValueChange={(value: PlayerLevel) =>
+                    setPlayer({ ...player, level: value })
+                  }
+                >
+                  <SelectTrigger
+                    id="level"
+                    className="border-primary/20 focus:ring-primary/30"
+                  >
+                    <SelectValue placeholder="Seleziona un livello" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(PlayerLevel).map(([key, value]) => (
+                      <SelectItem value={key!}>{value}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="status">Stato Attivo</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Determina se il giocatore è attualmente attivo
+                  </p>
+                </div>
+                <Switch
+                  id="status"
+                  checked={player.status === PlayerStatus.ACTIVE}
+                  onCheckedChange={(checked) =>
+                    setPlayer({
+                      ...player,
+                      status: checked
+                        ? PlayerStatus.ACTIVE
+                        : PlayerStatus.INACTIVE,
+                    })
+                  }
                 />
               </div>
             </CardContent>
