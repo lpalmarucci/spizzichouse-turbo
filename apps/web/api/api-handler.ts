@@ -2,16 +2,16 @@
 
 import { getAxiosInstance } from "@/api/axios";
 import { AxiosRequestConfig, HttpStatusCode } from "axios";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function handleRequest<T>(
   method: AxiosRequestConfig["method"],
   endpoint: string,
   body?: Object,
 ) {
-  const { sessionId, redirectToSignIn } = await auth();
   const axios = await getAxiosInstance();
-  const client = await clerkClient();
+  const cookieStore = await cookies();
   try {
     const response = await axios<T>({
       method,
@@ -20,9 +20,11 @@ export async function handleRequest<T>(
     });
     return response.data;
   } catch (e: any) {
-    if (sessionId && e.response.status === HttpStatusCode.Unauthorized) {
-      await client.sessions.revokeSession(sessionId);
-      redirectToSignIn();
+    console.log(e.response);
+    if (e.response.status === HttpStatusCode.Unauthorized) {
+      cookieStore.delete("session");
+      redirect("/");
     }
+    return {} as T;
   }
 }

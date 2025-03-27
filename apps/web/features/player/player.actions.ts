@@ -8,5 +8,5 @@ export async function getPlayers() {
 }
 
 export async function getPlayerById(id: string) {
-  return handleRequest<Player[]>("GET", `/players/${id}`);
+  return handleRequest<Player>("GET", `/players/${id}`);
 }

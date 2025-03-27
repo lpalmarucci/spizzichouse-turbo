@@ -2,9 +2,11 @@ import { Button } from "@workspace/ui/components/button";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { getSession } from "@/lib/auth";
 
-export default function Page() {
+export default async function Page() {
+  const session = await getSession();
+
   return (
     <div className="flex items-center justify-center min-h-svh">
       <div className="flex min-h-screen flex-col min-w-6xl">
@@ -15,14 +17,13 @@ export default function Page() {
               <span className="text-xl font-bold">Spizzichouse</span>
             </div>
             <div className="flex items-center gap-4">
-              <SignedOut>
-                <Button asChild className='cursor-pointer'>
-                  <SignInButton mode="redirect" />
+              {session ? (
+                <Button className="cursor-pointer">Dashboard</Button>
+              ) : (
+                <Button asChild className="cursor-pointer">
+                  <Link href="/signin">Signin</Link>
                 </Button>
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
+              )}
             </div>
           </div>
         </header>
@@ -40,16 +41,13 @@ export default function Page() {
                     visualizations.
                   </p>
                 </div>
-                <SignedOut>
-                  <Button asChild className='cursor-pointer'>
-                    <SignInButton mode="redirect">Get started</SignInButton>
-                  </Button>
-                </SignedOut>
-                <SignedIn>
+                {session ? (
                   <Button asChild>
                     <Link href="/dashboard">Go to dashboard</Link>
                   </Button>
-                </SignedIn>
+                ) : (
+                  <Button className="cursor-pointer">Get started</Button>
+                )}
               </div>
             </div>
           </section>

@@ -4,6 +4,7 @@ import { User } from './decorators/user.decorator';
 import { Public } from './decorators/public.decorator';
 import { JwtAuthGuard } from './auth/guard/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

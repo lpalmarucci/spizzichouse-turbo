@@ -22,8 +22,8 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
 import { cn } from "@workspace/ui/lib/utils";
+import { Button } from "@workspace/ui/components/button";
 
 export function Drawer() {
   const pathname = usePathname();
@@ -95,7 +95,7 @@ export function Drawer() {
 
         <SidebarFooter className="border-t">
           <div className="inline-flex items-center justify-center p-4 gap-3 ">
-            <UserButton />
+            <Button>USERRR</Button>
             {sidebar.open && (
               <span
                 className={cn(
