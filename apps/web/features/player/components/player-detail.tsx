@@ -21,7 +21,7 @@ export function PlayerDetail({ id }: PlayerDetailProps) {
 
   return (
     <div className="w-full py-2 flex flex-col justify-center gap-4">
-      <div className="w-full flex items-center gap-2">
+      <div className="w-full flex items-center gap-4">
         <Button asChild size="lg" variant="outline" className="cursor-pointer">
           <Link href="/players">
             <ArrowLeft />
