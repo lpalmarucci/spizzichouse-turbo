@@ -1,16 +1,12 @@
-import { getAxiosInstance } from "@/api/axios";
+"use server";
+
 import { Player } from "@workspace/db";
+import { handleRequest } from "@/api/api-handler";
 
 export async function getPlayers() {
-  const axios = await getAxiosInstance();
-  const response = await axios.get("/players");
-  console.log(response.data);
-  return response.data;
+  return handleRequest<Player[]>("GET", "/players");
 }
 
 export async function getPlayerById(id: string) {
-  const axios = await getAxiosInstance();
-  const response = await axios.get<Player>(`/players/${id}`);
-  console.log(response.data);
-  return response.data;
+  return handleRequest<Player[]>("GET", `/players/${id}`);
 }

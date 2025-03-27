@@ -10,16 +10,11 @@ const axios = Axios.create({
 async function getAxiosInstance() {
   const { getToken } = await auth();
 
-  axios.interceptors.request.use(
-    async (config) => {
-      const token = await getToken();
-      config.headers.Authorization = `Bearer ${token}`;
-      return config;
-    },
-    (err) => {
-      console.log("axios ", err);
-    },
-  );
+  axios.interceptors.request.use(async (config) => {
+    const token = await getToken();
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
 
   return axios;
 }
