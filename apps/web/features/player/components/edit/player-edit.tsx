@@ -27,6 +27,7 @@ import {
 } from "@workspace/ui/components/select";
 import { Separator } from "@workspace/ui/components/separator";
 import { Switch } from "@workspace/ui/components/switch";
+import { getInitials } from "@/features/player/utils";
 
 interface PlayerEditProps {
   id: string;
@@ -67,15 +68,6 @@ export function PlayerEdit({ id }: PlayerEditProps) {
     // Qui andrebbe la logica per salvare le modifiche
     console.log("Player updated:", { player });
     router.push(`/players/${id}`);
-  };
-
-  // Funzione per ottenere le iniziali del nome
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .toUpperCase();
   };
 
   if (!player) return;

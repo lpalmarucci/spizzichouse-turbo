@@ -1,17 +1,16 @@
 "use server";
 
 import Axios from "axios";
-import { auth } from "@clerk/nextjs/server";
+import { getSession } from "@/lib/auth";
 
 const axios = Axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 async function getAxiosInstance() {
-  const { getToken } = await auth();
+  const token = await getSession();
 
   axios.interceptors.request.use(async (config) => {
-    const token = await getToken();
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   });
