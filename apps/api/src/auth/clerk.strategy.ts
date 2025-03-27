@@ -26,9 +26,7 @@ export class ClerkStrategy extends PassportStrategy(Strategy, 'clerk') {
         secretKey: this.configService.get('CLERK_SECRET_KEY'),
       });
 
-      const user = await this.clerkClient.users.getUser(tokenPayload.sub);
-
-      return user;
+      return this.clerkClient.users.getUser(tokenPayload.sub);
     } catch (error) {
       console.error(error);
       throw new UnauthorizedException('Invalid token');
