@@ -1,4 +1,4 @@
-import { PlayerStatus } from "@workspace/types";
+import { PlayerStatus } from "@workspace/db";
 
 export const getLevelColor = (level: string) => {
   switch (level) {

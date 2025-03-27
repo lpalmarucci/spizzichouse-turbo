@@ -17,7 +17,7 @@ import {
 } from "@workspace/ui/components/tabs";
 import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/types";
+import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
 import { useGetPlayers } from "@/features/player/player.query";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
 
@@ -42,6 +42,8 @@ export function PlayerSection() {
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const { data } = useGetPlayers();
+
+  console.log({ data });
 
   const filteredPlayers = useMemo(() => {
     if (!data) return [];

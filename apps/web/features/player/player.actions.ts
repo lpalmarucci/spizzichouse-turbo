@@ -1,9 +1,10 @@
 import { getAxiosInstance } from "@/api/axios";
-import { Player } from "@workspace/types";
+import { Player } from "@workspace/db";
 
 export async function getPlayers() {
   const axios = await getAxiosInstance();
   const response = await axios.get("/players");
+  console.log(response.data);
   return response.data;
 }
 

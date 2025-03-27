@@ -1,6 +1,6 @@
 "use client";
 
-import { Player } from "@workspace/types";
+import { Player } from "@workspace/db";
 import {
   Card,
   CardContent,
@@ -49,7 +49,7 @@ export function PlayerDetailCard({ player }: PlayerDetailCardProps) {
         <div className="flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4 text-muted-foreground" />
           <span>
-            Iscritto il {new Date(player.createdAt).toLocaleDateString()}
+            Iscritto il {new Date(player.createdAt).toLocaleDateString("en-UK")}
           </span>
         </div>
 
