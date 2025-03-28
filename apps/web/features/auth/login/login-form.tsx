@@ -101,11 +101,11 @@ export function LoginForm() {
             <Button
               variant="outline"
               className="border-primary/20 w-full cursor-pointer"
-              onClick={() =>
+              onClick={() => {
                 router.push(
                   `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`,
-                )
-              }
+                );
+              }}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path

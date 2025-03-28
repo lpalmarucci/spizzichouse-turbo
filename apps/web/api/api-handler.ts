@@ -20,6 +20,7 @@ export async function handleRequest<T>(
     });
     return response.data;
   } catch (e: any) {
+    console.log(e);
     if (e.response.status === HttpStatusCode.Unauthorized) {
       cookieStore.delete("session");
       redirect("/");

@@ -2,15 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
-import { PrismaService } from '../../prisma/prisma.service';
 import { ApiConfig, GoogleAuthConfig } from '../../config/types';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(
-    private configService: ConfigService<ApiConfig>,
-    private prismaService: PrismaService,
-  ) {
+  constructor(private configService: ConfigService<ApiConfig>) {
     const googleAuth: GoogleAuthConfig = configService.get('auth').google;
     super({
       clientID: googleAuth?.clientID,

@@ -3,9 +3,12 @@ import { Trophy } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const session = await getSession();
+
+  if (session) redirect("/dashboard");
 
   return (
     <div className="flex items-center justify-center min-h-svh">
@@ -18,10 +21,12 @@ export default async function Page() {
             </div>
             <div className="flex items-center gap-4">
               {session ? (
-                <Button className="cursor-pointer">Dashboard</Button>
+                <Button asChild className="cursor-pointer">
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>
               ) : (
                 <Button asChild className="cursor-pointer">
-                  <Link href="/signin">Signin</Link>
+                  <Link href="/auth/signin">Signin</Link>
                 </Button>
               )}
             </div>

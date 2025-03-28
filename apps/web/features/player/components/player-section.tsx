@@ -43,8 +43,6 @@ export function PlayerSection() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const { data } = useGetPlayers();
 
-  console.log({ data });
-
   const filteredPlayers = useMemo(() => {
     if (!data) return [];
     return data.filter((player) => {

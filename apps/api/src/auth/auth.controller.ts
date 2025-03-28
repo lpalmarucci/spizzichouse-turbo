@@ -27,15 +27,16 @@ export class AuthController {
       maxAge: 2592000000,
       sameSite: true,
       secure: false,
+      httpOnly: true,
     });
 
-    const redirectUrl = this.configService.get('frontendUrl');
-    return res.redirect(redirectUrl);
+    const redirectUrl = this.configService.get('frontendAfterGoogleSigninUrl');
+    return res.redirect(`${redirectUrl}?token=${token}`);
   }
 
   @Get('protected')
   @UseGuards(JwtAuthGuard)
   hello() {
-    return 'hello this is protected from jwt with google';
+    return 'hello this is protected from jwt with callback';
   }
 }
