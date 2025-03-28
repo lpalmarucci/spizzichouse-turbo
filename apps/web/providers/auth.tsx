@@ -7,14 +7,14 @@ import { useGetUserInfo } from "@/features/auth/auth.query";
 
 export type AuthContextType = {
   userInfo?: UserInfo;
-  token: string | null;
+  token: string | undefined;
 };
 
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { data } = useGetUserInfo();
-  const [token, setToken] = useState<string | null>();
+  const [token, setToken] = useState<string | undefined>();
 
   useEffect(() => {
     const sessionCookie = document.cookie
