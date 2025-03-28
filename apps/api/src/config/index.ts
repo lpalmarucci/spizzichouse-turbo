@@ -17,5 +17,7 @@ export default (): ApiConfig => ({
     user: process.env.POSTGRES_USER!,
     password: process.env.POSTGRES_PASSWORD!,
   },
-  frontendAfterGoogleSigninUrl: process.env.FRONTEND_AFTER_GOOGLE_SIGN_IN_URL!,
+  frontendUrl: process.env.FRONTEND_URL!,
+  redirectAfterSignInUrl: `${process.env.FRONTEND_URL!}/auth/callback`,
+  redirectSignInUrl: `${process.env.FRONTEND_URL!}/auth/signin`,
 });

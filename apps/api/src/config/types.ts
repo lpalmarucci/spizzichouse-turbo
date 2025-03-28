@@ -4,7 +4,9 @@ export type ApiConfig = {
     jwt: JwtAuthConfig;
   };
   database: DatabaseConfig;
-  frontendAfterGoogleSigninUrl: string;
+  frontendUrl: string;
+  redirectAfterSignInUrl: string;
+  redirectSignInUrl: string;
 };
 
 export type GoogleAuthConfig = {

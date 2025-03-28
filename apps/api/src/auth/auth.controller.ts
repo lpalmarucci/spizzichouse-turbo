@@ -20,6 +20,11 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleAuthCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const redirectAfterSignInUrl = this.configService.get('redirectAfterSignInUrl');
+    const redirectSignInUrl = this.configService.get('redirectSignInUrl');
+    if (req.params.error) {
+      return res.redirect(redirectSignInUrl);
+    }
     const token = await this.authService.signIn((req as any).user);
 
     res.cookie('session', token, {
@@ -29,8 +34,7 @@ export class AuthController {
       httpOnly: true,
     });
 
-    const redirectUrl = this.configService.get('frontendAfterGoogleSigninUrl');
-    return res.redirect(`${redirectUrl}?token=${token}`);
+    return res.redirect(`${redirectAfterSignInUrl}?token=${token}`);
   }
 
   @Get('protected')

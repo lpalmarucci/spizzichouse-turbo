@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePlayerDto } from '../players/dto/create-player.dto';
-import { Player } from '@workspace/db';
+import { Player, PlayerLevel, PlayerStatus } from '@workspace/db';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,13 @@ export class AuthService {
     let user = await this.findUserByEmail(requestUser.email);
 
     if (!user) {
-      user = await this.registerUser(requestUser);
+      user = await this.registerUser({
+        name: requestUser.name,
+        email: requestUser.email,
+        bio: '',
+        level: PlayerLevel.BEGINNER,
+        status: PlayerStatus.ACTIVE,
+      });
     }
 
     return this.jwtService.sign({
