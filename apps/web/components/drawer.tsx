@@ -22,8 +22,7 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { cn } from "@workspace/ui/lib/utils";
+import { UserDropdown } from "@/components/user-drodown";
 
 export function Drawer() {
   const pathname = usePathname();
@@ -95,16 +94,7 @@ export function Drawer() {
 
         <SidebarFooter className="border-t">
           <div className="inline-flex items-center justify-center p-4 gap-3 ">
-            <UserButton />
-            {sidebar.open && (
-              <span
-                className={cn(
-                  "font-bold text-md tracking-tight transition text-nowrap inline-block animate-fade-in",
-                )}
-              >
-                Luca Palmarucci
-              </span>
-            )}
+            <UserDropdown showName={sidebar.open} />
           </div>
         </SidebarFooter>
       </Sidebar>
