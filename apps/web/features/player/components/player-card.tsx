@@ -28,7 +28,11 @@ import Link from "next/link";
 import { Badge } from "@workspace/ui/components/badge";
 import { Progress } from "@workspace/ui/components/progress";
 import { Player } from "@workspace/db";
-import { getStatusColor, getStatusText } from "@/features/player/utils";
+import {
+  getLevelColor,
+  getStatusColor,
+  getStatusText,
+} from "@/features/player/utils";
 
 export function PlayerCard({ player }: { player: Player }) {
   const getInitials = (name: string) => {
@@ -74,6 +78,7 @@ export function PlayerCard({ player }: { player: Player }) {
           </DropdownMenu>
         </div>
         <div className="flex items-center gap-2 mt-2">
+          <Badge className={getLevelColor(player.level)}>{player.level}</Badge>
           <Badge className={getStatusColor(player.status)}>
             {getStatusText(player.status)}
           </Badge>

@@ -21,19 +21,7 @@ import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
 import { useGetPlayers } from "@/features/player/player.query";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
 
-type SortField =
-  | "name"
-  | "matches"
-  | "wins"
-  | "winRate"
-  | "avgPosition"
-  | "level"
-  | "lastActive";
 type SortDirection = "asc" | "desc";
-
-interface PlayerSectionProps {
-  data: any[];
-}
 
 export function PlayerSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -194,19 +182,6 @@ export function PlayerSection() {
               ))}
           </div>
         </TabsContent>
-
-        {/*<TabsContent value="top" className="mt-4">*/}
-        {/*  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">*/}
-        {/*    {sortedPlayers*/}
-        {/*      // .sort((a, b) => b.winRate - a.winRate)*/}
-        {/*      .slice(0, 6)*/}
-        {/*      .map((player, index) => (*/}
-        {/*        <div key={player.id}>*/}
-        {/*          <PlayerCard player={player}  />*/}
-        {/*        </div>*/}
-        {/*      ))}*/}
-        {/*  </div>*/}
-        {/*</TabsContent>*/}
       </Tabs>
     </>
   );

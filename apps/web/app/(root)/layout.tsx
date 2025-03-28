@@ -10,6 +10,7 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { Separator } from "@workspace/ui/components/separator";
 import { AuthProvider } from "@/providers/auth";
+import { Toaster } from "@workspace/ui/components/sonner";
 
 export default function LayoutDashboardPage({
   children,
@@ -35,6 +36,7 @@ export default function LayoutDashboardPage({
           </section>
         </main>
       </SidebarProvider>
+      <Toaster />
     </AuthProvider>
   );
 }

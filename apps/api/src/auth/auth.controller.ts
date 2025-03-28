@@ -22,7 +22,6 @@ export class AuthController {
   async googleAuthCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const token = await this.authService.signIn((req as any).user);
 
-    console.log({ token });
     res.cookie('session', token, {
       maxAge: 2592000000,
       sameSite: true,

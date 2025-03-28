@@ -16,7 +16,10 @@ import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGetPlayerById } from "@/features/player/player.query";
+import {
+  useGetPlayerById,
+  usePatchPlayer,
+} from "@/features/player/player.query";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
 import {
   Select,
@@ -28,6 +31,19 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { Switch } from "@workspace/ui/components/switch";
 import { getInitials } from "@/features/player/utils";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@workspace/ui/zod-resolver";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui/components/form";
+import { toast } from "sonner";
 
 interface PlayerEditProps {
   id: string;
@@ -58,17 +74,41 @@ const playerData = {
   ],
 };
 
+const playerSchema = z.object({
+  name: z.string(),
+  bio: z.string().max(255),
+  level: z.enum([
+    PlayerLevel.BEGINNER,
+    PlayerLevel.INTERMEDIATE,
+    PlayerLevel.EXPERT,
+  ]),
+  status: z.enum([PlayerStatus.ACTIVE, PlayerStatus.INACTIVE]),
+});
+
 export function PlayerEdit({ id }: PlayerEditProps) {
   const router = useRouter();
   const { data } = useGetPlayerById(id);
   const [player, setPlayer] = useState<Player | undefined>(data);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Qui andrebbe la logica per salvare le modifiche
-    console.log("Player updated:", { player });
-    router.push(`/players/${id}`);
-  };
+  const mutation = usePatchPlayer(id, () => {
+    toast("Player updated successfully!");
+    router.back();
+  });
+  const form = useForm<z.infer<typeof playerSchema>>({
+    resolver: zodResolver(playerSchema),
+    defaultValues: {
+      bio: player?.bio,
+      name: player?.name,
+      level: player?.level,
+      status: player?.status,
+    },
+  });
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof playerSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log({ values });
+    mutation.mutate({ ...values, id });
+  }
 
   if (!player) return;
 
@@ -88,132 +128,170 @@ export function PlayerEdit({ id }: PlayerEditProps) {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid gap-6">
-          <Card>
-            <CardHeader>
-              <div className="w-full flex items-center justify-between">
-                <div>
-                  <CardTitle>Informazioni Personali</CardTitle>
-                  <CardDescription>
-                    Modifica i dettagli di base del giocatore
-                  </CardDescription>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="grid gap-6">
+            <Card>
+              <CardHeader>
+                <div className="w-full flex items-center justify-between">
+                  <div>
+                    <CardTitle>Informazioni Personali</CardTitle>
+                    <CardDescription>
+                      Modifica i dettagli di base del giocatore
+                    </CardDescription>
+                  </div>
+                  <Avatar className="h-12 w-12 border-2 border-primary/20">
+                    <AvatarFallback className="text-xl bg-primary text-primary-foreground">
+                      {getInitials(player.name)}
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
-                <Avatar className="h-12 w-12 border-2 border-primary/20">
-                  <AvatarFallback className="text-xl bg-primary text-primary-foreground">
-                    {getInitials(player.name)}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Nome Completo</Label>
-                <Input
-                  id="name"
-                  value={player.name}
-                  onChange={(e) =>
-                    setPlayer({ ...player, name: e.target.value })
-                  }
-                  className="border-primary/20 focus-visible:ring-primary/30"
-                />
-              </div>
-
-              <div className="grid gap-2 cursor-not-allowed">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={player.email}
-                  disabled
-                  onChange={(e) =>
-                    setPlayer({ ...player, email: e.target.value })
-                  }
-                  className="border-primary/20 focus-visible:ring-primary/30"
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="bio">Biografia</Label>
-                <Textarea
-                  id="bio"
-                  value={player.bio}
-                  onChange={(e) =>
-                    setPlayer({ ...player, bio: e.target.value })
-                  }
-                  className="min-h-[100px] border-primary/20 focus-visible:ring-primary/30"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Livello e Stato</CardTitle>
-              <CardDescription>
-                Aggiorna il livello e lo stato del giocatore
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-2">
-                <Label htmlFor="level">Livello</Label>
-                <Select
-                  value={player.level}
-                  onValueChange={(value: PlayerLevel) =>
-                    setPlayer({ ...player, level: value })
-                  }
-                >
-                  <SelectTrigger
-                    id="level"
-                    className="border-primary/20 focus:ring-primary/30"
-                  >
-                    <SelectValue placeholder="Seleziona un livello" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(PlayerLevel).map(([key, value]) => (
-                      <SelectItem value={key!}>{value}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="status">Stato Attivo</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Determina se il giocatore è attualmente attivo
-                  </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            className="border-primary/20 focus-visible:ring-primary/30"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <Switch
-                  id="status"
-                  checked={player.status === PlayerStatus.ACTIVE}
-                  onCheckedChange={(checked) =>
-                    setPlayer({
-                      ...player,
-                      status: checked
-                        ? PlayerStatus.ACTIVE
-                        : PlayerStatus.INACTIVE,
-                    })
-                  }
-                />
-              </div>
-            </CardContent>
-          </Card>
 
-          <CardFooter className="flex justify-end gap-2 px-0">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-            >
-              Annulla
-            </Button>
-            <Button type="submit">Salva Modifiche</Button>
-          </CardFooter>
-        </div>
-      </form>
+                <div className="grid gap-2 cursor-not-allowed">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={player.email}
+                    disabled
+                    onChange={(e) =>
+                      setPlayer({ ...player, email: e.target.value })
+                    }
+                    className="border-primary/20 focus-visible:ring-primary/30"
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="bio"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Biografia</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            className="min-h-[100px] border-primary/20 focus-visible:ring-primary/30"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Livello e Stato</CardTitle>
+                <CardDescription>
+                  Aggiorna il livello e lo stato del giocatore
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="level"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Livello</FormLabel>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                          {...field}
+                        >
+                          <FormControl>
+                            <SelectTrigger
+                              id="level"
+                              className="border-primary/20 focus:ring-primary/30 w-full"
+                            >
+                              <SelectValue placeholder="Seleziona un livello" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {Object.values(PlayerLevel).map((value) => (
+                              <SelectItem value={value!} key={value}>
+                                {value}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between">
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem className="w-full flex items-center justify-between">
+                        <div>
+                          <FormLabel>Stato attivo</FormLabel>
+                          <FormDescription>
+                            Determina se il giocatore è attualmente attivo
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value === PlayerStatus.ACTIVE}
+                            onCheckedChange={(val) =>
+                              field.onChange(
+                                val
+                                  ? PlayerStatus.ACTIVE
+                                  : PlayerStatus.INACTIVE,
+                              )
+                            }
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <CardFooter className="flex justify-end gap-2 px-0">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+              >
+                Annulla
+              </Button>
+              <Button type="submit">Salva Modifiche</Button>
+            </CardFooter>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
