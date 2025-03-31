@@ -5,12 +5,11 @@ import {
   getPlayers,
   updatePlayer,
 } from "@/features/player/player.actions";
-import { ResponseError } from "@/lib/types";
 
 export const PLAYER_QUERY_KEY = "player";
 
 export function useGetPlayers() {
-  return useQuery<Player[] | ResponseError>({
+  return useQuery<Player[]>({
     queryKey: [PLAYER_QUERY_KEY],
     queryFn: getPlayers,
     retry: false,
