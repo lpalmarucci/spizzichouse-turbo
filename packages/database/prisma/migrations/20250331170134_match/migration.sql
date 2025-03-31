@@ -1,0 +1,33 @@
+-- CreateEnum
+CREATE TYPE "MatchStatus" AS ENUM ('ACTIVE', 'COMPLETED');
+
+-- AlterTable
+ALTER TABLE "Player" ALTER COLUMN "bio" DROP NOT NULL;
+
+-- CreateTable
+CREATE TABLE "Match" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "status" "MatchStatus" NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "duration" DOUBLE PRECISION,
+
+    CONSTRAINT "Match_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_MatchToPlayer" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_MatchToPlayer_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateIndex
+CREATE INDEX "_MatchToPlayer_B_index" ON "_MatchToPlayer"("B");
+
+-- AddForeignKey
+ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_A_fkey" FOREIGN KEY ("A") REFERENCES "Match"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_B_fkey" FOREIGN KEY ("B") REFERENCES "Player"("id") ON DELETE CASCADE ON UPDATE CASCADE;

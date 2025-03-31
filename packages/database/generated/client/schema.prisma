@@ -18,10 +18,25 @@ model Player {
   id        String       @id @default(uuid())
   name      String
   email     String
-  bio       String
+  bio       String?
   createdAt DateTime     @default(now())
   level     PlayerLevel
   status    PlayerStatus
+  Match     Match[]
+}
+
+model Match {
+  id       String      @id @default(uuid())
+  title    String
+  status   MatchStatus
+  players  Player[]
+  date     DateTime    @default(now())
+  duration Float?
+}
+
+enum MatchStatus {
+  ACTIVE
+  COMPLETED
 }
 
 enum PlayerLevel {
