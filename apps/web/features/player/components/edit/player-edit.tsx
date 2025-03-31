@@ -11,12 +11,14 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
-import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
-import React, { useActionState, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGetPlayerById } from "@/features/player/player.query";
+import {
+  useGetPlayerById,
+  useUpdatePlayer,
+} from "@/features/player/player.query";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
 import {
   Select,
@@ -41,9 +43,8 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { SubmitButton } from "@/components/submit-button";
-import { updatePlayer } from "@/features/player/player.actions";
 import { toast } from "sonner";
-import { ApiResponse, isResponseError } from "@/lib/types";
+import { ScreenLoader } from "@/components/screen-loader";
 
 interface PlayerEditProps {
   id: string;
@@ -59,11 +60,20 @@ const playerSchema = z.object({
     PlayerLevel.EXPERT,
   ]),
   status: z.enum([PlayerStatus.ACTIVE, PlayerStatus.INACTIVE]),
+  createdAt: z.date(),
+  email: z.string(),
 });
 
 export function PlayerEdit({ id }: PlayerEditProps) {
   const router = useRouter();
-  const { data } = useGetPlayerById(id);
+  const { data, error, isFetching } = useGetPlayerById(id);
+  if (isFetching) return <ScreenLoader />;
+  if (error && !data) {
+    toast(`Player ${id} not found`, { id });
+    router.replace("/players");
+    return;
+  }
+
   const [player, setPlayer] = useState<Player | undefined>(data);
   const form = useForm<z.infer<typeof playerSchema>>({
     resolver: zodResolver(playerSchema),
@@ -73,27 +83,24 @@ export function PlayerEdit({ id }: PlayerEditProps) {
       name: player?.name,
       level: player?.level,
       status: player?.status,
+      email: player?.email,
+      createdAt: player?.createdAt,
     },
     mode: "onChange",
   });
 
-  const [state, formAction] = useActionState(updatePlayer, {} as ApiResponse);
+  const {
+    error: errorMutation,
+    mutate,
+    isPending,
+  } = useUpdatePlayer(id, () => {
+    toast("Player updated successfully!");
+    router.push(`/players/${id}`);
+  });
 
-  useEffect(() => {
-    if (!state) return;
-    if (isResponseError(state)) {
-      toast(state.error);
-      return;
-    }
-
-    if (state.status) {
-      toast("Player updated successfully!");
-      router.push(`/players/${id}`);
-      return;
-    }
-  }, [state]);
-
-  if (!player) return;
+  function onFormSubmit() {
+    mutate(form.getValues());
+  }
 
   return (
     <div>
@@ -112,7 +119,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
       </div>
 
       <Form {...form}>
-        <form action={formAction} className="space-y-8">
+        <form className="space-y-8">
           <FormField
             control={form.control}
             name="id"
@@ -138,7 +145,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                   </div>
                   <Avatar className="h-12 w-12 border-2 border-primary/20">
                     <AvatarFallback className="text-xl bg-primary text-primary-foreground">
-                      {getInitials(player.name)}
+                      {getInitials(player?.name ?? "")}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -160,20 +167,6 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
-                </div>
-
-                <div className="grid gap-2 cursor-not-allowed">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={player.email}
-                    disabled
-                    onChange={(e) =>
-                      setPlayer({ ...player, email: e.target.value })
-                    }
-                    className="border-primary/20 focus-visible:ring-primary/30"
                   />
                 </div>
 
@@ -283,7 +276,13 @@ export function PlayerEdit({ id }: PlayerEditProps) {
               >
                 Annulla
               </Button>
-              <SubmitButton>Salva modifiche</SubmitButton>
+              <SubmitButton
+                type="button"
+                onClick={onFormSubmit}
+                isLoading={isPending}
+              >
+                Salva modifiche
+              </SubmitButton>
             </CardFooter>
           </div>
         </form>

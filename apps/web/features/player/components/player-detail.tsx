@@ -5,19 +5,25 @@ import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 import { ArrowLeft, Edit } from "lucide-react";
 import { PlayerDetailCard } from "@/features/player/components/player-detail-card";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ScreenLoader } from "@/components/screen-loader";
 
 interface PlayerDetailProps {
   id: string;
 }
 
 export function PlayerDetail({ id }: PlayerDetailProps) {
-  const { data, isLoading } = useGetPlayerById(id);
+  const { data, error, isFetching } = useGetPlayerById(id);
+  const router = useRouter();
 
-  // if (isLoading) return <span>Loading...</span>;
-
-  console.log({ data });
-
-  if (!data) return <span>User not found</span>;
+  if (isFetching) return <ScreenLoader />;
+  if (error) {
+    toast(`Player ${id} not found`, { id });
+    router.push("/players");
+    return;
+  }
+  if (!data) return;
 
   return (
     <div className="w-full py-2 flex flex-col justify-center gap-4">

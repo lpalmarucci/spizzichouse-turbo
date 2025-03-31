@@ -18,6 +18,7 @@ export async function handleRequest<T>(
       data: body,
       url: endpoint,
     });
+
     return response.data;
   } catch (e: any) {
     console.log(e);
@@ -25,6 +26,6 @@ export async function handleRequest<T>(
       cookieStore.delete("session");
       redirect("/");
     }
-    return { error: e.message };
+    return Promise.reject(e);
   }
 }
