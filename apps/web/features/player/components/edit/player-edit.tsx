@@ -14,12 +14,9 @@ import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
-import React, { useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useGetPlayerById,
-  usePatchPlayer,
-} from "@/features/player/player.query";
+import { useGetPlayerById } from "@/features/player/player.query";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
 import {
   Select,
@@ -43,38 +40,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@workspace/ui/components/form";
+import { SubmitButton } from "@/components/submit-button";
+import { updatePlayer } from "@/features/player/player.actions";
 import { toast } from "sonner";
+import { ApiResponse, isResponseError } from "@/lib/types";
 
 interface PlayerEditProps {
   id: string;
 }
 
-// Dati mockati per il giocatore
-const playerData = {
-  id: "1",
-  name: "Alessandro Bianchi",
-  email: "alessandro.bianchi@example.com",
-  joinDate: "2024-01-15",
-  matches: 42,
-  wins: 28,
-  winRate: 66.7,
-  avgPosition: 1.8,
-  favoriteRuleSet: "Standard",
-  level: "Esperto",
-  status: "active",
-  lastActive: "2025-03-20",
-  avatar: null,
-  bio: "Appassionato di giochi di carte da oltre 10 anni. Specializzato in strategie difensive e gioco tattico. Ha partecipato a numerosi tornei nazionali e internazionali, ottenendo ottimi risultati. Sempre alla ricerca di nuove sfide e avversari competitivi.",
-  achievements: [
-    "Campione Regionale 2024",
-    "Vincitore Torneo Estivo",
-    "MVP del mese",
-    "Miglior Stratega 2023",
-    "Finalista Campionato Nazionale",
-  ],
-};
-
 const playerSchema = z.object({
+  id: z.string(),
   name: z.string(),
   bio: z.string().max(255),
   level: z.enum([
@@ -89,26 +65,33 @@ export function PlayerEdit({ id }: PlayerEditProps) {
   const router = useRouter();
   const { data } = useGetPlayerById(id);
   const [player, setPlayer] = useState<Player | undefined>(data);
-  const mutation = usePatchPlayer(id, () => {
-    toast("Player updated successfully!");
-    router.back();
-  });
   const form = useForm<z.infer<typeof playerSchema>>({
     resolver: zodResolver(playerSchema),
     defaultValues: {
+      id,
       bio: player?.bio,
       name: player?.name,
       level: player?.level,
       status: player?.status,
     },
+    mode: "onChange",
   });
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof playerSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log({ values });
-    mutation.mutate({ ...values, id });
-  }
+
+  const [state, formAction] = useActionState(updatePlayer, {} as ApiResponse);
+
+  useEffect(() => {
+    if (!state) return;
+    if (isResponseError(state)) {
+      toast(state.error);
+      return;
+    }
+
+    if (state.status) {
+      toast("Player updated successfully!");
+      router.push(`/players/${id}`);
+      return;
+    }
+  }, [state]);
 
   if (!player) return;
 
@@ -129,7 +112,20 @@ export function PlayerEdit({ id }: PlayerEditProps) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form action={formAction} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="id"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="hidden" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="grid gap-6">
             <Card>
               <CardHeader>
@@ -287,7 +283,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
               >
                 Annulla
               </Button>
-              <Button type="submit">Salva Modifiche</Button>
+              <SubmitButton>Salva modifiche</SubmitButton>
             </CardFooter>
           </div>
         </form>

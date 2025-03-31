@@ -25,6 +25,6 @@ export async function handleRequest<T>(
       cookieStore.delete("session");
       redirect("/");
     }
-    return {} as T;
+    return { error: e.message };
   }
 }
