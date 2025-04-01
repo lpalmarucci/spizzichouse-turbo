@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { MatchService } from './match.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
@@ -8,6 +8,7 @@ export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createMatchDto: CreateMatchDto) {
     return this.matchService.create(createMatchDto);
   }
@@ -28,7 +29,8 @@ export class MatchController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.matchService.remove(id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string) {
+    await this.matchService.remove(id);
   }
 }

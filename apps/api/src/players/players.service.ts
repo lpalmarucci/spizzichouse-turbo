@@ -43,7 +43,8 @@ export class PlayersService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
     return this._prismaService.player.delete({ where: { id } });
   }
 }

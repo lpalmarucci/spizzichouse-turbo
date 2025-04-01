@@ -90,7 +90,8 @@ export class MatchService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
     return this._prismaService.match.delete({ where: { id } });
   }
 }
