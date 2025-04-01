@@ -24,6 +24,16 @@ export class PlayersService {
     return player;
   }
 
+  findMany(ids: string[]): Promise<Player[]> {
+    return this._prismaService.player.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   update(id: string, updatePlayerDto: UpdatePlayerDto) {
     return this._prismaService.player.update({
       where: {
