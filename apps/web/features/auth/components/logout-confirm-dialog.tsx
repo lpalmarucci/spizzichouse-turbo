@@ -1,19 +1,20 @@
 "use client";
 
-import React, { PropsWithChildren, use } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
-import { AuthContext } from "@/providers/auth";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import { logout } from "@/features/auth/auth.actions";
+import { DialogBody } from "next/dist/client/components/react-dev-overlay/ui/components/dialog";
+import { SubmitButton } from "@/components/submit-button";
 
 type LogoutConfirmDialogProps = {
   open: boolean;
@@ -25,9 +26,9 @@ export function LogoutConfirmDialog({
   onOpenChange,
   children,
 }: LogoutConfirmDialogProps) {
-  const auth = use(AuthContext);
   const router = useRouter();
   const supabase = createClient();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   function handleConfirmLogout() {
     supabase.auth
       .signOut()
@@ -49,12 +50,14 @@ export function LogoutConfirmDialog({
             Dovrai effettuare nuovamente l'accesso per continuare.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={() => handleConfirmLogout()}>Confirm</Button>
-        </DialogFooter>
+        <DialogBody>
+          <form className="w-full flex justify-end">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <SubmitButton formAction={logout}>Confirm</SubmitButton>
+          </form>
+        </DialogBody>
       </DialogContent>
     </Dialog>
   );

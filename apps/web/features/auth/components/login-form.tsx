@@ -52,7 +52,6 @@ export function LoginForm() {
 
   useEffect(() => {
     if (state.error) {
-      console.log(state.error);
       toast.error(state.error);
     }
   }, [state]);
@@ -62,8 +61,7 @@ export function LoginForm() {
       .signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {},
+          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
         },
       })
       .then(() => {

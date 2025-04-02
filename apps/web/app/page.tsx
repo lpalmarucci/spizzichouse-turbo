@@ -2,15 +2,11 @@ import { Button } from "@workspace/ui/components/button";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
-import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Page() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/auth/signin");
-  }
 
   return (
     <div className="flex items-center justify-center min-h-svh">
@@ -22,7 +18,7 @@ export default async function Page() {
               <span className="text-xl font-bold">Spizzichouse</span>
             </div>
             <div className="flex items-center gap-4">
-              {data ? (
+              {data.user ? (
                 <Button asChild className="cursor-pointer">
                   <Link href="/dashboard">Dashboard</Link>
                 </Button>
@@ -48,7 +44,7 @@ export default async function Page() {
                     visualizations.
                   </p>
                 </div>
-                {data ? (
+                {data.user ? (
                   <Button asChild>
                     <Link href="/dashboard">Go to dashboard</Link>
                   </Button>

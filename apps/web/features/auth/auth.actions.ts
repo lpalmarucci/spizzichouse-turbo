@@ -56,3 +56,13 @@ export async function signup(prevState: any, formData: FormData) {
   redirect("/dashboard");
   return { error: null };
 }
+
+export async function logout(formData: FormData) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    return;
+  }
+  revalidatePath("/");
+  redirect("/");
+}
