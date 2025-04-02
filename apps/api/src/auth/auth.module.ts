@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ApiConfig, JwtAuthConfig } from '../config/types';
 import { PrismaService } from '../prisma/prisma.service';
@@ -28,7 +26,6 @@ import { SupabaseGuard } from './guard/supabase.guard';
     }),
   ],
   providers: [
-    AuthService,
     PrismaService,
     SupabaseStrategy,
     {
@@ -36,6 +33,5 @@ import { SupabaseGuard } from './guard/supabase.guard';
       useClass: SupabaseGuard,
     },
   ],
-  controllers: [AuthController],
 })
 export class AuthModule {}

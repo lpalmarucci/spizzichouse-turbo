@@ -8,6 +8,7 @@ CREATE TYPE "PlayerStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 CREATE TABLE "players" (
     "id" UUID NOT NULL,
     "full_name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "bio" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "level" "PlayerLevel" NOT NULL,
