@@ -8,7 +8,6 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
 import { Separator } from "@workspace/ui/components/separator";
-import { Toaster } from "@workspace/ui/components/sonner";
 import { Drawer } from "@/components/drawer";
 
 export default function LayoutDashboardPage({
@@ -35,7 +34,6 @@ export default function LayoutDashboardPage({
           </section>
         </main>
       </SidebarProvider>
-      <Toaster />
     </>
   );
 }
