@@ -16,7 +16,6 @@ export function SubmitButton({
   className,
   ...props
 }: SubmitButtonProps) {
-  console.log({ isLoading });
   return (
     <Button
       type="submit"

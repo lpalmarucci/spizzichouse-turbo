@@ -16,6 +16,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Separator } from "@workspace/ui/components/separator";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,14 +24,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Qui andrebbe la logica di autenticazione
-    console.log({ email, password, rememberMe });
-    // Redirect alla dashboard dopo il login
-    window.location.href = "/";
-  };
+  const supabase = createClient();
 
   return (
     <div className="w-full max-w-md fade-in">
@@ -44,7 +38,7 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -102,9 +96,17 @@ export function LoginForm() {
               variant="outline"
               className="border-primary/20 w-full cursor-pointer"
               onClick={() => {
-                router.push(
-                  `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`,
-                );
+                supabase.auth
+                  .signInWithOAuth({
+                    provider: "google",
+                    options: {
+                      redirectTo: `${window.location.origin}/auth/callback`,
+                      queryParams: {},
+                    },
+                  })
+                  .then(() => {
+                    router.push("/dashboard");
+                  });
               }}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">

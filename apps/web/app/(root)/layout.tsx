@@ -1,4 +1,3 @@
-import { Drawer } from "@/components/drawer";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -9,8 +8,8 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
 import { Separator } from "@workspace/ui/components/separator";
-import { AuthProvider } from "@/providers/auth";
 import { Toaster } from "@workspace/ui/components/sonner";
+import { Drawer } from "@/components/drawer";
 
 export default function LayoutDashboardPage({
   children,
@@ -18,7 +17,7 @@ export default function LayoutDashboardPage({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
+    <>
       <SidebarProvider>
         <main className="w-full flex">
           <Drawer />
@@ -37,6 +36,6 @@ export default function LayoutDashboardPage({
         </main>
       </SidebarProvider>
       <Toaster />
-    </AuthProvider>
+    </>
   );
 }

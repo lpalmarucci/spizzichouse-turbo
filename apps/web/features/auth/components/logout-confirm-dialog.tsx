@@ -11,7 +11,9 @@ import {
 } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
 import { AuthContext } from "@/providers/auth";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 
 type LogoutConfirmDialogProps = {
   open: boolean;
@@ -25,14 +27,17 @@ export function LogoutConfirmDialog({
 }: LogoutConfirmDialogProps) {
   const auth = use(AuthContext);
   const router = useRouter();
+  const supabase = createClient();
   function handleConfirmLogout() {
-    fetch("/api/logout", {
-      headers: {
-        Authorization: `Bearer ${auth?.token}`,
-      },
-    }).then((res) => {
-      redirect("/");
-    });
+    supabase.auth
+      .signOut()
+      .then(() => {
+        toast("Logged out successfully.");
+        setTimeout(() => {
+          router.push("/");
+        }, 500);
+      })
+      .catch(() => toast("error while trying to logout."));
   }
 
   return (

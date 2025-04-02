@@ -12,6 +12,10 @@ export default (): ApiConfig => ({
       expiresIn: process.env.JWT_EXPIRES_IN!,
     },
   },
+  supabase: {
+    key: process.env.SUPABASE_KEY!,
+    url: process.env.SUPABASE_URL!,
+  },
   database: {
     name: process.env.POSTGRES_DB!,
     user: process.env.POSTGRES_USER!,

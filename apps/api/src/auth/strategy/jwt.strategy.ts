@@ -1,9 +1,8 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExtractJwt } from 'passport-jwt';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiConfig, JwtAuthConfig } from '../../config/types';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PassportSupabaseStrategy } from '../../supabase/passport-supabase.strategy';
+import { User } from '@supabase/supabase-js';
 
 export type JwtPayload = {
   sub: string;
@@ -12,37 +11,16 @@ export type JwtPayload = {
 };
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(
-    private configService: ConfigService<ApiConfig>,
-    private prismaService: PrismaService,
-  ) {
-    const extractJwtFromCookieOrHeader = (req: any) => {
-      let token = null;
-      if (req && req.cookies) {
-        token = req.cookies['session'];
-      }
-      return token || ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-    };
-
-    const jwtAuthConfig: JwtAuthConfig = configService.get('auth').jwt;
-
+export class JwtStrategy extends PassportSupabaseStrategy {
+  constructor(private configService: ConfigService) {
     super({
-      ignoreExpiration: false,
-      secretOrKey: jwtAuthConfig?.secret!,
-      jwtFromRequest: extractJwtFromCookieOrHeader,
+      extractor: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      supabaseKey: configService.get<string>('supabase.key') as string,
+      supabaseUrl: configService.get<string>('supabase.url') as string,
     });
   }
 
-  async validate(payload: JwtPayload) {
-    const user = await this.prismaService.player.findUnique({ where: { id: payload.sub } });
-
-    if (!user) throw new UnauthorizedException('Please log in to continue');
-
-    return {
-      id: payload.sub,
-      name: payload.name,
-      email: payload.email,
-    };
+  async validate(payload: User) {
+    return payload;
   }
 }
