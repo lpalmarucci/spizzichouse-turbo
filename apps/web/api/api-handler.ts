@@ -2,7 +2,6 @@
 
 import { getAxiosInstance } from "@/api/axios";
 import { AxiosRequestConfig, HttpStatusCode } from "axios";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function handleRequest<T>(
@@ -11,7 +10,6 @@ export async function handleRequest<T>(
   body?: Object,
 ) {
   const axios = await getAxiosInstance();
-  const cookieStore = await cookies();
   try {
     const response = await axios<T>({
       method,
@@ -23,7 +21,6 @@ export async function handleRequest<T>(
   } catch (e: any) {
     console.log(e);
     if (e.response.status === HttpStatusCode.Unauthorized) {
-      cookieStore.delete("session");
       redirect("/");
     }
     return Promise.reject(e);
