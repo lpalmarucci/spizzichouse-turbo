@@ -4,7 +4,7 @@ import Axios from "axios";
 import { createClient } from "@/utils/supabase/server";
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL: process.env.BACKEND_URL,
 });
 
 async function getAxiosInstance() {
