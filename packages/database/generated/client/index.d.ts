@@ -911,8 +911,7 @@ export namespace Prisma {
 
   export type PlayerMinAggregateOutputType = {
     id: string | null
-    name: string | null
-    email: string | null
+    full_name: string | null
     bio: string | null
     createdAt: Date | null
     level: $Enums.PlayerLevel | null
@@ -921,8 +920,7 @@ export namespace Prisma {
 
   export type PlayerMaxAggregateOutputType = {
     id: string | null
-    name: string | null
-    email: string | null
+    full_name: string | null
     bio: string | null
     createdAt: Date | null
     level: $Enums.PlayerLevel | null
@@ -931,8 +929,7 @@ export namespace Prisma {
 
   export type PlayerCountAggregateOutputType = {
     id: number
-    name: number
-    email: number
+    full_name: number
     bio: number
     createdAt: number
     level: number
@@ -943,8 +940,7 @@ export namespace Prisma {
 
   export type PlayerMinAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
+    full_name?: true
     bio?: true
     createdAt?: true
     level?: true
@@ -953,8 +949,7 @@ export namespace Prisma {
 
   export type PlayerMaxAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
+    full_name?: true
     bio?: true
     createdAt?: true
     level?: true
@@ -963,8 +958,7 @@ export namespace Prisma {
 
   export type PlayerCountAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
+    full_name?: true
     bio?: true
     createdAt?: true
     level?: true
@@ -1046,8 +1040,7 @@ export namespace Prisma {
 
   export type PlayerGroupByOutputType = {
     id: string
-    name: string
-    email: string
+    full_name: string
     bio: string
     createdAt: Date
     level: $Enums.PlayerLevel
@@ -1073,8 +1066,7 @@ export namespace Prisma {
 
   export type PlayerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
+    full_name?: boolean
     bio?: boolean
     createdAt?: boolean
     level?: boolean
@@ -1083,8 +1075,7 @@ export namespace Prisma {
 
   export type PlayerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
+    full_name?: boolean
     bio?: boolean
     createdAt?: boolean
     level?: boolean
@@ -1093,8 +1084,7 @@ export namespace Prisma {
 
   export type PlayerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
+    full_name?: boolean
     bio?: boolean
     createdAt?: boolean
     level?: boolean
@@ -1103,23 +1093,21 @@ export namespace Prisma {
 
   export type PlayerSelectScalar = {
     id?: boolean
-    name?: boolean
-    email?: boolean
+    full_name?: boolean
     bio?: boolean
     createdAt?: boolean
     level?: boolean
     status?: boolean
   }
 
-  export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "bio" | "createdAt" | "level" | "status", ExtArgs["result"]["player"]>
+  export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "full_name" | "bio" | "createdAt" | "level" | "status", ExtArgs["result"]["player"]>
 
   export type $PlayerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Player"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-      email: string
+      full_name: string
       bio: string
       createdAt: Date
       level: $Enums.PlayerLevel
@@ -1548,8 +1536,7 @@ export namespace Prisma {
    */ 
   interface PlayerFieldRefs {
     readonly id: FieldRef<"Player", 'String'>
-    readonly name: FieldRef<"Player", 'String'>
-    readonly email: FieldRef<"Player", 'String'>
+    readonly full_name: FieldRef<"Player", 'String'>
     readonly bio: FieldRef<"Player", 'String'>
     readonly createdAt: FieldRef<"Player", 'DateTime'>
     readonly level: FieldRef<"Player", 'PlayerLevel'>
@@ -1936,8 +1923,7 @@ export namespace Prisma {
 
   export const PlayerScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    email: 'email',
+    full_name: 'full_name',
     bio: 'bio',
     createdAt: 'createdAt',
     level: 'level',
@@ -2045,9 +2031,8 @@ export namespace Prisma {
     AND?: PlayerWhereInput | PlayerWhereInput[]
     OR?: PlayerWhereInput[]
     NOT?: PlayerWhereInput | PlayerWhereInput[]
-    id?: StringFilter<"Player"> | string
-    name?: StringFilter<"Player"> | string
-    email?: StringFilter<"Player"> | string
+    id?: UuidFilter<"Player"> | string
+    full_name?: StringFilter<"Player"> | string
     bio?: StringFilter<"Player"> | string
     createdAt?: DateTimeFilter<"Player"> | Date | string
     level?: EnumPlayerLevelFilter<"Player"> | $Enums.PlayerLevel
@@ -2056,8 +2041,7 @@ export namespace Prisma {
 
   export type PlayerOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    full_name?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
@@ -2069,8 +2053,7 @@ export namespace Prisma {
     AND?: PlayerWhereInput | PlayerWhereInput[]
     OR?: PlayerWhereInput[]
     NOT?: PlayerWhereInput | PlayerWhereInput[]
-    name?: StringFilter<"Player"> | string
-    email?: StringFilter<"Player"> | string
+    full_name?: StringFilter<"Player"> | string
     bio?: StringFilter<"Player"> | string
     createdAt?: DateTimeFilter<"Player"> | Date | string
     level?: EnumPlayerLevelFilter<"Player"> | $Enums.PlayerLevel
@@ -2079,8 +2062,7 @@ export namespace Prisma {
 
   export type PlayerOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    full_name?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
@@ -2094,9 +2076,8 @@ export namespace Prisma {
     AND?: PlayerScalarWhereWithAggregatesInput | PlayerScalarWhereWithAggregatesInput[]
     OR?: PlayerScalarWhereWithAggregatesInput[]
     NOT?: PlayerScalarWhereWithAggregatesInput | PlayerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Player"> | string
-    name?: StringWithAggregatesFilter<"Player"> | string
-    email?: StringWithAggregatesFilter<"Player"> | string
+    id?: UuidWithAggregatesFilter<"Player"> | string
+    full_name?: StringWithAggregatesFilter<"Player"> | string
     bio?: StringWithAggregatesFilter<"Player"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Player"> | Date | string
     level?: EnumPlayerLevelWithAggregatesFilter<"Player"> | $Enums.PlayerLevel
@@ -2105,8 +2086,7 @@ export namespace Prisma {
 
   export type PlayerCreateInput = {
     id?: string
-    name: string
-    email: string
+    full_name: string
     bio: string
     createdAt?: Date | string
     level: $Enums.PlayerLevel
@@ -2115,8 +2095,7 @@ export namespace Prisma {
 
   export type PlayerUncheckedCreateInput = {
     id?: string
-    name: string
-    email: string
+    full_name: string
     bio: string
     createdAt?: Date | string
     level: $Enums.PlayerLevel
@@ -2125,8 +2104,7 @@ export namespace Prisma {
 
   export type PlayerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
@@ -2135,8 +2113,7 @@ export namespace Prisma {
 
   export type PlayerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
@@ -2145,8 +2122,7 @@ export namespace Prisma {
 
   export type PlayerCreateManyInput = {
     id?: string
-    name: string
-    email: string
+    full_name: string
     bio: string
     createdAt?: Date | string
     level: $Enums.PlayerLevel
@@ -2155,8 +2131,7 @@ export namespace Prisma {
 
   export type PlayerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
@@ -2165,12 +2140,23 @@ export namespace Prisma {
 
   export type PlayerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  }
+
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidFilter<$PrismaModel> | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2215,8 +2201,7 @@ export namespace Prisma {
 
   export type PlayerCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    full_name?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
@@ -2225,8 +2210,7 @@ export namespace Prisma {
 
   export type PlayerMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    full_name?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
@@ -2235,12 +2219,26 @@ export namespace Prisma {
 
   export type PlayerMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    full_name?: SortOrder
     bio?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
     status?: SortOrder
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -2311,6 +2309,17 @@ export namespace Prisma {
     set?: $Enums.PlayerStatus
   }
 
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -2350,6 +2359,31 @@ export namespace Prisma {
     not?: NestedEnumPlayerStatusFilter<$PrismaModel> | $Enums.PlayerStatus
   }
 
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -2365,17 +2399,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {

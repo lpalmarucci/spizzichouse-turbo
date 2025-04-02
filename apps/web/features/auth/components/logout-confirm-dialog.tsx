@@ -1,6 +1,6 @@
 "use client";
 
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,6 @@ import {
   DialogTitle,
 } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
-import { toast } from "sonner";
 import { logout } from "@/features/auth/auth.actions";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/ui/components/dialog";
 import { SubmitButton } from "@/components/submit-button";
@@ -26,21 +23,6 @@ export function LogoutConfirmDialog({
   onOpenChange,
   children,
 }: LogoutConfirmDialogProps) {
-  const router = useRouter();
-  const supabase = createClient();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  function handleConfirmLogout() {
-    supabase.auth
-      .signOut()
-      .then(() => {
-        toast("Logged out successfully.");
-        setTimeout(() => {
-          router.push("/");
-        }, 500);
-      })
-      .catch(() => toast("error while trying to logout."));
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -51,7 +33,7 @@ export function LogoutConfirmDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogBody>
-          <form className="w-full flex justify-end">
+          <form className="w-full flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>

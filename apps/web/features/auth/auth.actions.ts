@@ -1,19 +1,9 @@
 "use server";
 
-import { handleRequest } from "@/api/api-handler";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-
-export type UserInfo = {
-  sub: string;
-  name: string;
-  email: string;
-};
-
-export async function getUserInfo(): Promise<UserInfo> {
-  return handleRequest<UserInfo>("GET", "/me");
-}
+import { PlayerLevel, PlayerStatus } from "@workspace/db";
 
 export async function login(prevState: any, formData: FormData) {
   const supabase = await createClient();
@@ -43,6 +33,9 @@ export async function signup(prevState: any, formData: FormData) {
   const lastName = formData.get("lastName") as string;
   const rawData = {
     full_name: name.concat(" ", lastName),
+    bio: "A sample of player bio where the character",
+    level: PlayerLevel.BEGINNER,
+    status: PlayerStatus.ACTIVE,
   };
   const { error } = await supabase.auth.signUp({
     email: data.email,
@@ -52,6 +45,7 @@ export async function signup(prevState: any, formData: FormData) {
   if (error) {
     return { error: error.message };
   }
+
   revalidatePath("/dashboard", "layout");
   redirect("/dashboard");
   return { error: null };
