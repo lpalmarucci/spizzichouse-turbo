@@ -2,7 +2,7 @@
 CREATE TYPE "MatchStatus" AS ENUM ('ACTIVE', 'COMPLETED');
 
 -- AlterTable
-ALTER TABLE "Player" ALTER COLUMN "bio" DROP NOT NULL;
+ALTER TABLE "players" ALTER COLUMN "bio" DROP NOT NULL;
 
 -- CreateTable
 CREATE TABLE "Match" (
@@ -18,7 +18,7 @@ CREATE TABLE "Match" (
 -- CreateTable
 CREATE TABLE "_MatchToPlayer" (
     "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
+    "B" UUID NOT NULL,
 
     CONSTRAINT "_MatchToPlayer_AB_pkey" PRIMARY KEY ("A","B")
 );
@@ -30,4 +30,4 @@ CREATE INDEX "_MatchToPlayer_B_index" ON "_MatchToPlayer"("B");
 ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_A_fkey" FOREIGN KEY ("A") REFERENCES "Match"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_B_fkey" FOREIGN KEY ("B") REFERENCES "Player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_B_fkey" FOREIGN KEY ("B") REFERENCES "players"("id") ON DELETE CASCADE ON UPDATE CASCADE;

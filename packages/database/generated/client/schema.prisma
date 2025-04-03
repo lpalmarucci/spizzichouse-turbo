@@ -22,7 +22,7 @@ model Player {
   createdAt DateTime     @default(now())
   level     PlayerLevel
   status    PlayerStatus
-  Match     Match[]?
+  Match     Match[]
 
   @@map("players")
 }

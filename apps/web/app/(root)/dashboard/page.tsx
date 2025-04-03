@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="container w-full flex items-center justify-center">
+    <div className="container mx-auto w-full flex items-center justify-center">
       <SidebarTrigger />
       <h1 className="text-2xl tracking-tight font-bold">Dashboard</h1>
     </div>

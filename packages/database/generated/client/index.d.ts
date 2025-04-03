@@ -1278,6 +1278,12 @@ export namespace Prisma {
   }
 
   export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "full_name" | "email" | "bio" | "createdAt" | "level" | "status", ExtArgs["result"]["player"]>
+  export type PlayerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Match?: boolean | Player$MatchArgs<ExtArgs>
+    _count?: boolean | PlayerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlayerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PlayerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $PlayerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Player"
@@ -3621,6 +3627,66 @@ export namespace Prisma {
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
   }
 
+  export type MatchCreateInput = {
+    id?: string
+    title: string
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerCreateNestedManyWithoutMatchInput
+  }
+
+  export type MatchUncheckedCreateInput = {
+    id?: string
+    title: string
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerUncheckedCreateNestedManyWithoutMatchInput
+  }
+
+  export type MatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUpdateManyWithoutMatchNestedInput
+  }
+
+  export type MatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUncheckedUpdateManyWithoutMatchNestedInput
+  }
+
+  export type MatchCreateManyInput = {
+    id?: string
+    title: string
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+  }
+
+  export type MatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type MatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -3936,6 +4002,82 @@ export namespace Prisma {
     set?: $Enums.PlayerStatus
   }
 
+  export type MatchUpdateManyWithoutPlayersNestedInput = {
+    create?: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput> | MatchCreateWithoutPlayersInput[] | MatchUncheckedCreateWithoutPlayersInput[]
+    connectOrCreate?: MatchCreateOrConnectWithoutPlayersInput | MatchCreateOrConnectWithoutPlayersInput[]
+    upsert?: MatchUpsertWithWhereUniqueWithoutPlayersInput | MatchUpsertWithWhereUniqueWithoutPlayersInput[]
+    set?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    disconnect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    delete?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    update?: MatchUpdateWithWhereUniqueWithoutPlayersInput | MatchUpdateWithWhereUniqueWithoutPlayersInput[]
+    updateMany?: MatchUpdateManyWithWhereWithoutPlayersInput | MatchUpdateManyWithWhereWithoutPlayersInput[]
+    deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
+  }
+
+  export type MatchUncheckedUpdateManyWithoutPlayersNestedInput = {
+    create?: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput> | MatchCreateWithoutPlayersInput[] | MatchUncheckedCreateWithoutPlayersInput[]
+    connectOrCreate?: MatchCreateOrConnectWithoutPlayersInput | MatchCreateOrConnectWithoutPlayersInput[]
+    upsert?: MatchUpsertWithWhereUniqueWithoutPlayersInput | MatchUpsertWithWhereUniqueWithoutPlayersInput[]
+    set?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    disconnect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    delete?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+    update?: MatchUpdateWithWhereUniqueWithoutPlayersInput | MatchUpdateWithWhereUniqueWithoutPlayersInput[]
+    updateMany?: MatchUpdateManyWithWhereWithoutPlayersInput | MatchUpdateManyWithWhereWithoutPlayersInput[]
+    deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
+  }
+
+  export type PlayerCreateNestedManyWithoutMatchInput = {
+    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type PlayerUncheckedCreateNestedManyWithoutMatchInput = {
+    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type EnumMatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MatchStatus
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type PlayerUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchInput | PlayerUpsertWithWhereUniqueWithoutMatchInput[]
+    set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutMatchInput | PlayerUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutMatchInput | PlayerUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+  }
+
+  export type PlayerUncheckedUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchInput | PlayerUpsertWithWhereUniqueWithoutMatchInput[]
+    set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutMatchInput | PlayerUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutMatchInput | PlayerUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -4040,6 +4182,34 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -4170,7 +4340,7 @@ export namespace Prisma {
 
   export type PlayerCreateWithoutMatchInput = {
     id?: string
-    name: string
+    full_name: string
     email: string
     bio?: string | null
     createdAt?: Date | string
@@ -4180,7 +4350,7 @@ export namespace Prisma {
 
   export type PlayerUncheckedCreateWithoutMatchInput = {
     id?: string
-    name: string
+    full_name: string
     email: string
     bio?: string | null
     createdAt?: Date | string
@@ -4213,8 +4383,8 @@ export namespace Prisma {
     AND?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
     OR?: PlayerScalarWhereInput[]
     NOT?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
-    id?: StringFilter<"Player"> | string
-    name?: StringFilter<"Player"> | string
+    id?: UuidFilter<"Player"> | string
+    full_name?: StringFilter<"Player"> | string
     email?: StringFilter<"Player"> | string
     bio?: StringNullableFilter<"Player"> | string | null
     createdAt?: DateTimeFilter<"Player"> | Date | string
@@ -4248,7 +4418,7 @@ export namespace Prisma {
 
   export type PlayerUpdateWithoutMatchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4258,7 +4428,7 @@ export namespace Prisma {
 
   export type PlayerUncheckedUpdateWithoutMatchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4268,7 +4438,7 @@ export namespace Prisma {
 
   export type PlayerUncheckedUpdateManyWithoutMatchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

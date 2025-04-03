@@ -1,17 +1,13 @@
 "use client";
 
-import { Github, Trophy } from "lucide-react";
+import { Github } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
   return (
     <footer className="w-full border-t py-6 md:py-0">
-      <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-        <div className="flex items-center gap-2">
-          <Trophy className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold">Spizzichouse</span>
-        </div>
-        <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+      <div className="container mx-auto flex flex-row items-center justify-between gap-4 md:h-24">
+        <p className="text-center text-sm leading-loose text-muted-foreground md:text-left grow-1">
           © 2025 Spizzichouse. All rights reserved.
         </p>
         <div className="flex gap-4">
