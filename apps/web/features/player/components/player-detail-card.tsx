@@ -24,11 +24,11 @@ export function PlayerDetailCard({ player }: PlayerDetailCardProps) {
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border-2 border-primary/20">
             <AvatarFallback className="text-xl bg-primary text-primary-foreground">
-              {getInitials(player.name)}
+              {getInitials(player.full_name)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="text-2xl">{player.name}</CardTitle>
+            <CardTitle className="text-2xl">{player.full_name}</CardTitle>
             <div className="flex items-center gap-2 mt-1">
               <Badge className={getLevelColor(player.level)}>
                 {player.level}

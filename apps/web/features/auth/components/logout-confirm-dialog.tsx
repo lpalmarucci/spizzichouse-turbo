@@ -1,17 +1,17 @@
 "use client";
 
-import React, { PropsWithChildren, use } from "react";
+import React, { PropsWithChildren } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
-import { AuthContext } from "@/providers/auth";
-import { redirect, useRouter } from "next/navigation";
+import { logout } from "@/features/auth/auth.actions";
+import { DialogBody } from "next/dist/client/components/react-dev-overlay/ui/components/dialog";
+import { SubmitButton } from "@/components/submit-button";
 
 type LogoutConfirmDialogProps = {
   open: boolean;
@@ -23,18 +23,6 @@ export function LogoutConfirmDialog({
   onOpenChange,
   children,
 }: LogoutConfirmDialogProps) {
-  const auth = use(AuthContext);
-  const router = useRouter();
-  function handleConfirmLogout() {
-    fetch("/api/logout", {
-      headers: {
-        Authorization: `Bearer ${auth?.token}`,
-      },
-    }).then((res) => {
-      redirect("/");
-    });
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -44,12 +32,14 @@ export function LogoutConfirmDialog({
             Dovrai effettuare nuovamente l'accesso per continuare.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={() => handleConfirmLogout()}>Confirm</Button>
-        </DialogFooter>
+        <DialogBody>
+          <form className="w-full flex justify-end gap-2">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <SubmitButton formAction={logout}>Confirm</SubmitButton>
+          </form>
+        </DialogBody>
       </DialogContent>
     </Dialog>
   );

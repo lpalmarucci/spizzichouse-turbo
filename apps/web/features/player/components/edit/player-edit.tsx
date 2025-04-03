@@ -52,7 +52,7 @@ interface PlayerEditProps {
 
 const playerSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  full_name: z.string(),
   bio: z.string().max(255),
   level: z.enum([
     PlayerLevel.BEGINNER,
@@ -80,7 +80,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
     defaultValues: {
       id,
       bio: player?.bio,
-      name: player?.name,
+      full_name: player?.full_name,
       level: player?.level,
       status: player?.status,
       email: player?.email,
@@ -145,7 +145,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                   </div>
                   <Avatar className="h-12 w-12 border-2 border-primary/20">
                     <AvatarFallback className="text-xl bg-primary text-primary-foreground">
-                      {getInitials(player?.name ?? "")}
+                      {getInitials(player?.full_name ?? "")}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -154,7 +154,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                 <div className="grid gap-2">
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="full_name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Name</FormLabel>
