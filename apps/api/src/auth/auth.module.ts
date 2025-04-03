@@ -7,6 +7,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SupabaseStrategy } from './strategy/supabase-strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { SupabaseGuard } from './guard/supabase.guard';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { SupabaseModule } from '../supabase/supabase.module';
 
 @Module({
   imports: [
@@ -24,8 +27,10 @@ import { SupabaseGuard } from './guard/supabase.guard';
       inject: [ConfigService],
       imports: [ConfigModule],
     }),
+    SupabaseModule,
   ],
   providers: [
+    AuthService,
     PrismaService,
     SupabaseStrategy,
     {
@@ -33,5 +38,6 @@ import { SupabaseGuard } from './guard/supabase.guard';
       useClass: SupabaseGuard,
     },
   ],
+  controllers: [AuthController],
 })
 export class AuthModule {}
