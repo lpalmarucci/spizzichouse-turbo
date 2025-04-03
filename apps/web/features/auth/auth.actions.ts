@@ -46,7 +46,7 @@ export async function signup(prevState: any, formData: FormData) {
     return { error: error.message };
   }
 
-  revalidatePath("/dashboard", "layout");
+  revalidatePath("/dashboard");
   redirect("/dashboard");
   return { error: null };
 }
