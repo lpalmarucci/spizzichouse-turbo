@@ -15,14 +15,11 @@ export async function GET(request: Request) {
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";
       const { data } = await supabase.auth.getSession();
-      const response = await fetch(
-        `${process.env.BACKEND_URL}/auth/user/exists`,
-        {
-          headers: {
-            Authorization: `Bearer ${data.session?.access_token}`,
-          },
+      await fetch(`${process.env.BACKEND_URL}/auth/user/exists`, {
+        headers: {
+          Authorization: `Bearer ${data.session?.access_token}`,
         },
-      );
+      });
 
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
