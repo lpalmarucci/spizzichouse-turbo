@@ -1,14 +1,16 @@
 "use server";
 
 import Axios from "axios";
-import { getSession } from "@/lib/auth";
+import { createClient } from "@/utils/supabase/server";
 
 const axios = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL: process.env.BACKEND_URL,
 });
 
 async function getAxiosInstance() {
-  const token = await getSession();
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
 
   axios.interceptors.request.use(async (config) => {
     config.headers.Authorization = `Bearer ${token}`;

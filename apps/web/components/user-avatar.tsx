@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { getInitials } from "@/features/player/utils";
 import React from "react";

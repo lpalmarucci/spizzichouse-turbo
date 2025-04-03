@@ -54,7 +54,7 @@ export function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-primary/20 focus-visible:ring-primary/30 ring"
+                className="border-primary/20 focus-visible:ring-primary/30"
               />
             </div>
             <div className="space-y-2">

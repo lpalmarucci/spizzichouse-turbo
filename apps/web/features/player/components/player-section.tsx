@@ -36,7 +36,7 @@ export function PlayerSection() {
     return data.filter((player) => {
       if (
         searchQuery &&
-        !player.name.toLowerCase().includes(searchQuery.toLowerCase())
+        !player.full_name.toLowerCase().includes(searchQuery.toLowerCase())
       ) {
         return false;
       }

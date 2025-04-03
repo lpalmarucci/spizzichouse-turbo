@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ApiConfig, JwtAuthConfig } from '../config/types';
 import { PrismaService } from '../prisma/prisma.service';
-import { JwtStrategy } from './strategy/jwt.strategy';
-import { GoogleStrategy } from './strategy/google.strategy';
+import { SupabaseStrategy } from './strategy/supabase-strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { SupabaseGuard } from './guard/supabase.guard';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -26,7 +27,15 @@ import { GoogleStrategy } from './strategy/google.strategy';
       imports: [ConfigModule],
     }),
   ],
-  providers: [AuthService, PrismaService, JwtStrategy, GoogleStrategy],
+  providers: [
+    AuthService,
+    PrismaService,
+    SupabaseStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: SupabaseGuard,
+    },
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

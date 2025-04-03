@@ -50,11 +50,11 @@ export function PlayerCard({ player }: { player: Player }) {
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 border-2 border-primary/20">
               <AvatarFallback className="bg-primary text-primary-foreground">
-                {getInitials(player.name)}
+                {getInitials(player.full_name)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle className="text-xl">{player.name}</CardTitle>
+              <CardTitle className="text-xl">{player.full_name}</CardTitle>
               <CardDescription>{player.email}</CardDescription>
             </div>
           </div>
