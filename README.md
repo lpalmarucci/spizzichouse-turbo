@@ -1,4 +1,4 @@
-# Spizzichouse - Documentazione
+# Spizzichouse
 
 ## Panoramica
 Spizzichouse è un monorepo strutturato con **Turborepo**, contenente un'applicazione frontend sviluppata con **Next.js** e un'API backend sviluppata con **NestJS**.
