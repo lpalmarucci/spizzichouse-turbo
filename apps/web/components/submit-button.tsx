@@ -24,7 +24,7 @@ export function SubmitButton({
       className={cn("flex items-center gap-2", className)}
       {...props}
     >
-      {isLoading || (pending && <Loader className="h-8 w-8 animate-spin" />)}
+      {(isLoading || pending) && <Loader className="h-8 w-8 animate-spin" />}
       {children}
     </Button>
   );

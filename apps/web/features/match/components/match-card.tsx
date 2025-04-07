@@ -25,6 +25,7 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
+import { Player } from "@workspace/db";
 
 export function MatchCard({
   match,
@@ -125,8 +126,8 @@ export function MatchCard({
           <div className="mt-3">
             <p className="text-sm font-medium mb-2">Players:</p>
             <div className="flex -space-x-2 overflow-hidden">
-              {match.players.slice(0, 5).map((player) => (
-                <UserAvatar name={player.name} key={player.id} />
+              {match.players.slice(0, 5).map((player: Player) => (
+                <UserAvatar name={player.full_name} key={player.id} />
               ))}
               {match.players.length > 5 && (
                 <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted text-xs font-medium">

@@ -19,3 +19,8 @@ export async function createMatch(match: UpdateMatchDto) {
   revalidatePath(`/matches`);
   return data;
 }
+
+export async function deleteMatch(id: string) {
+  await handleRequest("DELETE", `/matches/${id}`);
+  revalidatePath("/matches", "page");
+}

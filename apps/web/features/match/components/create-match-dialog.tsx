@@ -33,54 +33,69 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
 import { SubmitButton } from "@/components/submit-button";
 import { MATCH_QUERY_KEY, useCreateMatch } from "@/features/match/match.query";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface CreateMatchDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+const formInitialValues = {
+  title: "",
+  description: null,
+  duration: null,
+  date: new Date(),
+  playerIds: [],
+};
+
 export const matchSchema = z.object({
   title: z.string(),
   description: z.string().nullable(),
   date: z.coerce.date(),
   duration: z.coerce.number().nullable(),
-  playerIds: z.array(z.string()),
+  playerIds: z.array(z.string()).min(1),
 });
 
 function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
-  const router = useRouter();
   const form = useForm<z.infer<typeof matchSchema>>({
+    mode: "onChange",
     resolver: zodResolver(matchSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      date: new Date(),
-      duration: 0,
-      playerIds: [],
-    },
+    defaultValues: formInitialValues,
   });
 
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useCreateMatch(() => {
-    toast("Match created successfully!");
+    toast("Match created successfully");
     queryClient
       .invalidateQueries({ queryKey: [MATCH_QUERY_KEY] })
       .then(() => onOpenChange(false));
   });
 
   function onFormSubmit() {
-    mutate(form.getValues());
+    const parseResult = matchSchema.safeParse(form.getValues());
+    const errors = parseResult.error?.flatten().formErrors;
+    if (!errors || errors.length === 0) {
+      mutate(form.getValues());
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        if (!val) {
+          form.reset(formInitialValues);
+        }
+        onOpenChange(val);
+      }}
+    >
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create New Match</DialogTitle>
+          <DialogTitle>
+            Create New Match isValid:{Boolean(form.formState.isValid)}
+          </DialogTitle>
           <DialogDescription>
             Set up a new card game match with custom rules and players.
           </DialogDescription>
@@ -97,6 +112,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
                     <FormControl>
                       <Input
                         {...field}
+                        placeholder="Weekend Tournament"
                         className="border-primary/20 focus-visible:ring-primary/30"
                       />
                     </FormControl>
@@ -195,7 +211,12 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
               >
                 Cancel
               </Button>
-              <SubmitButton isLoading={isPending}>Create Match</SubmitButton>
+              <SubmitButton
+                isLoading={isPending}
+                disabled={!form.formState.isValid}
+              >
+                Create Match
+              </SubmitButton>
             </div>
           </form>
         </Form>
@@ -204,4 +225,4 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
   );
 }
 
-export default React.memo(CreateMatchDialog);
+export default CreateMatchDialog;

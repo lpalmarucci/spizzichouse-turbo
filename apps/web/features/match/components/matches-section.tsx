@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Calendar, Plus, Search } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
@@ -8,18 +8,15 @@ import { Input } from "@workspace/ui/components/input";
 import { Badge } from "@workspace/ui/components/badge";
 import { MatchCard } from "@/features/match/components/match-card";
 import CreateMatchDialog from "@/features/match/components/create-match-dialog";
-import { useGetMatches } from "@/features/match/match.query";
+import {
+  MATCH_QUERY_KEY,
+  useDeleteMatch,
+  useGetMatches,
+} from "@/features/match/match.query";
 import { ScreenLoader } from "@/components/screen-loader";
-
-type SortField =
-  | "title"
-  | "date"
-  | "players"
-  | "ruleSet"
-  | "location"
-  | "duration"
-  | "status";
-type SortDirection = "asc" | "desc";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,6 +25,15 @@ export function MatchesSection() {
 
   const { data: matches = [], isFetching } = useGetMatches();
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const matchId = useRef<string | null>(null);
+
+  const { mutate: deleteMatchMutation } = useDeleteMatch(() => {
+    toast.info(`Match deleted successfully`);
+    setShowDeleteDialog(false);
+    queryClient.invalidateQueries({ queryKey: [MATCH_QUERY_KEY] });
+  });
 
   if (isFetching) {
     return <ScreenLoader />;
@@ -35,7 +41,8 @@ export function MatchesSection() {
 
   // Handle delete match
   const handleDeleteMatch = (id: string) => {
-    // setMatchesList(matchesList.filter((match) => match.id !== id));
+    setShowDeleteDialog(true);
+    matchId.current = id;
   };
 
   // Filter match based on criteria
@@ -197,6 +204,14 @@ export function MatchesSection() {
       <CreateMatchDialog
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
+      />
+
+      <ConfirmationDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={() => {
+          deleteMatchMutation(matchId.current as string);
+        }}
       />
     </div>
   );
