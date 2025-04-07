@@ -2335,7 +2335,7 @@ export namespace Prisma {
     id: string
     title: string
     description: string | null
-    status: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date: Date
     duration: number | null
     _count: MatchCountAggregateOutputType | null
@@ -2414,7 +2414,7 @@ export namespace Prisma {
       id: string
       title: string
       description: string | null
-      status: $Enums.MatchStatus | null
+      status: $Enums.MatchStatus
       date: Date
       duration: number | null
     }, ExtArgs["result"]["match"]>
@@ -3518,7 +3518,7 @@ export namespace Prisma {
     id?: StringFilter<"Match"> | string
     title?: StringFilter<"Match"> | string
     description?: StringNullableFilter<"Match"> | string | null
-    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
     players?: PlayerListRelationFilter
@@ -3528,7 +3528,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    status?: SortOrderInput | SortOrder
+    status?: SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
     players?: PlayerOrderByRelationAggregateInput
@@ -3541,7 +3541,7 @@ export namespace Prisma {
     NOT?: MatchWhereInput | MatchWhereInput[]
     title?: StringFilter<"Match"> | string
     description?: StringNullableFilter<"Match"> | string | null
-    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
     players?: PlayerListRelationFilter
@@ -3551,7 +3551,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    status?: SortOrderInput | SortOrder
+    status?: SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
     _count?: MatchCountOrderByAggregateInput
@@ -3568,7 +3568,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Match"> | string
     title?: StringWithAggregatesFilter<"Match"> | string
     description?: StringNullableWithAggregatesFilter<"Match"> | string | null
-    status?: EnumMatchStatusNullableWithAggregatesFilter<"Match"> | $Enums.MatchStatus | null
+    status?: EnumMatchStatusWithAggregatesFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeWithAggregatesFilter<"Match"> | Date | string
     duration?: FloatNullableWithAggregatesFilter<"Match"> | number | null
   }
@@ -3651,7 +3651,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    status?: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
     players?: PlayerCreateNestedManyWithoutMatchInput
@@ -3661,7 +3661,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    status?: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
     players?: PlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -3671,7 +3671,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
     players?: PlayerUpdateManyWithoutMatchNestedInput
@@ -3681,7 +3681,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
     players?: PlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -3691,7 +3691,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    status?: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
   }
@@ -3700,7 +3700,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -3709,7 +3709,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -3911,11 +3911,11 @@ export namespace Prisma {
     _max?: NestedEnumPlayerStatusFilter<$PrismaModel>
   }
 
-  export type EnumMatchStatusNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumMatchStatusNullableFilter<$PrismaModel> | $Enums.MatchStatus | null
+  export type EnumMatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMatchStatusFilter<$PrismaModel> | $Enums.MatchStatus
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -3974,14 +3974,14 @@ export namespace Prisma {
     duration?: SortOrder
   }
 
-  export type EnumMatchStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
-    _max?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
+  export type EnumMatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumMatchStatusFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4070,8 +4070,8 @@ export namespace Prisma {
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
   }
 
-  export type NullableEnumMatchStatusFieldUpdateOperationsInput = {
-    set?: $Enums.MatchStatus | null
+  export type EnumMatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MatchStatus
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -4276,11 +4276,11 @@ export namespace Prisma {
     _max?: NestedEnumPlayerStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumMatchStatusNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumMatchStatusNullableFilter<$PrismaModel> | $Enums.MatchStatus | null
+  export type NestedEnumMatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMatchStatusFilter<$PrismaModel> | $Enums.MatchStatus
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -4294,14 +4294,14 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
-    _max?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
+  export type NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumMatchStatusFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4324,7 +4324,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    status?: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
   }
@@ -4333,7 +4333,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    status?: $Enums.MatchStatus | null
+    status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
   }
@@ -4366,7 +4366,7 @@ export namespace Prisma {
     id?: StringFilter<"Match"> | string
     title?: StringFilter<"Match"> | string
     description?: StringNullableFilter<"Match"> | string | null
-    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
   }
@@ -4429,7 +4429,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -4438,7 +4438,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -4447,7 +4447,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
