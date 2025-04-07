@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "MatchStatus" AS ENUM ('ACTIVE', 'COMPLETED');
+CREATE TYPE "MatchStatus" AS ENUM ('UPCOMING', 'IN_PROGRESS', 'COMPLETED');
 
 -- AlterTable
 ALTER TABLE "players" ALTER COLUMN "bio" DROP NOT NULL;

@@ -12,7 +12,7 @@ export class CreateMatchDto {
   description: string;
 
   @IsEnum(MatchStatus, { message: () => `status must be a valid enum value: ${Object.values(MatchStatus).join(', ')}` })
-  status: MatchStatus = MatchStatus.ACTIVE;
+  status: MatchStatus = MatchStatus.UPCOMING;
 
   @IsArray()
   @Type(() => String)

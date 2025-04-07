@@ -162,7 +162,8 @@ exports.PlayerStatus = exports.$Enums.PlayerStatus = {
 };
 
 exports.MatchStatus = exports.$Enums.MatchStatus = {
-  ACTIVE: 'ACTIVE',
+  UPCOMING: 'UPCOMING',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED'
 };
 

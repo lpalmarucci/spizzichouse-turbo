@@ -17,6 +17,13 @@ import { ScreenLoader } from "@/components/screen-loader";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@workspace/ui/components/popover";
+import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar";
+import { MatchStatus } from "@workspace/db";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -99,6 +106,7 @@ export function MatchesSection() {
           >
             <TabsList className="bg-background border">
               <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value={MatchStatus.UPCOMING}>Active</TabsTrigger>
               <TabsTrigger value="in-progress">Active</TabsTrigger>
               <TabsTrigger value="completed">Completed</TabsTrigger>
             </TabsList>
@@ -116,22 +124,22 @@ export function MatchesSection() {
               />
             </div>
 
-            {/*<Popover>*/}
-            {/*  <PopoverTrigger asChild>*/}
-            {/*    <Button variant="outline" className="gap-2">*/}
-            {/*      <Calendar className="h-4 w-4" />*/}
-            {/*      {date ? date.toLocaleDateString() : <span>Pick a date</span>}*/}
-            {/*    </Button>*/}
-            {/*  </PopoverTrigger>*/}
-            {/*  <PopoverContent className="w-auto p-0" align="end">*/}
-            {/*    <CalendarComponent*/}
-            {/*      mode="single"*/}
-            {/*      selected={date}*/}
-            {/*      onSelect={setDate}*/}
-            {/*      initialFocus*/}
-            {/*    />*/}
-            {/*  </PopoverContent>*/}
-            {/*</Popover>*/}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {date ? date.toLocaleDateString() : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <CalendarComponent
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
@@ -139,7 +147,7 @@ export function MatchesSection() {
           <div className="flex items-center">
             <Badge variant="outline" className="gap-1 text-sm font-normal">
               <Calendar className="h-3 w-3" />
-              Date: {date.toLocaleDateString()}
+              Date: {date.toLocaleDateString("en-UK")}
               <button
                 className="ml-1 rounded-full hover:bg-muted p-1"
                 onClick={() => setDate(undefined)}

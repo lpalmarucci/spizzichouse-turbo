@@ -29,7 +29,8 @@ export type Match = $Result.DefaultSelection<Prisma.$MatchPayload>
  */
 export namespace $Enums {
   export const MatchStatus: {
-  ACTIVE: 'ACTIVE',
+  UPCOMING: 'UPCOMING',
+  IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED'
 };
 

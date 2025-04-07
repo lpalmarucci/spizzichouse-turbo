@@ -26,6 +26,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
 import { Player } from "@workspace/db";
+import { getStatusColor } from "@/features/match/match.utils";
 
 export function MatchCard({
   match,
@@ -34,27 +35,6 @@ export function MatchCard({
   match: any;
   onDelete: (id: string) => void;
 }) {
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .toUpperCase();
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "upcoming":
-        return "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20";
-      case "in-progress":
-        return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
-      case "completed":
-        return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
-    }
-  };
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");

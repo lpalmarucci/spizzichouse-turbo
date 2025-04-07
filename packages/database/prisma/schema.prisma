@@ -40,7 +40,8 @@ model Match {
 }
 
 enum MatchStatus {
-  ACTIVE
+  UPCOMING
+  IN_PROGRESS
   COMPLETED
 }
 
