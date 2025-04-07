@@ -106,9 +106,9 @@ export function MatchesSection() {
           >
             <TabsList className="bg-background border">
               <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value={MatchStatus.UPCOMING}>Active</TabsTrigger>
-              <TabsTrigger value="in-progress">Active</TabsTrigger>
-              <TabsTrigger value="completed">Completed</TabsTrigger>
+              <TabsTrigger value={MatchStatus.UPCOMING}>Upcoming</TabsTrigger>
+              <TabsTrigger value={MatchStatus.IN_PROGRESS}>Active</TabsTrigger>
+              <TabsTrigger value={MatchStatus.COMPLETED}>Completed</TabsTrigger>
             </TabsList>
           </Tabs>
 

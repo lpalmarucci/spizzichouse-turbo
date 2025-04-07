@@ -25,7 +25,7 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
-import { Player } from "@workspace/db";
+import { MatchStatus, Player } from "@workspace/db";
 import { getStatusColor } from "@/features/match/match.utils";
 
 export function MatchCard({
@@ -37,16 +37,16 @@ export function MatchCard({
 }) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US");
+    return date.toLocaleDateString("en-UK");
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "upcoming":
+      case MatchStatus.UPCOMING:
         return "Upcoming";
-      case "in-progress":
+      case MatchStatus.IN_PROGRESS:
         return "In Progress";
-      case "completed":
+      case MatchStatus.COMPLETED:
         return "Completed";
       default:
         return status.charAt(0).toUpperCase() + status.slice(1);
@@ -82,9 +82,6 @@ export function MatchCard({
           <Badge className={getStatusColor(match.status)}>
             {getStatusText(match.status)}
           </Badge>
-          <span className="text-sm text-muted-foreground">
-            Rule Set: {match.ruleSet}
-          </span>
         </div>
       </CardHeader>
       <CardContent>
@@ -95,9 +92,7 @@ export function MatchCard({
           </div>
           <div className="flex items-center text-sm">
             <Clock className="mr-2 h-4 w-4 opacity-70" />
-            <span>
-              {Math.floor(match.duration / 60)}h {match.duration % 60}m
-            </span>
+            <span>{match.duration % 60}m</span>
           </div>
           <div className="flex items-center text-sm">
             <Users className="mr-2 h-4 w-4 opacity-70" />
