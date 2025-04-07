@@ -9,7 +9,7 @@ CREATE TABLE "matches" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
-    "status" "MatchStatus",
+    "status" "MatchStatus" NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "duration" DOUBLE PRECISION,
 
