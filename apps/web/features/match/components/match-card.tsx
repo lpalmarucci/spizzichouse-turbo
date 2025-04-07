@@ -56,7 +56,7 @@ export function MatchCard({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleString();
+    return date.toLocaleDateString("en-US");
   };
 
   const getStatusText = (status: string) => {

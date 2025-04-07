@@ -2182,6 +2182,7 @@ export namespace Prisma {
   export type MatchMinAggregateOutputType = {
     id: string | null
     title: string | null
+    description: string | null
     status: $Enums.MatchStatus | null
     date: Date | null
     duration: number | null
@@ -2190,6 +2191,7 @@ export namespace Prisma {
   export type MatchMaxAggregateOutputType = {
     id: string | null
     title: string | null
+    description: string | null
     status: $Enums.MatchStatus | null
     date: Date | null
     duration: number | null
@@ -2198,6 +2200,7 @@ export namespace Prisma {
   export type MatchCountAggregateOutputType = {
     id: number
     title: number
+    description: number
     status: number
     date: number
     duration: number
@@ -2216,6 +2219,7 @@ export namespace Prisma {
   export type MatchMinAggregateInputType = {
     id?: true
     title?: true
+    description?: true
     status?: true
     date?: true
     duration?: true
@@ -2224,6 +2228,7 @@ export namespace Prisma {
   export type MatchMaxAggregateInputType = {
     id?: true
     title?: true
+    description?: true
     status?: true
     date?: true
     duration?: true
@@ -2232,6 +2237,7 @@ export namespace Prisma {
   export type MatchCountAggregateInputType = {
     id?: true
     title?: true
+    description?: true
     status?: true
     date?: true
     duration?: true
@@ -2327,7 +2333,8 @@ export namespace Prisma {
   export type MatchGroupByOutputType = {
     id: string
     title: string
-    status: $Enums.MatchStatus
+    description: string | null
+    status: $Enums.MatchStatus | null
     date: Date
     duration: number | null
     _count: MatchCountAggregateOutputType | null
@@ -2354,6 +2361,7 @@ export namespace Prisma {
   export type MatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    description?: boolean
     status?: boolean
     date?: boolean
     duration?: boolean
@@ -2364,6 +2372,7 @@ export namespace Prisma {
   export type MatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    description?: boolean
     status?: boolean
     date?: boolean
     duration?: boolean
@@ -2372,6 +2381,7 @@ export namespace Prisma {
   export type MatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    description?: boolean
     status?: boolean
     date?: boolean
     duration?: boolean
@@ -2380,12 +2390,13 @@ export namespace Prisma {
   export type MatchSelectScalar = {
     id?: boolean
     title?: boolean
+    description?: boolean
     status?: boolean
     date?: boolean
     duration?: boolean
   }
 
-  export type MatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "status" | "date" | "duration", ExtArgs["result"]["match"]>
+  export type MatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "date" | "duration", ExtArgs["result"]["match"]>
   export type MatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     players?: boolean | Match$playersArgs<ExtArgs>
     _count?: boolean | MatchCountOutputTypeDefaultArgs<ExtArgs>
@@ -2401,7 +2412,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
-      status: $Enums.MatchStatus
+      description: string | null
+      status: $Enums.MatchStatus | null
       date: Date
       duration: number | null
     }, ExtArgs["result"]["match"]>
@@ -2830,6 +2842,7 @@ export namespace Prisma {
   interface MatchFieldRefs {
     readonly id: FieldRef<"Match", 'String'>
     readonly title: FieldRef<"Match", 'String'>
+    readonly description: FieldRef<"Match", 'String'>
     readonly status: FieldRef<"Match", 'MatchStatus'>
     readonly date: FieldRef<"Match", 'DateTime'>
     readonly duration: FieldRef<"Match", 'Float'>
@@ -3293,6 +3306,7 @@ export namespace Prisma {
   export const MatchScalarFieldEnum: {
     id: 'id',
     title: 'title',
+    description: 'description',
     status: 'status',
     date: 'date',
     duration: 'duration'
@@ -3502,7 +3516,8 @@ export namespace Prisma {
     NOT?: MatchWhereInput | MatchWhereInput[]
     id?: StringFilter<"Match"> | string
     title?: StringFilter<"Match"> | string
-    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
+    description?: StringNullableFilter<"Match"> | string | null
+    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
     players?: PlayerListRelationFilter
@@ -3511,7 +3526,8 @@ export namespace Prisma {
   export type MatchOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
-    status?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
     players?: PlayerOrderByRelationAggregateInput
@@ -3523,7 +3539,8 @@ export namespace Prisma {
     OR?: MatchWhereInput[]
     NOT?: MatchWhereInput | MatchWhereInput[]
     title?: StringFilter<"Match"> | string
-    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
+    description?: StringNullableFilter<"Match"> | string | null
+    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
     players?: PlayerListRelationFilter
@@ -3532,7 +3549,8 @@ export namespace Prisma {
   export type MatchOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
-    status?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
     _count?: MatchCountOrderByAggregateInput
@@ -3548,7 +3566,8 @@ export namespace Prisma {
     NOT?: MatchScalarWhereWithAggregatesInput | MatchScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Match"> | string
     title?: StringWithAggregatesFilter<"Match"> | string
-    status?: EnumMatchStatusWithAggregatesFilter<"Match"> | $Enums.MatchStatus
+    description?: StringNullableWithAggregatesFilter<"Match"> | string | null
+    status?: EnumMatchStatusNullableWithAggregatesFilter<"Match"> | $Enums.MatchStatus | null
     date?: DateTimeWithAggregatesFilter<"Match"> | Date | string
     duration?: FloatNullableWithAggregatesFilter<"Match"> | number | null
   }
@@ -3630,7 +3649,8 @@ export namespace Prisma {
   export type MatchCreateInput = {
     id?: string
     title: string
-    status: $Enums.MatchStatus
+    description?: string | null
+    status?: $Enums.MatchStatus | null
     date?: Date | string
     duration?: number | null
     players?: PlayerCreateNestedManyWithoutMatchInput
@@ -3639,7 +3659,8 @@ export namespace Prisma {
   export type MatchUncheckedCreateInput = {
     id?: string
     title: string
-    status: $Enums.MatchStatus
+    description?: string | null
+    status?: $Enums.MatchStatus | null
     date?: Date | string
     duration?: number | null
     players?: PlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -3648,7 +3669,8 @@ export namespace Prisma {
   export type MatchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
     players?: PlayerUpdateManyWithoutMatchNestedInput
@@ -3657,7 +3679,8 @@ export namespace Prisma {
   export type MatchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
     players?: PlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -3666,7 +3689,8 @@ export namespace Prisma {
   export type MatchCreateManyInput = {
     id?: string
     title: string
-    status: $Enums.MatchStatus
+    description?: string | null
+    status?: $Enums.MatchStatus | null
     date?: Date | string
     duration?: number | null
   }
@@ -3674,7 +3698,8 @@ export namespace Prisma {
   export type MatchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -3682,7 +3707,8 @@ export namespace Prisma {
   export type MatchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -3884,11 +3910,11 @@ export namespace Prisma {
     _max?: NestedEnumPlayerStatusFilter<$PrismaModel>
   }
 
-  export type EnumMatchStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumMatchStatusFilter<$PrismaModel> | $Enums.MatchStatus
+  export type EnumMatchStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumMatchStatusNullableFilter<$PrismaModel> | $Enums.MatchStatus | null
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -3915,6 +3941,7 @@ export namespace Prisma {
   export type MatchCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
@@ -3927,6 +3954,7 @@ export namespace Prisma {
   export type MatchMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
@@ -3935,6 +3963,7 @@ export namespace Prisma {
   export type MatchMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
@@ -3944,14 +3973,14 @@ export namespace Prisma {
     duration?: SortOrder
   }
 
-  export type EnumMatchStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMatchStatusFilter<$PrismaModel>
-    _max?: NestedEnumMatchStatusFilter<$PrismaModel>
+  export type EnumMatchStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4040,8 +4069,8 @@ export namespace Prisma {
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
   }
 
-  export type EnumMatchStatusFieldUpdateOperationsInput = {
-    set?: $Enums.MatchStatus
+  export type NullableEnumMatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MatchStatus | null
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -4246,11 +4275,11 @@ export namespace Prisma {
     _max?: NestedEnumPlayerStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumMatchStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumMatchStatusFilter<$PrismaModel> | $Enums.MatchStatus
+  export type NestedEnumMatchStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumMatchStatusNullableFilter<$PrismaModel> | $Enums.MatchStatus | null
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -4264,14 +4293,14 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumMatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMatchStatusFilter<$PrismaModel>
-    _max?: NestedEnumMatchStatusFilter<$PrismaModel>
+  export type NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MatchStatus | EnumMatchStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.MatchStatus[] | ListEnumMatchStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumMatchStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.MatchStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumMatchStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4293,7 +4322,8 @@ export namespace Prisma {
   export type MatchCreateWithoutPlayersInput = {
     id?: string
     title: string
-    status: $Enums.MatchStatus
+    description?: string | null
+    status?: $Enums.MatchStatus | null
     date?: Date | string
     duration?: number | null
   }
@@ -4301,7 +4331,8 @@ export namespace Prisma {
   export type MatchUncheckedCreateWithoutPlayersInput = {
     id?: string
     title: string
-    status: $Enums.MatchStatus
+    description?: string | null
+    status?: $Enums.MatchStatus | null
     date?: Date | string
     duration?: number | null
   }
@@ -4333,7 +4364,8 @@ export namespace Prisma {
     NOT?: MatchScalarWhereInput | MatchScalarWhereInput[]
     id?: StringFilter<"Match"> | string
     title?: StringFilter<"Match"> | string
-    status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
+    description?: StringNullableFilter<"Match"> | string | null
+    status?: EnumMatchStatusNullableFilter<"Match"> | $Enums.MatchStatus | null
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
   }
@@ -4395,7 +4427,8 @@ export namespace Prisma {
   export type MatchUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -4403,7 +4436,8 @@ export namespace Prisma {
   export type MatchUncheckedUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
@@ -4411,7 +4445,8 @@ export namespace Prisma {
   export type MatchUncheckedUpdateManyWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }

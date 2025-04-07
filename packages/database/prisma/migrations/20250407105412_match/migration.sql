@@ -5,14 +5,15 @@ CREATE TYPE "MatchStatus" AS ENUM ('ACTIVE', 'COMPLETED');
 ALTER TABLE "players" ALTER COLUMN "bio" DROP NOT NULL;
 
 -- CreateTable
-CREATE TABLE "Match" (
+CREATE TABLE "matches" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "status" "MatchStatus" NOT NULL,
+    "description" TEXT,
+    "status" "MatchStatus",
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "duration" DOUBLE PRECISION,
 
-    CONSTRAINT "Match_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "matches_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -27,7 +28,7 @@ CREATE TABLE "_MatchToPlayer" (
 CREATE INDEX "_MatchToPlayer_B_index" ON "_MatchToPlayer"("B");
 
 -- AddForeignKey
-ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_A_fkey" FOREIGN KEY ("A") REFERENCES "Match"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_A_fkey" FOREIGN KEY ("A") REFERENCES "matches"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_MatchToPlayer" ADD CONSTRAINT "_MatchToPlayer_B_fkey" FOREIGN KEY ("B") REFERENCES "players"("id") ON DELETE CASCADE ON UPDATE CASCADE;

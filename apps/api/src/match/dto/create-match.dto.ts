@@ -7,6 +7,10 @@ export class CreateMatchDto {
   @IsString()
   title: string;
 
+  @IsString()
+  @IsOptional()
+  description: string;
+
   @IsEnum(MatchStatus, { message: () => `status must be a valid enum value: ${Object.values(MatchStatus).join(', ')}` })
   status: MatchStatus = MatchStatus.ACTIVE;
 
@@ -18,6 +22,6 @@ export class CreateMatchDto {
   date: Date = new Date();
 
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNumber()
   duration: number;
 }

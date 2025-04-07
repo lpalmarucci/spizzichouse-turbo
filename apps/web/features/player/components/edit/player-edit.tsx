@@ -13,13 +13,13 @@ import {
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import {
   useGetPlayerById,
   useUpdatePlayer,
 } from "@/features/player/player.query";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
+import { PlayerLevel, PlayerStatus } from "@workspace/db";
 import {
   Select,
   SelectContent,
@@ -66,20 +66,19 @@ const playerSchema = z.object({
 
 export function PlayerEdit({ id }: PlayerEditProps) {
   const router = useRouter();
-  const { data, error, isFetching } = useGetPlayerById(id);
+  const { data: player, error, isFetching } = useGetPlayerById(id);
   if (isFetching) return <ScreenLoader />;
-  if (error && !data) {
+  if (error && !player) {
     toast(`Player ${id} not found`, { id });
     router.replace("/players");
     return;
   }
 
-  const [player, setPlayer] = useState<Player | undefined>(data);
   const form = useForm<z.infer<typeof playerSchema>>({
     resolver: zodResolver(playerSchema),
     defaultValues: {
       id,
-      bio: player?.bio,
+      bio: player?.bio ?? "",
       full_name: player?.full_name,
       level: player?.level,
       status: player?.status,
@@ -89,11 +88,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
     mode: "onChange",
   });
 
-  const {
-    error: errorMutation,
-    mutate,
-    isPending,
-  } = useUpdatePlayer(id, () => {
+  const { mutate, isPending } = useUpdatePlayer(() => {
     toast("Player updated successfully!");
     router.push(`/players/${id}`);
   });

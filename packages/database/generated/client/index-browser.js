@@ -130,6 +130,7 @@ exports.Prisma.PlayerScalarFieldEnum = {
 exports.Prisma.MatchScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  description: 'description',
   status: 'status',
   date: 'date',
   duration: 'duration'

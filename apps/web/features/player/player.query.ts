@@ -28,7 +28,7 @@ export function useGetPlayerById(id: string) {
   });
 }
 
-export function useUpdatePlayer(id: string, onSuccess?: () => void) {
+export function useUpdatePlayer(onSuccess?: () => void) {
   return useMutation({
     mutationFn: updatePlayer,
     onSuccess,

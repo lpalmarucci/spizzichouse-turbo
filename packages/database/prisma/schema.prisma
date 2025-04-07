@@ -23,17 +23,20 @@ model Player {
   level     PlayerLevel
   status    PlayerStatus
   Match     Match[]
-  
+
   @@map("players")
 }
 
 model Match {
-  id       String      @id @default(uuid())
-  title    String
-  status   MatchStatus
-  players  Player[]
-  date     DateTime    @default(now())
-  duration Float?
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  status      MatchStatus?
+  players     Player[]
+  date        DateTime     @default(now())
+  duration    Float?
+
+  @@map("matches")
 }
 
 enum MatchStatus {
