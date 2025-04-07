@@ -51,7 +51,7 @@ const formInitialValues = {
 
 export const matchSchema = z.object({
   title: z.string().nonempty("Title is required"),
-  description: z.string().nullable(),
+  description: z.string().max(255).nullable(),
   date: z.coerce.date(),
   duration: z.coerce.number().nullable(),
   playerIds: z.array(z.string()).min(1),

@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createMatch,
   deleteMatch,
+  getMatchById,
   getMatches,
 } from "@/features/match/match.actions";
 import { MatchWithPlayers } from "@workspace/db";
@@ -13,6 +14,17 @@ export function useGetMatches() {
   return useQuery<MatchWithPlayers[]>({
     queryKey: [MATCH_QUERY_KEY],
     queryFn: getMatches,
+  });
+}
+
+export function useGetMatchById(id: string) {
+  return useQuery<MatchWithPlayers>({
+    enabled: !!id,
+    queryKey: [MATCH_QUERY_KEY, id],
+    queryFn: async ({ queryKey }) => {
+      const [_, matchId] = queryKey;
+      return getMatchById(matchId as string);
+    },
   });
 }
 

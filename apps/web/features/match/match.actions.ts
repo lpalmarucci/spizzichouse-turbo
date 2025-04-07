@@ -10,6 +10,10 @@ export async function getMatches() {
   return handleRequest<MatchWithPlayers[]>("GET", "/matches");
 }
 
+export async function getMatchById(id: string) {
+  return handleRequest<MatchWithPlayers>("GET", `/matches/${id}`);
+}
+
 export async function createMatch(match: UpdateMatchDto) {
   const data = await handleRequest<MatchWithPlayers[]>(
     "POST",

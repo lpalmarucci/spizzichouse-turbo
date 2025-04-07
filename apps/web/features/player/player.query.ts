@@ -12,7 +12,6 @@ export function useGetPlayers() {
   return useQuery<Player[]>({
     queryKey: [PLAYER_QUERY_KEY],
     queryFn: getPlayers,
-    retry: false,
   });
 }
 

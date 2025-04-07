@@ -15,7 +15,6 @@ import {
 } from "@/features/match/match.query";
 import { ScreenLoader } from "@/components/screen-loader";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import {
   Popover,
@@ -24,6 +23,7 @@ import {
 } from "@workspace/ui/components/popover";
 import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar";
 import { MatchStatus } from "@workspace/db";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
