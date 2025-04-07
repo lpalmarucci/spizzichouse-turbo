@@ -13,7 +13,6 @@ import React, { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { Separator } from "@workspace/ui/components/separator";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@workspace/ui/zod-resolver";
@@ -30,14 +29,13 @@ import { toast } from "sonner";
 import { SubmitButton } from "@/components/submit-button";
 
 const registerSchema = z.object({
-  name: z.string(),
-  lastName: z.string(),
+  name: z.string().nonempty("Name is required"),
+  lastName: z.string().nonempty("Last name is required"),
   email: z.string().email(),
-  password: z.string(),
+  password: z.string().min(8),
 });
 
 export function RegisterForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const form = useForm<z.infer<typeof registerSchema>>({
     mode: "onChange",
@@ -159,7 +157,12 @@ export function RegisterForm() {
                   </FormItem>
                 )}
               />
-              <SubmitButton className="w-full mt-4">Registrati</SubmitButton>
+              <SubmitButton
+                className="w-full mt-4"
+                disabled={!form.formState.isValid}
+              >
+                Registrati
+              </SubmitButton>
             </form>
           </Form>
 
