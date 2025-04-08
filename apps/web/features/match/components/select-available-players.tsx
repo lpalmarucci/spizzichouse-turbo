@@ -8,22 +8,28 @@ import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
 import React, { useState } from "react";
 import { useGetPlayers } from "@/features/player/player.query";
-import { ControllerRenderProps } from "react-hook-form";
-import { matchSchema } from "@/features/match/components/create-match-dialog";
-import { z } from "zod";
+import { ControllerRenderProps, FieldPath, FieldValues } from "react-hook-form";
 
-interface SelectAvailablePlayersProps {
-  field: ControllerRenderProps<z.infer<typeof matchSchema>, "playerIds">;
+interface SelectAvailablePlayersProps<
+  TFormValues extends FieldValues = FieldValues,
+  TFieldName extends FieldPath<TFormValues> = FieldPath<TFormValues>,
+> {
+  field: ControllerRenderProps<TFormValues, TFieldName>;
 }
 
-export function SelectAvailablePlayers({ field }: SelectAvailablePlayersProps) {
+export function SelectAvailablePlayers<
+  TFormValues extends FieldValues,
+  TFieldName extends FieldPath<TFormValues>,
+>({ field }: SelectAvailablePlayersProps<TFormValues, TFieldName>) {
   const { data: players = [], isPending } = useGetPlayers();
   const [playerSearch, setPlayerSearch] = useState<string>("");
 
   const togglePlayer = (playerId: string) => {
     if (field.value.length > 0 && field.value.includes(playerId)) {
       field.onChange(() => {
-        const filteredPlayers = field.value.filter((id) => id !== playerId);
+        const filteredPlayers = field.value.filter(
+          (id: string) => id !== playerId,
+        );
         field.onChange([...filteredPlayers]);
       });
     } else {

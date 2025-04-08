@@ -15,11 +15,12 @@ interface DetailHeaderProps extends PropsWithChildren {
   editButtonText?: string;
   headingText: string;
   subHeadingText?: string;
+  showEditButton?: boolean;
 }
 
 export function DetailHeader({
-  children,
   href,
+  showEditButton = true,
   editButtonText = "Edit",
   headingText,
   subHeadingText,
@@ -37,12 +38,14 @@ export function DetailHeader({
             <p className="text-lg text-muted-foreground">{subHeadingText}</p>
           )}
         </div>
-        <Button asChild>
-          <Link href={href}>
-            <Edit className="mr-2 h-4 w-4" />
-            {editButtonText}
-          </Link>
-        </Button>
+        {showEditButton && (
+          <Button asChild>
+            <Link href={href}>
+              <Edit className="mr-2 h-4 w-4" />
+              {editButtonText}
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ import {
 } from "@workspace/ui/components/dialog";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@workspace/ui/zod-resolver";
 import {
@@ -35,33 +34,22 @@ import { SubmitButton } from "@/components/submit-button";
 import { MATCH_QUERY_KEY, useCreateMatch } from "@/features/match/match.query";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import {
+  MATCH_FORM_INITIAL_VALUES,
+  matchSchema,
+  type MatchSchemaType,
+} from "@/features/match/match.schema";
 
 interface CreateMatchDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const formInitialValues = {
-  title: "",
-  description: null,
-  duration: null,
-  date: new Date(),
-  playerIds: [],
-};
-
-export const matchSchema = z.object({
-  title: z.string().nonempty("Title is required"),
-  description: z.string().max(255).nullable(),
-  date: z.coerce.date(),
-  duration: z.coerce.number().nullable(),
-  playerIds: z.array(z.string()).min(1),
-});
-
 function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
-  const form = useForm<z.infer<typeof matchSchema>>({
+  const form = useForm<MatchSchemaType>({
     mode: "onChange",
     resolver: zodResolver(matchSchema),
-    defaultValues: formInitialValues,
+    defaultValues: MATCH_FORM_INITIAL_VALUES,
   });
 
   const queryClient = useQueryClient();
@@ -86,7 +74,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
       open={open}
       onOpenChange={(val) => {
         if (!val) {
-          form.reset(formInitialValues);
+          form.reset(MATCH_FORM_INITIAL_VALUES);
         }
         onOpenChange(val);
       }}

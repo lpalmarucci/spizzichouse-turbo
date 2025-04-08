@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Calendar, Plus, Search } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
@@ -13,7 +13,6 @@ import {
   useDeleteMatch,
   useGetMatches,
 } from "@/features/match/match.query";
-import { ScreenLoader } from "@/components/screen-loader";
 import { toast } from "sonner";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import {
@@ -24,6 +23,7 @@ import {
 import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar";
 import { MatchStatus } from "@workspace/db";
 import { useQueryClient } from "@tanstack/react-query";
+import { ScreenLoader } from "@/components/screen-loader";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,7 +34,7 @@ export function MatchesSection() {
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const matchId = useRef<string | null>(null);
+  const [matchId, setMatchId] = useState<string | null>();
 
   const { mutate: deleteMatchMutation } = useDeleteMatch(() => {
     toast.info(`Match deleted successfully`);
@@ -49,7 +49,7 @@ export function MatchesSection() {
   // Handle delete match
   const handleDeleteMatch = (id: string) => {
     setShowDeleteDialog(true);
-    matchId.current = id;
+    setMatchId(matchId);
   };
 
   // Filter match based on criteria
@@ -218,7 +218,7 @@ export function MatchesSection() {
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={() => {
-          deleteMatchMutation(matchId.current as string);
+          deleteMatchMutation(matchId as string);
         }}
       />
     </div>
