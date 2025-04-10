@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Calendar, Plus, Search } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
@@ -34,7 +34,7 @@ export function MatchesSection() {
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const [matchId, setMatchId] = useState<string | null>();
+  const matchId = useRef<string>("");
 
   const { mutate: deleteMatchMutation } = useDeleteMatch(() => {
     toast.info(`Match deleted successfully`);
@@ -48,8 +48,8 @@ export function MatchesSection() {
 
   // Handle delete match
   const handleDeleteMatch = (id: string) => {
+    matchId.current = id;
     setShowDeleteDialog(true);
-    setMatchId(matchId);
   };
 
   // Filter match based on criteria
@@ -107,7 +107,9 @@ export function MatchesSection() {
             <TabsList className="bg-background border">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value={MatchStatus.UPCOMING}>Upcoming</TabsTrigger>
-              <TabsTrigger value={MatchStatus.IN_PROGRESS}>Active</TabsTrigger>
+              <TabsTrigger value={MatchStatus.IN_PROGRESS}>
+                In Progress
+              </TabsTrigger>
               <TabsTrigger value={MatchStatus.COMPLETED}>Completed</TabsTrigger>
             </TabsList>
           </Tabs>
@@ -218,7 +220,7 @@ export function MatchesSection() {
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={() => {
-          deleteMatchMutation(matchId as string);
+          deleteMatchMutation(matchId.current);
         }}
       />
     </div>

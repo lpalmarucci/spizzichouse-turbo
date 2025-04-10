@@ -51,7 +51,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
     resolver: zodResolver(matchSchema),
     defaultValues: MATCH_FORM_INITIAL_VALUES,
   });
-
+  console.log(form.formState.isValid, form.formState.errors);
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useCreateMatch(() => {

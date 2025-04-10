@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ArrowLeft } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -45,6 +44,7 @@ import {
 import { SubmitButton } from "@/components/submit-button";
 import { toast } from "sonner";
 import { ScreenLoader } from "@/components/screen-loader";
+import { Detail, DetailHeader } from "@/components/detail";
 
 interface PlayerEditProps {
   id: string;
@@ -98,23 +98,15 @@ export function PlayerEdit({ id }: PlayerEditProps) {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-4">
-        <Button variant="outline" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Modifica Giocatore
-          </h1>
-          <p className="text-muted-foreground">
-            Aggiorna le informazioni del profilo
-          </p>
-        </div>
-      </div>
+    <Detail>
+      <DetailHeader
+        backLocationHref="/matches"
+        headingText="Modifica giocatore"
+        subHeadingText="Aggiorne le informazioni del profilo"
+      />
 
       <Form {...form}>
-        <form className="space-y-8">
+        <form>
           <FormField
             control={form.control}
             name="id"
@@ -282,6 +274,6 @@ export function PlayerEdit({ id }: PlayerEditProps) {
           </div>
         </form>
       </Form>
-    </div>
+    </Detail>
   );
 }

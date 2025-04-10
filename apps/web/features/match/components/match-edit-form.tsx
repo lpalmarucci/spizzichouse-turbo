@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@workspace/ui/components/button";
@@ -21,14 +21,10 @@ import {
 } from "@workspace/ui/components/select";
 import { Textarea } from "@workspace/ui/components/textarea";
 import { DateTimePicker } from "@/components/date-time-picker";
-import { useGetMatchById } from "@/features/match/match.query";
+import { useEditMatch, useGetMatchById } from "@/features/match/match.query";
 import { ScreenLoader } from "@/components/screen-loader";
 import { useForm } from "react-hook-form";
-import {
-  MATCH_FORM_INITIAL_VALUES,
-  matchSchema,
-  MatchSchemaType,
-} from "@/features/match/match.schema";
+import { matchSchema, MatchSchemaType } from "@/features/match/match.schema";
 import { zodResolver } from "@workspace/ui/zod-resolver";
 import {
   Form,
@@ -41,6 +37,7 @@ import {
 import { SubmitButton } from "@/components/submit-button";
 import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
 import { MatchStatus } from "@workspace/db";
+import { toast } from "sonner";
 
 interface MatchEditFormProps {
   matchId: string;
@@ -48,35 +45,41 @@ interface MatchEditFormProps {
 
 export function MatchEditForm({ matchId }: MatchEditFormProps) {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState<Date>(new Date());
-  const [status, setStatus] = useState("upcoming");
-  const { data: match, isFetching } = useGetMatchById(matchId);
+  const { data: match, isFetching, error } = useGetMatchById(matchId);
+
+  if (isFetching) return <ScreenLoader />;
+  if (error && !match) {
+    toast(`Match ${matchId} not found`);
+    router.replace("/matches");
+    return;
+  }
+
   const form = useForm<MatchSchemaType>({
     mode: "onChange",
     resolver: zodResolver(matchSchema),
-    defaultValues: MATCH_FORM_INITIAL_VALUES,
+    defaultValues: {
+      id: matchId,
+      title: match?.title ?? "",
+      description: match?.description,
+      duration: match?.duration,
+      date: match?.date ? new Date(match?.date) : new Date(),
+      status: match?.status,
+      playerIds: match?.players?.map((p) => p.id) ?? [],
+    },
+  });
+
+  const { mutate, isPending } = useEditMatch(() => {
+    toast("Match updated successfully");
+    router.push(`/matches/${matchId}`);
   });
 
   function onFormSubmit() {
     const parseResult = matchSchema.safeParse(form.getValues());
     const errors = parseResult.error?.flatten().formErrors;
     if (!errors || errors.length === 0) {
-      // mutate(form.getValues());
+      mutate(form.getValues());
     }
   }
-
-  useEffect(() => {
-    console.log({ match });
-    if (match)
-      form.reset({
-        ...match,
-        date: new Date(match.date),
-        playerIds: match.players?.map((p) => p.id),
-      });
-  }, [match]);
-  if (isFetching) return <ScreenLoader />;
 
   return (
     <Form {...form}>
@@ -90,6 +93,19 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <FormField
+                control={form.control}
+                name="id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input type="hidden" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="space-y-2">
                 <FormField
                   control={form.control}
@@ -167,24 +183,26 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Estimated Duration</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value?.toString()}
-                        >
+                      <FormLabel>Durata</FormLabel>
+                      <Select
+                        {...field}
+                        defaultValue={field.value?.toString()}
+                        onValueChange={field.onChange}
+                        value={field.value?.toString() ?? "0"}
+                      >
+                        <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Minutes" />
                           </SelectTrigger>
-                          <SelectContent className="w-full border-primary/20 focus-visible:ring-primary/30">
-                            {[0, 15, 30, 45, 60].map((min) => (
-                              <SelectItem key={min} value={min.toString()}>
-                                {min} minutes
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                        </FormControl>
+                        <SelectContent className="w-full border-primary/20 focus-visible:ring-primary/30">
+                          {[0, 15, 30, 45, 60].map((min) => (
+                            <SelectItem key={min} value={min.toString()}>
+                              {min} minutes
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -244,7 +262,7 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
             >
               Cancel
             </Button>
-            <SubmitButton>Save changes</SubmitButton>
+            <SubmitButton isLoading={isPending}>Save changes</SubmitButton>
           </div>
         </div>
       </form>

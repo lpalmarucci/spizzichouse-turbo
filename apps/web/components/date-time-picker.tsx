@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
+import { formatDate } from "date-fns";
 
 interface DateTimePickerProps {
   date: Date;
@@ -51,7 +52,11 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? date.toLocaleDateString("en-UK") : <span>Pick a date</span>}
+          {date ? (
+            formatDate(date, "dd/MM/yyyy HH:mm")
+          ) : (
+            <span>Pick a date</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
@@ -82,7 +87,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
             </SelectContent>
           </Select>
           <Select
-            value={"0"}
+            value={date.getMinutes().toString()}
             onValueChange={(value) => {
               const newDate = new Date(date);
               newDate.setMinutes(Number.parseInt(value));

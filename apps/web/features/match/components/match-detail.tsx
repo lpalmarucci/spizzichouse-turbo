@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Calendar, Edit, Users } from "lucide-react";
+import { Calendar, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -15,8 +15,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@workspace/ui/components/tabs";
-import { Button } from "@workspace/ui/components/button";
-import Link from "next/link";
 import { Detail, DetailHeader } from "@/components/detail";
 import { MatchStatus } from "@workspace/db";
 import { useGetMatchById } from "@/features/match/match.query";
@@ -52,22 +50,12 @@ export default function MatchDetail({ id }: { id: string }) {
   return (
     <Detail>
       <DetailHeader
-        href={`/matches/${id}/edit`}
-        editButtonText="Edit match"
         headingText={match.title}
-      >
-        <Button variant="outline" size="icon" asChild>
-          <Link href="/">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <Button asChild>
-          <Link href={`/matches/${id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Match
-          </Link>
-        </Button>
-      </DetailHeader>
+        editHref={`/matches/${id}/edit`}
+        showEditButton={true}
+        editButtonText="Edit match"
+        backLocationHref="/matches"
+      />
       <div className="grid gap-6">
         <div className="flex flex-col md:flex-row gap-6">
           <Card className="flex-1">
