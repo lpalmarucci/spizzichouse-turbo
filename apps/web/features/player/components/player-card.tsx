@@ -90,7 +90,7 @@ export function PlayerCard({ player }: { player: Player }) {
             <div className="flex items-center gap-1 text-sm">
               <Trophy className="h-4 w-4 text-primary" />
               <span>
-                {/*Vittorie: {player.wins}/{player.matches}*/}
+                {/*Vittorie: {player.wins}/{player.match}*/}
                 Vittorie: 0
               </span>
             </div>

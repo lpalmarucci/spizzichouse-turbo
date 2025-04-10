@@ -127,6 +127,15 @@ exports.Prisma.PlayerScalarFieldEnum = {
   status: 'status'
 };
 
+exports.Prisma.MatchScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  date: 'date',
+  duration: 'duration'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -135,6 +144,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.PlayerLevel = exports.$Enums.PlayerLevel = {
   BEGINNER: 'BEGINNER',
@@ -147,8 +161,15 @@ exports.PlayerStatus = exports.$Enums.PlayerStatus = {
   INACTIVE: 'INACTIVE'
 };
 
+exports.MatchStatus = exports.$Enums.MatchStatus = {
+  UPCOMING: 'UPCOMING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.Prisma.ModelName = {
-  Player: 'Player'
+  Player: 'Player',
+  Match: 'Match'
 };
 
 /**

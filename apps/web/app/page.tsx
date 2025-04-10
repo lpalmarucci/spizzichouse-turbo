@@ -10,9 +10,9 @@ export default async function Page() {
 
   return (
     <div className="flex items-center justify-center min-h-svh">
-      <div className="flex min-h-screen flex-col min-w-6xl">
+      <div className="flex min-h-screen flex-col max-w-6xl w-full">
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container flex h-16 items-center justify-between">
+          <div className="container mx-auto flex h-16 items-center justify-between">
             <div className="flex items-center gap-2 px-4">
               <Trophy className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold">Spizzichouse</span>
@@ -30,9 +30,9 @@ export default async function Page() {
             </div>
           </div>
         </header>
-        <main className="flex-1 flex items-center">
+        <main className="flex-1 flex flex-col items-center">
           <section className="w-full py-12 md:py-24 lg:py-32">
-            <div className="container max-w-[800px] mx-auto px-4 md:px-6">
+            <div className="container mx-auto max-w-[800px] px-4 md:px-6">
               <div className="flex flex-col justify-center items-center space-y-4 text-center">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
