@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from '@nestjs/class-validator';
-import { MatchStatus } from '@workspace/db';
+import { MatchStatus } from '@prisma/client/output';
 import { IsArray, IsDate, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 

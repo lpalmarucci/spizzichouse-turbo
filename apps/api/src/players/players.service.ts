@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Player } from '@workspace/db';
+import { Player } from '@prisma/client/output';
 import { CreatePlayer } from './models/create-player.model';
+import { UpdatePlayer } from './models/update-player.model';
 
 @Injectable()
 export class PlayersService {
@@ -34,7 +34,7 @@ export class PlayersService {
     });
   }
 
-  update(id: string, updatePlayerDto: UpdatePlayerDto) {
+  update(id: string, updatePlayerDto: UpdatePlayer) {
     return this._prismaService.player.update({
       where: {
         id,

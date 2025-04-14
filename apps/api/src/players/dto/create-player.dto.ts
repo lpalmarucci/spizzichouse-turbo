@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString, MaxLength } from '@nestjs/class-validator';
-import { PlayerLevel, PlayerStatus } from '@workspace/db';
+import { PlayerLevel, PlayerStatus } from '@prisma/client/output';
 import { IsEmail } from 'class-validator';
 
 export class CreatePlayerDto {

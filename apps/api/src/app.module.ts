@@ -18,7 +18,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       driver: ApolloDriver,
       autoSchemaFile: `${process.cwd()}/src/@graphql/schema.gql`,
       sortSchema: true,
-      // graphiql: true,
+      graphiql: true,
     }),
     SupabaseModule,
     AuthModule,

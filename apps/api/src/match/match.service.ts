@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match, Player } from '@workspace/db';
+import { Match, Player } from '@prisma/client/output';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { PlayersService } from '../players/players.service';
 

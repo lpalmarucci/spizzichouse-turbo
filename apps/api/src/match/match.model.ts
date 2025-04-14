@@ -1,5 +1,5 @@
 import { Field, Float, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { MatchStatus } from '@workspace/db';
+import { MatchStatus } from '@prisma/client/output';
 import { Player } from '../players/models/player.model';
 
 registerEnumType(MatchStatus, { name: 'MatchStatus' });
