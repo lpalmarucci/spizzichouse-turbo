@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateMatch {
+  date: DateTime!
+  description: String
+  duration: Float!
+  playerIds: [String!]!
+  status: MatchStatus! = UPCOMING
+  title: String!
+}
+
 input CreatePlayer {
   bio: String
   email: String!
@@ -16,10 +25,10 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Match {
-  createdAt: DateTime!
+  date: DateTime!
   description: String
-  duration: Float
-  id: Int!
+  duration: Float!
+  id: String!
   players: [Player!]!
   status: MatchStatus!
   title: String!
@@ -32,8 +41,11 @@ enum MatchStatus {
 }
 
 type Mutation {
+  createMatch(match: CreateMatch!): Match!
   createPlayer(player: CreatePlayer!): Player!
+  deleteMatch(id: String!): Match!
   deletePlayer(id: String!): Player!
+  updateMatch(id: String!, match: UpdateMatch!): Match!
   updatePlayer(id: String!, player: UpdatePlayer!): Player!
 }
 
@@ -60,8 +72,19 @@ enum PlayerStatus {
 }
 
 type Query {
+  getAllMatches: [Match!]!
   getAllPlayers: [Player!]!
+  getMatchById(id: String!): Match!
   getPlayerById(id: String!): Player!
+}
+
+input UpdateMatch {
+  date: DateTime
+  description: String
+  duration: Float
+  playerIds: [String!]
+  status: MatchStatus = UPCOMING
+  title: String
 }
 
 input UpdatePlayer {

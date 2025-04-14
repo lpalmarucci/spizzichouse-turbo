@@ -1,6 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Match } from '../../match/match.model';
 import { PlayerLevel, PlayerStatus } from '@prisma/client/output';
+import { Match } from '../../match/models/match.model';
 
 registerEnumType(PlayerLevel, { name: 'PlayerLevel' });
 registerEnumType(PlayerStatus, { name: 'PlayerStatus' });

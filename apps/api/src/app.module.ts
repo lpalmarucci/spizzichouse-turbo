@@ -19,6 +19,20 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       autoSchemaFile: `${process.cwd()}/src/@graphql/schema.gql`,
       sortSchema: true,
       graphiql: true,
+      formatError: (error) => {
+        const originalError = error.extensions?.originalError as Error;
+
+        if (!originalError) {
+          return {
+            message: error.message,
+            code: error.extensions?.code,
+          };
+        }
+        return {
+          message: originalError.message,
+          code: error.extensions?.code,
+        };
+      },
     }),
     SupabaseModule,
     AuthModule,
