@@ -1,0 +1,72 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreatePlayer {
+  bio: String
+  email: String!
+  full_name: String!
+  level: PlayerLevel! = BEGINNER
+  status: PlayerStatus! = ACTIVE
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Match {
+  createdAt: DateTime!
+  description: String
+  duration: Float
+  id: Int!
+  players: [Player!]!
+  status: MatchStatus!
+  title: String!
+}
+
+enum MatchStatus {
+  COMPLETED
+  IN_PROGRESS
+  UPCOMING
+}
+
+type Mutation {
+  createPlayer(player: CreatePlayer!): Player!
+  deletePlayer(id: String!): Player!
+  updatePlayer(id: String!, player: UpdatePlayer!): Player!
+}
+
+type Player {
+  bio: String
+  createdAt: DateTime!
+  email: String!
+  full_name: String!
+  id: String!
+  level: PlayerLevel!
+  matches: [Match!]
+  status: PlayerStatus!
+}
+
+enum PlayerLevel {
+  BEGINNER
+  EXPERT
+  INTERMEDIATE
+}
+
+enum PlayerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type Query {
+  getAllPlayers: [Player!]!
+  getPlayerById(id: String!): Player!
+}
+
+input UpdatePlayer {
+  bio: String
+  full_name: String
+  level: PlayerLevel
+  status: PlayerStatus
+}
