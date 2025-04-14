@@ -67,6 +67,6 @@ type Query {
 input UpdatePlayer {
   bio: String
   full_name: String
-  level: PlayerLevel
-  status: PlayerStatus
+  level: PlayerLevel = BEGINNER
+  status: PlayerStatus = ACTIVE
 }

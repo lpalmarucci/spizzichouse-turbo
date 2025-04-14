@@ -1,5 +1,4 @@
-import { InputType, OmitType } from '@nestjs/graphql';
-import { PartialType } from '@nestjs/mapped-types';
+import { InputType, OmitType, PartialType } from '@nestjs/graphql';
 import { CreatePlayer } from './create-player.model';
 
 @InputType()
