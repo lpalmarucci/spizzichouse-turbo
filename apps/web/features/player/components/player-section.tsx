@@ -17,7 +17,7 @@ import {
 } from "@workspace/ui/components/tabs";
 import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
+import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import { useGetPlayers } from "@/features/player/player.query";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
 

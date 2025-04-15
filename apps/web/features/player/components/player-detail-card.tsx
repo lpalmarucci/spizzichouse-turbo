@@ -1,6 +1,6 @@
 "use client";
 
-import { Player } from "@workspace/db";
+import { Player } from "@workspace/api/qgl-types";
 import {
   Card,
   CardContent,

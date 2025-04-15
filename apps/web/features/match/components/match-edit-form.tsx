@@ -36,7 +36,7 @@ import {
 } from "@workspace/ui/components/form";
 import { SubmitButton } from "@/components/submit-button";
 import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
-import { MatchStatus } from "@workspace/db";
+import { MatchStatus } from "@workspace/api/qgl-types";
 import { toast } from "sonner";
 
 interface MatchEditFormProps {

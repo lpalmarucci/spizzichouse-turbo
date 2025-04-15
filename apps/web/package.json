@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate-gql-types": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/client": "^3.13.7",
@@ -17,6 +18,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-query": "^5.69.0",
     "@workspace/ui": "workspace:*",
+    "@workspace/api": "workspace:*",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "graphql": "^16.10.0",

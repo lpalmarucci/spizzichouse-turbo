@@ -1,6 +1,6 @@
 "use server";
 
-import { Player } from "@workspace/db";
+import { Player } from "@workspace/api/qgl-types";
 import { handleRequest } from "@/api/api-handler";
 import { revalidatePath } from "next/cache";
 

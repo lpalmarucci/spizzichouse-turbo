@@ -1,7 +1,6 @@
 "use client";
 
 import { Filter, Users } from "lucide-react";
-import { PlayerLevel, PlayerStatus } from "@workspace/db";
 import { Button } from "@workspace/ui/components/button";
 
 interface PlayerNotFoundProps {

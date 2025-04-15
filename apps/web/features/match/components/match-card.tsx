@@ -25,7 +25,7 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
-import { MatchStatus, Player } from "@workspace/db";
+import { MatchStatus, Player } from "@workspace/api/qgl-types";
 import { getStatusColor } from "@/features/match/match.utils";
 
 export function MatchCard({

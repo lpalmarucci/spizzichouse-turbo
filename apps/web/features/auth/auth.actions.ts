@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { PlayerLevel, PlayerStatus } from "@workspace/db";
+import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 
 export async function login(prevState: any, formData: FormData) {
   const supabase = await createClient();
@@ -34,8 +34,8 @@ export async function signup(prevState: any, formData: FormData) {
   const rawData = {
     full_name: name.concat(" ", lastName),
     bio: "A sample of player bio where the character",
-    level: PlayerLevel.BEGINNER,
-    status: PlayerStatus.ACTIVE,
+    level: PlayerLevel.Beginner,
+    status: PlayerStatus.Active,
   };
   const { error } = await supabase.auth.signUp({
     email: data.email,

@@ -18,7 +18,7 @@ import {
   useGetPlayerById,
   useUpdatePlayer,
 } from "@/features/player/player.query";
-import { PlayerLevel, PlayerStatus } from "@workspace/db";
+import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import {
   Select,
   SelectContent,
@@ -54,12 +54,8 @@ const playerSchema = z.object({
   id: z.string(),
   full_name: z.string(),
   bio: z.string().max(255),
-  level: z.enum([
-    PlayerLevel.BEGINNER,
-    PlayerLevel.INTERMEDIATE,
-    PlayerLevel.EXPERT,
-  ]),
-  status: z.enum([PlayerStatus.ACTIVE, PlayerStatus.INACTIVE]),
+  level: z.nativeEnum(PlayerLevel),
+  status: z.nativeEnum(PlayerStatus),
   createdAt: z.date(),
   email: z.string(),
 });
@@ -236,12 +232,12 @@ export function PlayerEdit({ id }: PlayerEditProps) {
                         </div>
                         <FormControl>
                           <Switch
-                            checked={field.value === PlayerStatus.ACTIVE}
+                            checked={field.value === PlayerStatus.Active}
                             onCheckedChange={(val) =>
                               field.onChange(
                                 val
-                                  ? PlayerStatus.ACTIVE
-                                  : PlayerStatus.INACTIVE,
+                                  ? PlayerStatus.Active
+                                  : PlayerStatus.Inactive,
                               )
                             }
                             {...field}

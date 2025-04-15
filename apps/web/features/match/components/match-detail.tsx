@@ -16,7 +16,7 @@ import {
   TabsTrigger,
 } from "@workspace/ui/components/tabs";
 import { Detail, DetailHeader } from "@/components/detail";
-import { MatchStatus } from "@workspace/db";
+import { MatchStatus } from "@workspace/api/qgl-types";
 import { useGetMatchById } from "@/features/match/match.query";
 import { ScreenLoader } from "@/components/screen-loader";
 

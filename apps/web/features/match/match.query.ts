@@ -6,20 +6,20 @@ import {
   getMatchById,
   getMatches,
 } from "@/features/match/match.actions";
-import { MatchWithPlayers } from "@workspace/db";
+import { Match } from "@workspace/api/qgl-types";
 import { toast } from "sonner";
 
 export const MATCH_QUERY_KEY = "match";
 
 export function useGetMatches() {
-  return useQuery<MatchWithPlayers[]>({
+  return useQuery<Match[]>({
     queryKey: [MATCH_QUERY_KEY],
     queryFn: getMatches,
   });
 }
 
 export function useGetMatchById(id: string) {
-  return useQuery<MatchWithPlayers>({
+  return useQuery<Match>({
     queryKey: [MATCH_QUERY_KEY, id],
     queryFn: async ({ queryKey }) => {
       const [_, matchId] = queryKey;

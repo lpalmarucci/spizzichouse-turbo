@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Player } from "@workspace/db";
+import { Player } from "@workspace/api/qgl-types";
 import {
   getPlayerById,
   getPlayers,

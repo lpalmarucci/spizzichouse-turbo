@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@workspace/ui/components/popover";
 import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar";
-import { MatchStatus } from "@workspace/db";
+import { MatchStatus } from "@workspace/api/qgl-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { ScreenLoader } from "@/components/screen-loader";
 
