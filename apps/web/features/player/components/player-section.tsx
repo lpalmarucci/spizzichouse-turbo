@@ -18,22 +18,24 @@ import {
 import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
-import { useGetPlayers } from "@/features/player/player.query";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
 
 type SortDirection = "asc" | "desc";
 
-export function PlayerSection() {
+interface PlayerSectionProps {
+  players: Player[];
+}
+
+export function PlayerSection({ players }: PlayerSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | undefined>();
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const { data } = useGetPlayers();
 
   const filteredPlayers = useMemo(() => {
-    if (!data) return [];
-    return data.filter((player) => {
+    if (!players) return [];
+    return players.filter((player) => {
       if (
         searchQuery &&
         !player.full_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -51,7 +53,7 @@ export function PlayerSection() {
 
       return true;
     });
-  }, [data, searchQuery, statusFilter]);
+  }, [players, searchQuery, statusFilter]);
 
   const sortedPlayers = useMemo<Player[]>(() => {
     if (!filteredPlayers) return [];
@@ -162,7 +164,7 @@ export function PlayerSection() {
         <TabsContent value="active" className="mt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
-              .filter((player) => player.status === PlayerStatus.ACTIVE)
+              .filter((player) => player.status === PlayerStatus.Active)
               .map((player, index) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />
@@ -174,7 +176,7 @@ export function PlayerSection() {
         <TabsContent value="inactive" className="mt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
-              .filter((player) => player.status === PlayerStatus.INACTIVE)
+              .filter((player) => player.status === PlayerStatus.Inactive)
               .map((player, index) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />

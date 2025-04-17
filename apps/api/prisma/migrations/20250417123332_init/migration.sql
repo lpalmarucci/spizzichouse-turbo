@@ -14,8 +14,8 @@ CREATE TABLE "players" (
     "email" TEXT NOT NULL,
     "bio" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "level" "PlayerLevel" NOT NULL,
-    "status" "PlayerStatus" NOT NULL,
+    "level" "PlayerLevel" NOT NULL DEFAULT 'BEGINNER',
+    "status" "PlayerStatus" NOT NULL DEFAULT 'ACTIVE',
 
     CONSTRAINT "players_pkey" PRIMARY KEY ("id")
 );

@@ -8,12 +8,12 @@ import { UpdatePlayer } from './models/update-player.model';
 export class PlayerResolver {
   constructor(private readonly playersService: PlayersService) {}
 
-  @Query(() => [Player], { name: 'getAllPlayers' })
+  @Query(() => [Player], { name: 'players' })
   async findAll() {
     return this.playersService.findAll();
   }
 
-  @Query(() => Player, { name: 'getPlayerById' })
+  @Query(() => Player, { name: 'player' })
   async findById(@Args('id', { type: () => String }) id: string) {
     return this.playersService.findOne(id);
   }

@@ -3579,8 +3579,8 @@ export namespace Prisma {
     email: string
     bio?: string | null
     createdAt?: Date | string
-    level: $Enums.PlayerLevel
-    status: $Enums.PlayerStatus
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
     Match?: MatchCreateNestedManyWithoutPlayersInput
   }
 
@@ -3590,8 +3590,8 @@ export namespace Prisma {
     email: string
     bio?: string | null
     createdAt?: Date | string
-    level: $Enums.PlayerLevel
-    status: $Enums.PlayerStatus
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
     Match?: MatchUncheckedCreateNestedManyWithoutPlayersInput
   }
 
@@ -3623,8 +3623,8 @@ export namespace Prisma {
     email: string
     bio?: string | null
     createdAt?: Date | string
-    level: $Enums.PlayerLevel
-    status: $Enums.PlayerStatus
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
   }
 
   export type PlayerUpdateManyMutationInput = {
@@ -4377,8 +4377,8 @@ export namespace Prisma {
     email: string
     bio?: string | null
     createdAt?: Date | string
-    level: $Enums.PlayerLevel
-    status: $Enums.PlayerStatus
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
   }
 
   export type PlayerUncheckedCreateWithoutMatchInput = {
@@ -4387,8 +4387,8 @@ export namespace Prisma {
     email: string
     bio?: string | null
     createdAt?: Date | string
-    level: $Enums.PlayerLevel
-    status: $Enums.PlayerStatus
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
   }
 
   export type PlayerCreateOrConnectWithoutMatchInput = {

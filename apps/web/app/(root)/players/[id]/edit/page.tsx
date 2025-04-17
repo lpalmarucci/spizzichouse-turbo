@@ -1,12 +1,8 @@
 import type React from "react";
 import { PlayerEdit } from "@/features/player/components/edit/player-edit";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getPlayerById } from "@/features/player/player.actions";
-import { PLAYER_QUERY_KEY } from "@/features/player/player.query";
+import { Player } from "@workspace/api/qgl-types";
+import { query } from "@/utils/apollo/server";
+import { GET_PLAYER_BY_ID } from "@/features/player/player.query";
 
 export default async function EditPlayerPage({
   params,
@@ -15,16 +11,10 @@ export default async function EditPlayerPage({
 }) {
   const { id } = await params;
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: [PLAYER_QUERY_KEY, id],
-    queryFn: () => getPlayerById(id),
+  const { data } = await query<{ player: Player }>({
+    query: GET_PLAYER_BY_ID,
+    variables: { id },
   });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PlayerEdit id={id} />
-    </HydrationBoundary>
-  );
+  return <PlayerEdit player={data.player} id={id} />;
 }

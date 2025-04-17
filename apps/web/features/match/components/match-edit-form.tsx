@@ -77,7 +77,7 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
     const parseResult = matchSchema.safeParse(form.getValues());
     const errors = parseResult.error?.flatten().formErrors;
     if (!errors || errors.length === 0) {
-      mutate(form.getValues());
+      mutate(matchId, form.getValues());
     }
   }
 

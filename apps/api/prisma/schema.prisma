@@ -20,8 +20,8 @@ model Player {
   email     String
   bio       String?
   createdAt DateTime     @default(now())
-  level     PlayerLevel
-  status    PlayerStatus
+  level     PlayerLevel  @default(BEGINNER)
+  status    PlayerStatus @default(ACTIVE)
   Match     Match[]
 
   @@map("players")

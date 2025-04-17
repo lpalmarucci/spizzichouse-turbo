@@ -119,9 +119,9 @@ export enum PlayerStatus {
 export type Query = {
   __typename?: 'Query';
   getAllMatches: Array<Match>;
-  getAllPlayers: Array<Player>;
   getMatchById: Match;
-  getPlayerById: Player;
+  player: Player;
+  players: Array<Player>;
 };
 
 
@@ -130,7 +130,7 @@ export type QueryGetMatchByIdArgs = {
 };
 
 
-export type QueryGetPlayerByIdArgs = {
+export type QueryPlayerArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -292,9 +292,9 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAllMatches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType>;
-  getAllPlayers?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
   getMatchById?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryGetMatchByIdArgs, 'id'>>;
-  getPlayerById?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryGetPlayerByIdArgs, 'id'>>;
+  player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
+  players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {

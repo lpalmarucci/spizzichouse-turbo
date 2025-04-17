@@ -18,13 +18,9 @@ export async function createMatch(match: CreateMatch) {
   return data;
 }
 
-export async function editMatch(match: UpdateMatch) {
-  const data = await handleRequest<Match[]>(
-    "PATCH",
-    `/matches/${match.id}`,
-    match,
-  );
-  revalidatePath(`/matches/${match.id}`);
+export async function editMatch(id: string, match: UpdateMatch) {
+  const data = await handleRequest<Match[]>("PATCH", `/matches/${id}`, match);
+  revalidatePath(`/matches/${id}`);
   return data;
 }
 

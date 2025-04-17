@@ -73,9 +73,9 @@ enum PlayerStatus {
 
 type Query {
   getAllMatches: [Match!]!
-  getAllPlayers: [Player!]!
   getMatchById(id: String!): Match!
-  getPlayerById(id: String!): Player!
+  player(id: String!): Player!
+  players: [Player!]!
 }
 
 input UpdateMatch {

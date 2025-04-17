@@ -14,11 +14,7 @@ import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
 import React from "react";
 import { useRouter } from "next/navigation";
-import {
-  useGetPlayerById,
-  useUpdatePlayer,
-} from "@/features/player/player.query";
-import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
+import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import {
   Select,
   SelectContent,
@@ -43,79 +39,61 @@ import {
 } from "@workspace/ui/components/form";
 import { SubmitButton } from "@/components/submit-button";
 import { toast } from "sonner";
-import { ScreenLoader } from "@/components/screen-loader";
 import { Detail, DetailHeader } from "@/components/detail";
+import { useUpdatePlayer } from "@/features/player/player.hook";
 
 interface PlayerEditProps {
+  player: Player;
   id: string;
 }
 
 const playerSchema = z.object({
-  id: z.string(),
   full_name: z.string(),
   bio: z.string().max(255),
   level: z.nativeEnum(PlayerLevel),
   status: z.nativeEnum(PlayerStatus),
-  createdAt: z.date(),
-  email: z.string(),
 });
 
-export function PlayerEdit({ id }: PlayerEditProps) {
+export function PlayerEdit({ player, id }: PlayerEditProps) {
   const router = useRouter();
-  const { data: player, error, isFetching } = useGetPlayerById(id);
-  if (isFetching) return <ScreenLoader />;
-  if (error && !player) {
-    toast(`Player ${id} not found`, { id });
-    router.replace("/players");
-    return;
-  }
 
   const form = useForm<z.infer<typeof playerSchema>>({
     resolver: zodResolver(playerSchema),
     defaultValues: {
-      id,
       bio: player?.bio ?? "",
       full_name: player?.full_name,
       level: player?.level,
       status: player?.status,
-      email: player?.email,
-      createdAt: player?.createdAt,
     },
     mode: "onChange",
   });
 
-  const { mutate, isPending } = useUpdatePlayer(() => {
-    toast("Player updated successfully!");
-    router.push(`/players/${id}`);
-  });
+  const [updatePlayer, { loading: isUpdatingPlayer }] = useUpdatePlayer();
 
   function onFormSubmit() {
-    mutate(form.getValues());
+    console.log(form.getValues());
+    updatePlayer({
+      variables: {
+        id,
+        player: form.getValues(),
+      },
+      onCompleted: () => {
+        toast("Player updated successfully!");
+        router.push(`/players/${id}`);
+      },
+    });
   }
 
   return (
     <Detail>
       <DetailHeader
-        backLocationHref="/matches"
+        backLocationHref="/players"
         headingText="Modifica giocatore"
         subHeadingText="Aggiorne le informazioni del profilo"
       />
 
       <Form {...form}>
         <form>
-          <FormField
-            control={form.control}
-            name="id"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input type="hidden" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className="grid gap-6">
             <Card>
               <CardHeader>
@@ -262,7 +240,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
               <SubmitButton
                 type="button"
                 onClick={onFormSubmit}
-                isLoading={isPending}
+                isLoading={isUpdatingPlayer}
               >
                 Salva modifiche
               </SubmitButton>

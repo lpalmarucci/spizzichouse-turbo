@@ -1,11 +1,8 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getPlayerById } from "@/features/player/player.actions";
-import { PLAYER_QUERY_KEY } from "@/features/player/player.query";
-import { PlayerDetail } from "@/features/player/components/player-detail";
+import { query } from "@/utils/apollo/server";
+import { GET_PLAYER_BY_ID } from "@/features/player/player.query";
+import { Player } from "@workspace/api/qgl-types";
+import { Detail, DetailHeader } from "@/components/detail";
+import { PlayerDetailCard } from "@/features/player/components/player-detail-card";
 
 export default async function PlayerDetailPage({
   params,
@@ -14,16 +11,23 @@ export default async function PlayerDetailPage({
 }) {
   const { id } = await params;
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: [PLAYER_QUERY_KEY, id],
-    queryFn: () => getPlayerById(id),
+  const { data } = await query<{ player: Player }>({
+    query: GET_PLAYER_BY_ID,
+    variables: { id },
   });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PlayerDetail id={id} />
-    </HydrationBoundary>
+    <Detail>
+      <DetailHeader
+        headingText="Dettaglio giocatore"
+        subHeadingText="Profilo giocatore e statistiche"
+        showEditButton={true}
+        editButtonText="Modifica"
+        backLocationHref="/players"
+      />
+      <div className="grid lg:grid-cols-2">
+        <PlayerDetailCard player={data.player} />
+      </div>
+    </Detail>
   );
 }
