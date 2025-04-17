@@ -1,7 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const PLAYER_QUERY_KEY = "player";
-
 export const GET_PLAYERS = gql`
   query getPlayers {
     players {
