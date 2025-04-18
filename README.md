@@ -76,23 +76,17 @@ FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 Questo trigger è collegato alla seguente funzione:
 
 ```sql
-CREATE FUNCTION public.handle_new_user()
-RETURNS trigger
-LANGUAGE plpgsql
-SECURITY DEFINER SET search_path = ''
-AS $$
-BEGIN
-  RAISE LOG 'logging message: %', NEW.raw_user_meta_data;
-  INSERT INTO public.players(id, full_name, bio, level, status)
-  VALUES (
-    NEW.id, 
-    NEW.raw_user_meta_data ->> 'full_name', 
-    NEW.raw_user_meta_data ->> 'bio',
-    (NEW.raw_user_meta_data ->> 'level')::public."PlayerLevel",
-    (NEW.raw_user_meta_data ->> 'status')::public."PlayerStatus"
-  );
-  RETURN NEW;
-END;
+create function public.handle_new_user()
+    returns trigger
+    language plpgsql
+security definer set search_path = ''
+as $$
+begin
+  RAISE NOTICE 'Value: %', new.raw_user_meta_data;
+insert into public.players(id, full_name, email, bio)
+values (new.id, new.raw_user_meta_data ->> 'full_name', new.email, new.raw_user_meta_data ->> 'bio');
+return new;
+end;
 $$;
 ```
 `NB! Come puoi vedere per le colonne LEVEL e STATUS viene fatto un casting con l'ENUM con cui è stata definita la corrispettiva colonna
