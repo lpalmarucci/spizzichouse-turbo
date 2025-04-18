@@ -1,22 +1,11 @@
 import { MatchesSection } from "@/features/match/components/matches-section";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { MATCH_QUERY_KEY, useGetMatches } from "@/features/match/match.query";
+import { PreloadQuery } from "@/utils/apollo/server";
+import { GET_MATCHES } from "@/features/match/match.query";
 
 export default async function MatchesPage() {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: [MATCH_QUERY_KEY],
-    queryFn: useGetMatches,
-  });
-
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <PreloadQuery query={GET_MATCHES}>
       <MatchesSection />
-    </HydrationBoundary>
+    </PreloadQuery>
   );
 }

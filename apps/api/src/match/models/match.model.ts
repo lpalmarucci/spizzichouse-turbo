@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { MatchStatus } from '@prisma/client/output';
 import { Player } from '../../players/models/player.model';
 
@@ -21,8 +21,8 @@ export class Match {
   @Field(() => Date)
   date: Date;
 
-  @Field(() => Float)
-  duration: number;
+  @Field(() => Int, { nullable: true })
+  duration?: number;
 
   @Field(() => [Player])
   players: Player[];

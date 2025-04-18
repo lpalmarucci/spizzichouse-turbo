@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Calendar, Plus, Search } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
@@ -8,12 +8,7 @@ import { Input } from "@workspace/ui/components/input";
 import { Badge } from "@workspace/ui/components/badge";
 import { MatchCard } from "@/features/match/components/match-card";
 import CreateMatchDialog from "@/features/match/components/create-match-dialog";
-import {
-  MATCH_QUERY_KEY,
-  useDeleteMatch,
-  useGetMatches,
-} from "@/features/match/match.query";
-import { toast } from "sonner";
+import { useGetMatches } from "@/features/match/match.hook";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import {
   Popover,
@@ -22,35 +17,41 @@ import {
 } from "@workspace/ui/components/popover";
 import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar";
 import { MatchStatus } from "@workspace/api/qgl-types";
-import { useQueryClient } from "@tanstack/react-query";
-import { ScreenLoader } from "@/components/screen-loader";
+import { deleteMatchAction } from "@/features/match/match.actions";
+import { toast } from "sonner";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const { data: matches = [], isFetching } = useGetMatches();
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-  const queryClient = useQueryClient();
+  const { data } = useGetMatches();
+  const { matches } = data;
   const matchId = useRef<string>("");
 
-  const { mutate: deleteMatchMutation } = useDeleteMatch(() => {
-    toast.info(`Match deleted successfully`);
-    setShowDeleteDialog(false);
-    queryClient.invalidateQueries({ queryKey: [MATCH_QUERY_KEY] });
-  });
-
-  if (isFetching) {
-    return <ScreenLoader />;
-  }
+  const [isPending, startTransition] = useTransition();
 
   // Handle delete match
   const handleDeleteMatch = (id: string) => {
     matchId.current = id;
     setShowDeleteDialog(true);
   };
+
+  function onDeleteMatch() {
+    startTransition(async () => {
+      const { error } = await deleteMatchAction(matchId.current);
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.info("Match deleted successfully");
+      setShowDeleteDialog(false);
+    });
+  }
 
   // Filter match based on criteria
   const filteredMatches = matches.filter((match) => {
@@ -219,9 +220,7 @@ export function MatchesSection() {
       <ConfirmationDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        onConfirm={() => {
-          deleteMatchMutation(matchId.current);
-        }}
+        onConfirm={onDeleteMatch}
       />
     </div>
   );

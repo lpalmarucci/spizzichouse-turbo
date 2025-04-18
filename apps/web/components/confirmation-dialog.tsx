@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
-import { Button } from "@workspace/ui/components/button";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/ui/components/dialog";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@workspace/ui/components/button";
 
 type ConfirmationDialogProps = {
   open: boolean;

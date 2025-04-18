@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@workspace/ui/components/button";
@@ -21,8 +21,7 @@ import {
 } from "@workspace/ui/components/select";
 import { Textarea } from "@workspace/ui/components/textarea";
 import { DateTimePicker } from "@/components/date-time-picker";
-import { useEditMatch, useGetMatchById } from "@/features/match/match.query";
-import { ScreenLoader } from "@/components/screen-loader";
+import { useGetMatch } from "@/features/match/match.hook";
 import { useForm } from "react-hook-form";
 import { matchSchema, MatchSchemaType } from "@/features/match/match.schema";
 import { zodResolver } from "@workspace/ui/zod-resolver";
@@ -38,27 +37,21 @@ import { SubmitButton } from "@/components/submit-button";
 import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
 import { MatchStatus } from "@workspace/api/qgl-types";
 import { toast } from "sonner";
+import { updateMatchAction } from "@/features/match/match.actions";
 
 interface MatchEditFormProps {
-  matchId: string;
+  id: string;
 }
 
-export function MatchEditForm({ matchId }: MatchEditFormProps) {
+export function MatchEditForm({ id }: MatchEditFormProps) {
+  const { data } = useGetMatch(id);
+  const { match } = data;
   const router = useRouter();
-  const { data: match, isFetching, error } = useGetMatchById(matchId);
-
-  if (isFetching) return <ScreenLoader />;
-  if (error && !match) {
-    toast(`Match ${matchId} not found`);
-    router.replace("/matches");
-    return;
-  }
 
   const form = useForm<MatchSchemaType>({
     mode: "onChange",
     resolver: zodResolver(matchSchema),
     defaultValues: {
-      id: matchId,
       title: match?.title ?? "",
       description: match?.description,
       duration: match?.duration,
@@ -68,22 +61,25 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
     },
   });
 
-  const { mutate, isPending } = useEditMatch(() => {
-    toast("Match updated successfully");
-    router.push(`/matches/${matchId}`);
-  });
+  const [isPending, startTransition] = useTransition();
 
-  function onFormSubmit() {
-    const parseResult = matchSchema.safeParse(form.getValues());
-    const errors = parseResult.error?.flatten().formErrors;
-    if (!errors || errors.length === 0) {
-      mutate(matchId, form.getValues());
-    }
+  async function onFormAction() {
+    startTransition(async () => {
+      const { error } = await updateMatchAction(id, form.getValues());
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.info("Match updated successfully");
+      router.push(`/matches/${id}`);
+    });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onFormSubmit)}>
+      <form action={onFormAction}>
         <div className="grid gap-6">
           <Card>
             <CardHeader>
@@ -93,19 +89,6 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input type="hidden" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <div className="space-y-2">
                 <FormField
                   control={form.control}
@@ -187,7 +170,7 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
                       <Select
                         {...field}
                         defaultValue={field.value?.toString()}
-                        onValueChange={field.onChange}
+                        onValueChange={(v) => field.onChange(Number(v))}
                         value={field.value?.toString() ?? "0"}
                       >
                         <FormControl>
@@ -262,7 +245,9 @@ export function MatchEditForm({ matchId }: MatchEditFormProps) {
             >
               Cancel
             </Button>
-            <SubmitButton isLoading={isPending}>Save changes</SubmitButton>
+            <SubmitButton disabled={isPending || !form.formState.isValid}>
+              Save changes
+            </SubmitButton>
           </div>
         </div>
       </form>

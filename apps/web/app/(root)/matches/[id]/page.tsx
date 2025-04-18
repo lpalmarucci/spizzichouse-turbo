@@ -1,11 +1,6 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 import MatchDetail from "@/features/match/components/match-detail";
-import { MATCH_QUERY_KEY } from "@/features/match/match.query";
-import { getMatchById } from "@/features/match/match.actions";
+import { PreloadQuery } from "@/utils/apollo/server";
+import { GET_MATCH_BY_ID } from "@/features/match/match.query";
 
 export default async function MatchDetailPage({
   params,
@@ -15,17 +10,9 @@ export default async function MatchDetailPage({
   }>;
 }) {
   const { id } = await params;
-
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: [MATCH_QUERY_KEY, id],
-    queryFn: () => getMatchById(id),
-  });
-
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <PreloadQuery query={GET_MATCH_BY_ID} variables={{ id }}>
       <MatchDetail id={id} />
-    </HydrationBoundary>
+    </PreloadQuery>
   );
 }

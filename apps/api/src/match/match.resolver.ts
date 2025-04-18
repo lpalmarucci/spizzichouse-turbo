@@ -13,27 +13,27 @@ export class MatchResolver {
     private readonly playersService: PlayersService,
   ) {}
 
-  @Query(() => [Match])
+  @Query(() => [Match], { name: 'matches' })
   async getAllMatches() {
     return this.matchService.findAll();
   }
 
-  @Query(() => Match)
+  @Query(() => Match, { name: 'match' })
   async getMatchById(@Args('id') id: string) {
     return this.matchService.findOne(id);
   }
 
-  @Mutation(() => Match)
+  @Mutation(() => Match, { name: 'createMatch' })
   async createMatch(@Args('match') match: CreateMatch) {
     return this.matchService.create(match);
   }
 
-  @Mutation(() => Match)
+  @Mutation(() => Match, { name: 'updateMatch' })
   async updateMatch(@Args('id') id: string, @Args('match') match: UpdateMatch) {
     return this.matchService.update(id, match);
   }
 
-  @Mutation(() => Match)
+  @Mutation(() => Match, { name: 'deleteMatch' })
   async deleteMatch(@Args('id') id: string) {
     return this.matchService.remove(id);
   }

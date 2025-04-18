@@ -1,4 +1,4 @@
-import { Field, Float, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { IsEnum, IsString } from '@nestjs/class-validator';
 import { MatchStatus } from '@prisma/client/output';
@@ -23,10 +23,10 @@ export class CreateMatch {
   @IsDate()
   date: Date;
 
-  @Field(() => Float)
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @Field(() => Int, { nullable: true })
+  @IsNumber()
   @IsOptional()
-  duration: number;
+  duration?: number;
 
   @Field(() => [String])
   @IsArray()

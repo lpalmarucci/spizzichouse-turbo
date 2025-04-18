@@ -12,7 +12,6 @@ export const MATCH_FORM_INITIAL_VALUES = {
 };
 
 export const matchSchema = z.object({
-  id: z.string().optional(),
   title: z.string().nonempty("Title is required"),
   description: z.string().max(255).nullable(),
   date: z.coerce.date(),

@@ -20,7 +20,7 @@ export type Scalars = {
 export type CreateMatch = {
   date: Scalars['DateTime']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
-  duration: Scalars['Float']['input'];
+  duration?: InputMaybe<Scalars['Int']['input']>;
   playerIds: Array<Scalars['String']['input']>;
   status?: MatchStatus;
   title: Scalars['String']['input'];
@@ -38,7 +38,7 @@ export type Match = {
   __typename?: 'Match';
   date: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  duration: Scalars['Float']['output'];
+  duration?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   players: Array<Player>;
   status: MatchStatus;
@@ -118,14 +118,14 @@ export enum PlayerStatus {
 
 export type Query = {
   __typename?: 'Query';
-  getAllMatches: Array<Match>;
-  getMatchById: Match;
+  match: Match;
+  matches: Array<Match>;
   player: Player;
   players: Array<Player>;
 };
 
 
-export type QueryGetMatchByIdArgs = {
+export type QueryMatchArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -137,7 +137,7 @@ export type QueryPlayerArgs = {
 export type UpdateMatch = {
   date?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  duration?: InputMaybe<Scalars['Float']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
   playerIds?: InputMaybe<Array<Scalars['String']['input']>>;
   status?: InputMaybe<MatchStatus>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -225,7 +225,7 @@ export type ResolversTypes = {
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Match: ResolverTypeWrapper<Match>;
   MatchStatus: MatchStatus;
   Mutation: ResolverTypeWrapper<{}>;
@@ -244,7 +244,7 @@ export type ResolversParentTypes = {
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
   DateTime: Scalars['DateTime']['output'];
-  Float: Scalars['Float']['output'];
+  Int: Scalars['Int']['output'];
   Match: Match;
   Mutation: {};
   Player: Player;
@@ -261,7 +261,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type MatchResolvers<ContextType = any, ParentType extends ResolversParentTypes['Match'] = ResolversParentTypes['Match']> = {
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  duration?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  duration?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['MatchStatus'], ParentType, ContextType>;
@@ -291,8 +291,8 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getAllMatches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType>;
-  getMatchById?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryGetMatchByIdArgs, 'id'>>;
+  match?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryMatchArgs, 'id'>>;
+  matches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType>;
   player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
 };

@@ -1,30 +1,65 @@
 "use server";
 
-import { handleRequest } from "@/api/api-handler";
-import { CreateMatch, Match, UpdateMatch } from "@workspace/api/qgl-types";
 import { revalidatePath } from "next/cache";
+import { getClient } from "@/utils/apollo/server";
+import {
+  CREATE_MATCH,
+  DELETE_MATCH,
+  UPDATE_MATCH,
+} from "@/features/match/match.query";
+import { CreateMatch, UpdateMatch } from "@workspace/api/qgl-types";
 
-export async function getMatches() {
-  return handleRequest<Match[]>("GET", "/matches");
+export async function createMatchAction(createMatch: CreateMatch) {
+  try {
+    const client = getClient();
+
+    await client.mutate({
+      mutation: CREATE_MATCH,
+      variables: {
+        match: createMatch,
+      },
+    });
+    revalidatePath("/matches");
+
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
-export async function getMatchById(id: string) {
-  return handleRequest<Match>("GET", `/matches/${id}`);
+export async function updateMatchAction(id: string, updateMatch: UpdateMatch) {
+  try {
+    const client = getClient();
+
+    await client.mutate({
+      mutation: UPDATE_MATCH,
+      variables: {
+        id,
+        match: updateMatch,
+      },
+    });
+    revalidatePath(`/matches/${id}`);
+
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
-export async function createMatch(match: CreateMatch) {
-  const data = await handleRequest<Match[]>("POST", `/matches`, match);
-  revalidatePath(`/matches`);
-  return data;
-}
+export async function deleteMatchAction(id: string) {
+  try {
+    const client = getClient();
 
-export async function editMatch(id: string, match: UpdateMatch) {
-  const data = await handleRequest<Match[]>("PATCH", `/matches/${id}`, match);
-  revalidatePath(`/matches/${id}`);
-  return data;
-}
+    await client.mutate({
+      mutation: DELETE_MATCH,
+      variables: {
+        id,
+      },
+    });
+    revalidatePath(`/matches`);
 
-export async function deleteMatch(id: string) {
-  await handleRequest("DELETE", `/matches/${id}`);
-  revalidatePath("/matches", "page");
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }

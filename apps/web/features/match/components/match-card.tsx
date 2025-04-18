@@ -42,11 +42,11 @@ export function MatchCard({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case MatchStatus.UPCOMING:
+      case MatchStatus.Upcoming:
         return "Upcoming";
-      case MatchStatus.IN_PROGRESS:
+      case MatchStatus.InProgress:
         return "In Progress";
-      case MatchStatus.COMPLETED:
+      case MatchStatus.Completed:
         return "Completed";
       default:
         return status.charAt(0).toUpperCase() + status.slice(1);
