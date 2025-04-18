@@ -66,9 +66,6 @@ export function PlayerCard({ player }: { player: Player }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href={`/players/${player.id}`}>Visualizza Dettagli</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
                 <Link href={`/players/${player.id}/edit`}>
                   <Pencil className="mr-2 h-4 w-4" />
                   Modifica

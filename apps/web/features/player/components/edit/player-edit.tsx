@@ -12,9 +12,9 @@ import {
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
-import React from "react";
+import React, { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
+import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import {
   Select,
   SelectContent,
@@ -40,10 +40,10 @@ import {
 import { SubmitButton } from "@/components/submit-button";
 import { toast } from "sonner";
 import { Detail, DetailHeader } from "@/components/detail";
-import { useUpdatePlayer } from "@/features/player/player.hook";
+import { useGetPlayerById } from "@/features/player/player.hook";
+import { updatePlayerAction } from "@/features/player/player.actions";
 
 interface PlayerEditProps {
-  player: Player;
   id: string;
 }
 
@@ -54,7 +54,10 @@ const playerSchema = z.object({
   status: z.nativeEnum(PlayerStatus),
 });
 
-export function PlayerEdit({ player, id }: PlayerEditProps) {
+export function PlayerEdit({ id }: PlayerEditProps) {
+  const {
+    data: { player },
+  } = useGetPlayerById(id);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof playerSchema>>({
@@ -68,19 +71,18 @@ export function PlayerEdit({ player, id }: PlayerEditProps) {
     mode: "onChange",
   });
 
-  const [updatePlayer, { loading: isUpdatingPlayer }] = useUpdatePlayer();
+  const [_, startTransition] = useTransition();
 
-  function onFormSubmit() {
-    console.log(form.getValues());
-    updatePlayer({
-      variables: {
-        id,
-        player: form.getValues(),
-      },
-      onCompleted: () => {
-        toast("Player updated successfully!");
-        router.push(`/players/${id}`);
-      },
+  function onFormAction() {
+    startTransition(async () => {
+      const res = await updatePlayerAction(id, form.getValues());
+
+      if (res?.error) {
+        toast.error(res?.error.message);
+        return;
+      }
+      toast("Player updated successfully!");
+      router.push(`/players/${id}`);
     });
   }
 
@@ -93,7 +95,7 @@ export function PlayerEdit({ player, id }: PlayerEditProps) {
       />
 
       <Form {...form}>
-        <form>
+        <form action={onFormAction}>
           <div className="grid gap-6">
             <Card>
               <CardHeader>
@@ -237,13 +239,7 @@ export function PlayerEdit({ player, id }: PlayerEditProps) {
               >
                 Annulla
               </Button>
-              <SubmitButton
-                type="button"
-                onClick={onFormSubmit}
-                isLoading={isUpdatingPlayer}
-              >
-                Salva modifiche
-              </SubmitButton>
+              <SubmitButton>Salva modifiche</SubmitButton>
             </CardFooter>
           </div>
         </form>

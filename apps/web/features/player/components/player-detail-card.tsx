@@ -1,6 +1,5 @@
 "use client";
 
-import { Player } from "@workspace/api/qgl-types";
 import {
   Card,
   CardContent,
@@ -12,12 +11,16 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Calendar, House, Mail, Trophy } from "lucide-react";
 import { getInitials, getLevelColor } from "@/features/player/utils";
 import { Separator } from "@workspace/ui/components/separator";
+import { useGetPlayerById } from "@/features/player/player.hook";
 
 interface PlayerDetailCardProps {
-  player: Player;
+  id: string;
 }
 
-export function PlayerDetailCard({ player }: PlayerDetailCardProps) {
+export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
+  const {
+    data: { player },
+  } = useGetPlayerById(id);
   return (
     <Card className="flex-1">
       <CardHeader>

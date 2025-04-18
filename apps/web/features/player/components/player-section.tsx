@@ -19,19 +19,18 @@ import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
+import { useGetPlayers } from "@/features/player/player.hook";
 
 type SortDirection = "asc" | "desc";
 
-interface PlayerSectionProps {
-  players: Player[];
-}
-
-export function PlayerSection({ players }: PlayerSectionProps) {
+export function PlayerSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | undefined>();
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const { data } = useGetPlayers();
+  const { players } = data;
 
   const filteredPlayers = useMemo(() => {
     if (!players) return [];
