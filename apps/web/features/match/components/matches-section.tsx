@@ -19,6 +19,8 @@ import { Calendar as CalendarComponent } from "@workspace/ui/components/calendar
 import { MatchStatus } from "@workspace/api/qgl-types";
 import { deleteMatchAction } from "@/features/match/match.actions";
 import { toast } from "sonner";
+import { ScreenLoader } from "@/components/screen-loader";
+import { redirect } from "next/navigation";
 
 export function MatchesSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,10 +31,22 @@ export function MatchesSection() {
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const {
     data: { matches },
+    isLoading,
+    error,
   } = useGetMatches();
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (error) {
+    redirect("/");
+    return;
+  }
+
   const matchId = useRef<string>("");
 
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
 
   // Handle delete match
   const handleDeleteMatch = (id: string) => {

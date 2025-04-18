@@ -18,6 +18,9 @@ import {
 import { Detail, DetailHeader } from "@/components/detail";
 import { MatchStatus } from "@workspace/api/qgl-types";
 import { useGetMatch } from "@/features/match/match.hook";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
+import { ScreenLoader } from "@/components/screen-loader";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -42,9 +45,29 @@ interface MatchDetailProps {
 }
 
 export default function MatchDetail({ id }: MatchDetailProps) {
-  const {
-    data: { match },
-  } = useGetMatch(id);
+  const { data, isLoading, error } = useGetMatch(id);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  const { match } = data;
 
   return (
     <Detail>

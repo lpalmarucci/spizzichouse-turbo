@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -38,15 +38,36 @@ import { SelectAvailablePlayers } from "@/features/match/components/select-avail
 import { MatchStatus } from "@workspace/api/qgl-types";
 import { toast } from "sonner";
 import { updateMatchAction } from "@/features/match/match.actions";
+import { ScreenLoader } from "@/components/screen-loader";
 
 interface MatchEditFormProps {
   id: string;
 }
 
 export function MatchEditForm({ id }: MatchEditFormProps) {
-  const {
-    data: { match },
-  } = useGetMatch(id);
+  const { data, isLoading, error } = useGetMatch(id);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  const { match } = data;
   const router = useRouter();
 
   const form = useForm<MatchSchemaType>({

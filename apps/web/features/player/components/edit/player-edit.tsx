@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
 import React, { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import {
   Select,
@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import { Detail, DetailHeader } from "@/components/detail";
 import { useGetPlayerById } from "@/features/player/player.hook";
 import { updatePlayerAction } from "@/features/player/player.actions";
+import { ScreenLoader } from "@/components/screen-loader";
 
 interface PlayerEditProps {
   id: string;
@@ -55,9 +56,29 @@ const playerSchema = z.object({
 });
 
 export function PlayerEdit({ id }: PlayerEditProps) {
-  const {
-    data: { player },
-  } = useGetPlayerById(id);
+  const { data, isLoading, error } = useGetPlayerById(id);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  const { player } = data;
   const router = useRouter();
 
   const form = useForm<z.infer<typeof playerSchema>>({

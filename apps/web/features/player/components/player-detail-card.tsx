@@ -12,15 +12,38 @@ import { Calendar, House, Mail, Trophy } from "lucide-react";
 import { getInitials, getLevelColor } from "@/features/player/utils";
 import { Separator } from "@workspace/ui/components/separator";
 import { useGetPlayerById } from "@/features/player/player.hook";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { ScreenLoader } from "@/components/screen-loader";
 
 interface PlayerDetailCardProps {
   id: string;
 }
 
 export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
-  const {
-    data: { player },
-  } = useGetPlayerById(id);
+  const { data, isLoading, error } = useGetPlayerById(id);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  const { player } = data;
   return (
     <Card className="flex-1">
       <CardHeader>

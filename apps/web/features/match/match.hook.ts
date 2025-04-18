@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateMatch, Match, UpdateMatch } from "@workspace/api/qgl-types";
 import {
   CREATE_MATCH,
@@ -11,13 +11,14 @@ import {
 import { gqlRequest } from "@/utils/query";
 
 export const useGetMatches = () =>
-  useSuspenseQuery<{ matches: Match[] }>({
+  useQuery<{ matches: Match[] }>({
     queryKey: [MATCH_QUERY_KEY],
     queryFn: () => gqlRequest(GET_MATCHES),
+    initialData: { matches: [] },
   });
 
 export const useGetMatch = (id: string) =>
-  useSuspenseQuery<{ match: Match }>({
+  useQuery<{ match: Match }>({
     queryKey: [MATCH_QUERY_KEY, id],
     queryFn: () => gqlRequest(GET_MATCH_BY_ID, { id }),
   });

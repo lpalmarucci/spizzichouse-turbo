@@ -14,6 +14,7 @@ export default async function MatchesPage() {
     queryKey: [MATCH_QUERY_KEY],
     queryFn: () => gqlRequest(GET_MATCHES),
   });
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <MatchesSection />

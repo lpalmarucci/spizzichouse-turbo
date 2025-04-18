@@ -20,6 +20,9 @@ import { useMemo, useState } from "react";
 import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
 import { useGetPlayers } from "@/features/player/player.hook";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { ScreenLoader } from "@/components/screen-loader";
 
 type SortDirection = "asc" | "desc";
 
@@ -29,9 +32,29 @@ export function PlayerSection() {
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const {
-    data: { players },
-  } = useGetPlayers();
+  const { data, isLoading, error } = useGetPlayers();
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  const { players } = data;
 
   const filteredPlayers = useMemo(() => {
     if (!players) return [];
