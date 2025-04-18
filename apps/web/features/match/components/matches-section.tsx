@@ -27,8 +27,9 @@ export function MatchesSection() {
 
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-  const { data } = useGetMatches();
-  const { matches } = data;
+  const {
+    data: { matches },
+  } = useGetMatches();
   const matchId = useRef<string>("");
 
   const [isPending, startTransition] = useTransition();

@@ -1,7 +1,15 @@
-import { PreloadQuery } from "@/utils/apollo/server";
-import { GET_PLAYER_BY_ID } from "@/features/player/player.query";
+import {
+  GET_PLAYER_BY_ID,
+  PLAYER_QUERY_KEY,
+} from "@/features/player/player.query";
 import { Detail, DetailHeader } from "@/components/detail";
 import { PlayerDetailCard } from "@/features/player/components/player-detail-card";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { gqlRequest } from "@/utils/query";
 
 export default async function PlayerDetailPage({
   params,
@@ -9,8 +17,16 @@ export default async function PlayerDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: [PLAYER_QUERY_KEY, id],
+    queryFn: () => gqlRequest(GET_PLAYER_BY_ID, { id }),
+  });
+
   return (
-    <PreloadQuery query={GET_PLAYER_BY_ID} variables={{ id }}>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <Detail>
         <DetailHeader
           headingText="Dettaglio giocatore"
@@ -23,6 +39,6 @@ export default async function PlayerDetailPage({
           <PlayerDetailCard id={id} />
         </div>
       </Detail>
-    </PreloadQuery>
+    </HydrationBoundary>
   );
 }

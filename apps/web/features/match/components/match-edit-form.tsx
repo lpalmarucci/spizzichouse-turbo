@@ -44,8 +44,9 @@ interface MatchEditFormProps {
 }
 
 export function MatchEditForm({ id }: MatchEditFormProps) {
-  const { data } = useGetMatch(id);
-  const { match } = data;
+  const {
+    data: { match },
+  } = useGetMatch(id);
   const router = useRouter();
 
   const form = useForm<MatchSchemaType>({

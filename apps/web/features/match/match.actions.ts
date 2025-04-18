@@ -1,23 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getClient } from "@/utils/apollo/server";
 import {
   CREATE_MATCH,
   DELETE_MATCH,
   UPDATE_MATCH,
 } from "@/features/match/match.query";
 import { CreateMatch, UpdateMatch } from "@workspace/api/qgl-types";
+import { gqlRequest } from "@/utils/query";
 
 export async function createMatchAction(createMatch: CreateMatch) {
   try {
-    const client = getClient();
-
-    await client.mutate({
-      mutation: CREATE_MATCH,
-      variables: {
-        match: createMatch,
-      },
+    await gqlRequest(CREATE_MATCH, {
+      match: createMatch,
     });
     revalidatePath("/matches");
 
@@ -29,14 +24,9 @@ export async function createMatchAction(createMatch: CreateMatch) {
 
 export async function updateMatchAction(id: string, updateMatch: UpdateMatch) {
   try {
-    const client = getClient();
-
-    await client.mutate({
-      mutation: UPDATE_MATCH,
-      variables: {
-        id,
-        match: updateMatch,
-      },
+    await gqlRequest(UPDATE_MATCH, {
+      id,
+      match: updateMatch,
     });
     revalidatePath(`/matches/${id}`);
 
@@ -48,13 +38,8 @@ export async function updateMatchAction(id: string, updateMatch: UpdateMatch) {
 
 export async function deleteMatchAction(id: string) {
   try {
-    const client = getClient();
-
-    await client.mutate({
-      mutation: DELETE_MATCH,
-      variables: {
-        id,
-      },
+    await gqlRequest(DELETE_MATCH, {
+      id,
     });
     revalidatePath(`/matches`);
 

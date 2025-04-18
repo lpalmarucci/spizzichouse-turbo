@@ -42,8 +42,9 @@ interface MatchDetailProps {
 }
 
 export default function MatchDetail({ id }: MatchDetailProps) {
-  const { data } = useGetMatch(id);
-  const { match } = data;
+  const {
+    data: { match },
+  } = useGetMatch(id);
 
   return (
     <Detail>

@@ -29,8 +29,9 @@ export function PlayerSection() {
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const { data } = useGetPlayers();
-  const { players } = data;
+  const {
+    data: { players },
+  } = useGetPlayers();
 
   const filteredPlayers = useMemo(() => {
     if (!players) return [];

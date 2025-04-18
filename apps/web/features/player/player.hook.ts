@@ -1,17 +1,20 @@
-import { useMutation, useQuery, useSuspenseQuery } from "@apollo/client";
 import {
   GET_PLAYER_BY_ID,
   GET_PLAYERS,
-  UPDATE_PLAYER,
+  PLAYER_QUERY_KEY,
 } from "@/features/player/player.query";
+import { gqlRequest } from "@/utils/query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Player } from "@workspace/api/qgl-types";
 
-export const usePlayers = () => useQuery<{ players: Player[] }>(GET_PLAYERS);
-
 export const useGetPlayers = () =>
-  useSuspenseQuery<{ players: Player[] }>(GET_PLAYERS);
+  useSuspenseQuery<{ players: Player[] }>({
+    queryKey: [PLAYER_QUERY_KEY],
+    queryFn: () => gqlRequest(GET_PLAYERS),
+  });
 
 export const useGetPlayerById = (id: string) =>
-  useSuspenseQuery<{ player: Player }>(GET_PLAYER_BY_ID, { variables: { id } });
-
-export const useUpdatePlayer = () => useMutation(UPDATE_PLAYER);
+  useSuspenseQuery<{ player: Player }>({
+    queryKey: [PLAYER_QUERY_KEY, id],
+    queryFn: () => gqlRequest(GET_PLAYER_BY_ID, { id }),
+  });

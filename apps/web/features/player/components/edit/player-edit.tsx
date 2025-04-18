@@ -89,7 +89,7 @@ export function PlayerEdit({ id }: PlayerEditProps) {
   return (
     <Detail>
       <DetailHeader
-        backLocationHref="/players"
+        backLocationHref={`/players/${id}`}
         headingText="Modifica giocatore"
         subHeadingText="Aggiorne le informazioni del profilo"
       />

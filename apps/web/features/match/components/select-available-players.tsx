@@ -7,7 +7,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
 import React, { useState } from "react";
-import { usePlayers } from "@/features/player/player.hook";
+import { useGetPlayers } from "@/features/player/player.hook";
 import { ControllerRenderProps, FieldPath, FieldValues } from "react-hook-form";
 
 interface SelectAvailablePlayersProps<
@@ -21,7 +21,7 @@ export function SelectAvailablePlayers<
   TFormValues extends FieldValues,
   TFieldName extends FieldPath<TFormValues>,
 >({ field }: SelectAvailablePlayersProps<TFormValues, TFieldName>) {
-  const { data, loading } = usePlayers();
+  const { data, isPending } = useGetPlayers();
   const players = data?.players ?? [];
 
   const [playerSearch, setPlayerSearch] = useState<string>("");
@@ -41,7 +41,7 @@ export function SelectAvailablePlayers<
     }
   };
 
-  if (loading) {
+  if (isPending) {
     return (
       <div className="w-full flex justify-center items-center">
         <Loader2 className=" h-12 w-12 animate-spin" />
