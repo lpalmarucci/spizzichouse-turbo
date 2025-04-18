@@ -17,9 +17,12 @@ import {
 } from "@workspace/ui/components/tabs";
 import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/db";
-import { useGetPlayers } from "@/features/player/player.query";
+import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
+import { useGetPlayers } from "@/features/player/player.hook";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { ScreenLoader } from "@/components/screen-loader";
 
 type SortDirection = "asc" | "desc";
 
@@ -29,11 +32,33 @@ export function PlayerSection() {
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const { data } = useGetPlayers();
+  const { data, isLoading, error } = useGetPlayers();
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  const { players } = data;
 
   const filteredPlayers = useMemo(() => {
-    if (!data) return [];
-    return data.filter((player) => {
+    if (!players) return [];
+    return players.filter((player) => {
       if (
         searchQuery &&
         !player.full_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -51,7 +76,7 @@ export function PlayerSection() {
 
       return true;
     });
-  }, [data, searchQuery, statusFilter]);
+  }, [players, searchQuery, statusFilter]);
 
   const sortedPlayers = useMemo<Player[]>(() => {
     if (!filteredPlayers) return [];
@@ -162,7 +187,7 @@ export function PlayerSection() {
         <TabsContent value="active" className="mt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
-              .filter((player) => player.status === PlayerStatus.ACTIVE)
+              .filter((player) => player.status === PlayerStatus.Active)
               .map((player, index) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />
@@ -174,7 +199,7 @@ export function PlayerSection() {
         <TabsContent value="inactive" className="mt-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
-              .filter((player) => player.status === PlayerStatus.INACTIVE)
+              .filter((player) => player.status === PlayerStatus.Inactive)
               .map((player, index) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />

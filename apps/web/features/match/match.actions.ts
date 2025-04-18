@@ -1,41 +1,50 @@
 "use server";
 
-import { handleRequest } from "@/api/api-handler";
-import { Match, MatchWithPlayers } from "@workspace/db";
 import { revalidatePath } from "next/cache";
+import {
+  CREATE_MATCH,
+  DELETE_MATCH,
+  UPDATE_MATCH,
+} from "@/features/match/match.query";
+import { CreateMatch, UpdateMatch } from "@workspace/api/qgl-types";
+import { gqlRequest } from "@/utils/query";
 
-type CreateMatchDto = Omit<Match, "id">;
-type UpdateMatchDto = Partial<Match>;
+export async function createMatchAction(createMatch: CreateMatch) {
+  try {
+    await gqlRequest(CREATE_MATCH, {
+      match: createMatch,
+    });
+    revalidatePath("/matches");
 
-export async function getMatches() {
-  return handleRequest<MatchWithPlayers[]>("GET", "/matches");
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
-export async function getMatchById(id: string) {
-  return handleRequest<MatchWithPlayers>("GET", `/matches/${id}`);
+export async function updateMatchAction(id: string, updateMatch: UpdateMatch) {
+  try {
+    await gqlRequest(UPDATE_MATCH, {
+      id,
+      match: updateMatch,
+    });
+    revalidatePath(`/matches/${id}`);
+
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
-export async function createMatch(match: CreateMatchDto) {
-  const data = await handleRequest<MatchWithPlayers[]>(
-    "POST",
-    `/matches`,
-    match,
-  );
-  revalidatePath(`/matches`);
-  return data;
-}
+export async function deleteMatchAction(id: string) {
+  try {
+    await gqlRequest(DELETE_MATCH, {
+      id,
+    });
+    revalidatePath(`/matches`);
 
-export async function editMatch(match: UpdateMatchDto) {
-  const data = await handleRequest<MatchWithPlayers[]>(
-    "PATCH",
-    `/matches/${match.id}`,
-    match,
-  );
-  revalidatePath(`/matches/${match.id}`);
-  return data;
-}
-
-export async function deleteMatch(id: string) {
-  await handleRequest("DELETE", `/matches/${id}`);
-  revalidatePath("/matches", "page");
+    return { error: null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }

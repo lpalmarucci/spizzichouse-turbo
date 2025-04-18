@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateMatchDto } from './dto/create-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match, Player } from '@workspace/db';
-import { UpdateMatchDto } from './dto/update-match.dto';
+import { Match, Player } from '@prisma/client/output';
 import { PlayersService } from '../players/players.service';
+import { CreateMatch } from './models/create-match.model';
+import { UpdateMatch } from './models/update-match.model';
 
 @Injectable()
 export class MatchService {
@@ -12,10 +12,16 @@ export class MatchService {
     private playerService: PlayersService,
   ) {}
 
-  async create(createMatchDto: CreateMatchDto): Promise<Match> {
+  async create(createMatchDto: CreateMatch): Promise<Match> {
     let users: Player[] = [];
     if (createMatchDto.playerIds && createMatchDto.playerIds.length > 0) {
-      users = await this.playerService.findMany(createMatchDto.playerIds);
+      users = await this.playerService.findMany({
+        where: {
+          id: {
+            in: createMatchDto.playerIds,
+          },
+        },
+      });
       delete createMatchDto?.playerIds;
     }
     const userIds = users.map((user) => ({
@@ -36,11 +42,7 @@ export class MatchService {
   }
 
   findAll() {
-    return this._prismaService.match.findMany({
-      include: {
-        players: true,
-      },
-    });
+    return this._prismaService.match.findMany();
   }
 
   async findOne(id: string) {
@@ -49,12 +51,18 @@ export class MatchService {
     return match;
   }
 
-  async update(id: string, updateMatchDto: UpdateMatchDto) {
+  async update(id: string, updateMatchDto: UpdateMatch) {
     const match = await this.findOne(id);
 
     let users: Player[] = [];
     if (updateMatchDto.playerIds && updateMatchDto.playerIds.length > 0) {
-      users = await this.playerService.findMany(updateMatchDto.playerIds);
+      users = await this.playerService.findMany({
+        where: {
+          id: {
+            in: updateMatchDto.playerIds,
+          },
+        },
+      });
       delete updateMatchDto?.playerIds;
     }
     const userIds = users.map((user) => ({

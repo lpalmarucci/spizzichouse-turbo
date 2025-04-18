@@ -9,8 +9,6 @@ export default async function DashboardPage() {
     redirect("/auth/signin");
   }
 
-  console.log(await supabase.auth.getSession());
-
   return (
     <div className="container mx-auto w-full flex items-center justify-center">
       <SidebarTrigger />

@@ -1,12 +1,12 @@
-import { PlayerLevel, PlayerStatus } from "@workspace/db";
+import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 
 export const getLevelColor = (level: string) => {
   switch (level) {
-    case PlayerLevel.BEGINNER:
+    case PlayerLevel.Beginner:
       return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
-    case PlayerLevel.INTERMEDIATE:
+    case PlayerLevel.Intermediate:
       return "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20";
-    case PlayerLevel.EXPERT:
+    case PlayerLevel.Expert:
       return "bg-purple-500/10 text-purple-500 hover:bg-purple-500/20";
     default:
       return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
@@ -15,9 +15,9 @@ export const getLevelColor = (level: string) => {
 
 export const getStatusColor = (status: PlayerStatus) => {
   switch (status) {
-    case PlayerStatus.ACTIVE:
+    case PlayerStatus.Active:
       return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
-    case PlayerStatus.INACTIVE:
+    case PlayerStatus.Inactive:
       return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
     default:
       return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
@@ -26,9 +26,9 @@ export const getStatusColor = (status: PlayerStatus) => {
 
 export const getStatusText = (status: PlayerStatus) => {
   switch (status) {
-    case PlayerStatus.ACTIVE:
+    case PlayerStatus.Active:
       return "Attivo";
-    case PlayerStatus.INACTIVE:
+    case PlayerStatus.Inactive:
       return "Inattivo";
     default:
       return status;

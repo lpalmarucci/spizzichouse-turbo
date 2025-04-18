@@ -77,7 +77,7 @@ export function Drawer() {
                   <SidebarMenuItem key={route.href}>
                     <SidebarMenuButton
                       asChild
-                      isActive={pathname === route.href}
+                      isActive={pathname.includes(route.href)}
                       tooltip={route.title}
                     >
                       <Link href={route.href}>

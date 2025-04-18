@@ -27,12 +27,12 @@ import {
 import Link from "next/link";
 import { Badge } from "@workspace/ui/components/badge";
 import { Progress } from "@workspace/ui/components/progress";
-import { Player } from "@workspace/db";
 import {
   getLevelColor,
   getStatusColor,
   getStatusText,
 } from "@/features/player/utils";
+import { Player } from "@workspace/api/qgl-types";
 
 export function PlayerCard({ player }: { player: Player }) {
   const getInitials = (name: string) => {
@@ -65,9 +65,6 @@ export function PlayerCard({ player }: { player: Player }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href={`/players/${player.id}`}>Visualizza Dettagli</Link>
-              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/players/${player.id}/edit`}>
                   <Pencil className="mr-2 h-4 w-4" />

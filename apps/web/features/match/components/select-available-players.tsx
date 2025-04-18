@@ -7,7 +7,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
 import React, { useState } from "react";
-import { useGetPlayers } from "@/features/player/player.query";
+import { useGetPlayers } from "@/features/player/player.hook";
 import { ControllerRenderProps, FieldPath, FieldValues } from "react-hook-form";
 
 interface SelectAvailablePlayersProps<
@@ -21,7 +21,9 @@ export function SelectAvailablePlayers<
   TFormValues extends FieldValues,
   TFieldName extends FieldPath<TFormValues>,
 >({ field }: SelectAvailablePlayersProps<TFormValues, TFieldName>) {
-  const { data: players = [], isPending } = useGetPlayers();
+  const { data, isPending } = useGetPlayers();
+  const players = data?.players ?? [];
+
   const [playerSearch, setPlayerSearch] = useState<string>("");
 
   const togglePlayer = (playerId: string) => {

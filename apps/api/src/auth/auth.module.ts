@@ -5,8 +5,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { ApiConfig, JwtAuthConfig } from '../config/types';
 import { PrismaService } from '../prisma/prisma.service';
 import { SupabaseStrategy } from './strategy/supabase-strategy';
-import { APP_GUARD } from '@nestjs/core';
-import { SupabaseGuard } from './guard/supabase.guard';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -31,10 +29,10 @@ import { AuthService } from './auth.service';
     AuthService,
     PrismaService,
     SupabaseStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: SupabaseGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: SupabaseGuard,
+    // },
   ],
   controllers: [AuthController],
 })

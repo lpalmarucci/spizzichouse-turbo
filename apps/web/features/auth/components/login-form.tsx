@@ -48,7 +48,7 @@ export function LoginForm() {
       password: "",
     },
   });
-  const [state, formAcion] = useActionState(login, { error: null });
+  const [state, formAction] = useActionState(login, { error: null });
 
   useEffect(() => {
     if (state.error) {
@@ -57,15 +57,16 @@ export function LoginForm() {
   }, [state]);
 
   function handleGoogleLogin() {
+    console.log("href", window.location.origin);
     supabase.auth
       .signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       })
       .then(() => {
-        router.push("/dashboard");
+        // router.push("/dashboard");
       });
   }
 
@@ -82,7 +83,7 @@ export function LoginForm() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={formAcion} className="space-y-4">
+            <form action={formAction} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"

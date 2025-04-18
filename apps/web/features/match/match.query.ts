@@ -1,57 +1,80 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  createMatch,
-  deleteMatch,
-  editMatch,
-  getMatchById,
-  getMatches,
-} from "@/features/match/match.actions";
-import { MatchWithPlayers } from "@workspace/db";
-import { toast } from "sonner";
+import { gql } from "graphql-request";
 
 export const MATCH_QUERY_KEY = "match";
 
-export function useGetMatches() {
-  return useQuery<MatchWithPlayers[]>({
-    queryKey: [MATCH_QUERY_KEY],
-    queryFn: getMatches,
-  });
-}
+export const GET_MATCHES = gql`
+  query getMatches {
+    matches {
+      date
+      description
+      duration
+      id
+      status
+      title
+      players {
+        id
+        full_name
+      }
+    }
+  }
+`;
 
-export function useGetMatchById(id: string) {
-  return useQuery<MatchWithPlayers>({
-    queryKey: [MATCH_QUERY_KEY, id],
-    queryFn: async ({ queryKey }) => {
-      const [_, matchId] = queryKey;
-      return getMatchById(matchId as string);
-    },
-  });
-}
+export const GET_MATCH_BY_ID = gql`
+  query Match($id: String!) {
+    match(id: $id) {
+      date
+      description
+      duration
+      id
+      status
+      title
+      players {
+        id
+        full_name
+      }
+    }
+  }
+`;
 
-export function useCreateMatch(onSuccess?: () => void) {
-  return useMutation({
-    mutationFn: createMatch,
-    onSuccess,
-    onError: (error) => {
-      toast(error.message);
-    },
-    retry: false,
-    retryDelay: 0,
-  });
-}
+export const UPDATE_MATCH = gql`
+  mutation UpdateMatch($id: String!, $match: UpdateMatch!) {
+    updateMatch(id: $id, match: $match) {
+      date
+      description
+      duration
+      id
+      status
+      title
+    }
+  }
+`;
 
-export function useEditMatch(onSuccess?: () => void) {
-  return useMutation({
-    mutationFn: editMatch,
-    onSuccess,
-  });
-}
+export const CREATE_MATCH = gql`
+  mutation CreateMatch($match: CreateMatch!) {
+    createMatch(match: $match) {
+      date
+      description
+      duration
+      id
+      status
+      title
+    }
+  }
+`;
 
-export function useDeleteMatch(onSuccess?: () => void) {
-  return useMutation({
-    mutationFn: deleteMatch,
-    retry: false,
-    retryDelay: 0,
-    onSuccess,
-  });
-}
+export const DELETE_MATCH = gql`
+  mutation DeleteMatch($id: String!) {
+    deleteMatch(id: $id) {
+      date
+      description
+      duration
+      id
+      status
+      title
+      players {
+        id
+        full_name
+      }
+    }
+  }
+`;

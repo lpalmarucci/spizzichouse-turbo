@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,14 +31,13 @@ import { DateTimePicker } from "@/components/date-time-picker";
 import { Textarea } from "@workspace/ui/components/textarea";
 import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
 import { SubmitButton } from "@/components/submit-button";
-import { MATCH_QUERY_KEY, useCreateMatch } from "@/features/match/match.query";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { createMatchAction } from "@/features/match/match.actions";
 import {
   MATCH_FORM_INITIAL_VALUES,
   matchSchema,
   type MatchSchemaType,
 } from "@/features/match/match.schema";
+import { toast } from "sonner";
 
 interface CreateMatchDialogProps {
   open: boolean;
@@ -51,22 +50,22 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
     resolver: zodResolver(matchSchema),
     defaultValues: MATCH_FORM_INITIAL_VALUES,
   });
-  console.log(form.formState.isValid, form.formState.errors);
-  const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useCreateMatch(() => {
-    toast("Match created successfully");
-    queryClient
-      .invalidateQueries({ queryKey: [MATCH_QUERY_KEY] })
-      .then(() => onOpenChange(false));
-  });
+  const [_, startTransition] = useTransition();
 
-  function onFormSubmit() {
-    const parseResult = matchSchema.safeParse(form.getValues());
-    const errors = parseResult.error?.flatten().formErrors;
-    if (!errors || errors.length === 0) {
-      mutate(form.getValues());
-    }
+  async function onFormAction(formData: FormData) {
+    startTransition(async () => {
+      const { error } = await createMatchAction(form.getValues());
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.info("Match created successfully");
+      form.reset();
+      onOpenChange(false);
+    });
   }
 
   return (
@@ -89,7 +88,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onFormSubmit)}>
+          <form action={onFormAction}>
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
@@ -117,6 +116,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
                       <FormLabel>Date</FormLabel>
                       <FormControl>
                         <DateTimePicker
+                          {...field}
                           date={field.value}
                           setDate={(date) => field.onChange(date)}
                         />
@@ -134,7 +134,11 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
                         <FormLabel>Estimated Duration</FormLabel>
                         <FormControl>
                           <Select
-                            onValueChange={field.onChange}
+                            {...field}
+                            value={field.value?.toString()}
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
                             defaultValue={field.value?.toString()}
                           >
                             <SelectTrigger className="w-full">
@@ -199,10 +203,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
               >
                 Cancel
               </Button>
-              <SubmitButton
-                isLoading={isPending}
-                disabled={!form.formState.isValid}
-              >
+              <SubmitButton disabled={!form.formState.isValid}>
                 Create Match
               </SubmitButton>
             </div>

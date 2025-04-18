@@ -16,17 +16,19 @@ import {
   TabsTrigger,
 } from "@workspace/ui/components/tabs";
 import { Detail, DetailHeader } from "@/components/detail";
-import { MatchStatus } from "@workspace/db";
-import { useGetMatchById } from "@/features/match/match.query";
+import { MatchStatus } from "@workspace/api/qgl-types";
+import { useGetMatch } from "@/features/match/match.hook";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import { ScreenLoader } from "@/components/screen-loader";
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case MatchStatus.UPCOMING:
+    case MatchStatus.Upcoming:
       return "bg-blue-500";
-    case MatchStatus.IN_PROGRESS:
+    case MatchStatus.InProgress:
       return "bg-green-500";
-    case MatchStatus.COMPLETED:
+    case MatchStatus.Completed:
       return "bg-gray-500";
     default:
       return "bg-gray-500";
@@ -38,14 +40,34 @@ const formatDate = (dateString: string | Date) => {
   return date.toLocaleString("en-UK", { dateStyle: "short" });
 };
 
-export default function MatchDetail({ id }: { id: string }) {
-  const { data: match, isFetching } = useGetMatchById(id);
+interface MatchDetailProps {
+  id: string;
+}
 
-  if (isFetching) {
+export default function MatchDetail({ id }: MatchDetailProps) {
+  const { data, isLoading, error } = useGetMatch(id);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  if (isLoading) {
     return <ScreenLoader />;
   }
 
-  if (!match) return;
+  if (!data) {
+    toast.warning("No match found!");
+    setTimeout(() => {
+      redirect("/matches");
+    }, 500);
+    return;
+  }
+
+  const { match } = data;
 
   return (
     <Detail>
@@ -134,13 +156,13 @@ export default function MatchDetail({ id }: { id: string }) {
               <CardHeader>
                 <CardTitle>Match Results</CardTitle>
                 <CardDescription>
-                  {match.status === MatchStatus.COMPLETED
+                  {match.status === MatchStatus.Completed
                     ? "Final standings and scores"
                     : "Results will be available once the match is completed"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {match.status === MatchStatus.COMPLETED ? (
+                {match.status === MatchStatus.Completed ? (
                   <div className="space-y-4">
                     {/* Results would go here */}
                     <p>Results data would be displayed here.</p>

@@ -1,20 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Player } from '@workspace/db';
+import { Player, Prisma } from '@prisma/client/output';
+import { CreatePlayer } from './models/create-player.model';
+import { UpdatePlayer } from './models/update-player.model';
+import PlayerFindManyArgs = Prisma.PlayerFindManyArgs;
 
 @Injectable()
 export class PlayersService {
   constructor(private _prismaService: PrismaService) {}
 
-  create(createPlayerDto: CreatePlayerDto): Promise<Player> {
+  create(createPlayerDto: CreatePlayer): Promise<Player> {
     return this._prismaService.player.create({
       data: createPlayerDto,
     });
   }
 
-  findAll() {
+  async findAll() {
     return this._prismaService.player.findMany();
   }
 
@@ -24,17 +25,11 @@ export class PlayersService {
     return player;
   }
 
-  findMany(ids: string[]): Promise<Player[]> {
-    return this._prismaService.player.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-    });
+  findMany(options: PlayerFindManyArgs): Promise<Player[]> {
+    return this._prismaService.player.findMany(options);
   }
 
-  update(id: string, updatePlayerDto: UpdatePlayerDto) {
+  update(id: string, updatePlayerDto: UpdatePlayer) {
     return this._prismaService.player.update({
       where: {
         id,

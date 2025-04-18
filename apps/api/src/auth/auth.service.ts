@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { type User } from '@supabase/supabase-js';
 import { PrismaService } from '../prisma/prisma.service';
-import { PlayerLevel, PlayerStatus } from '@workspace/db';
+import { PlayerLevel, PlayerStatus } from '@prisma/client/output';
 
 @Injectable()
 export class AuthService {

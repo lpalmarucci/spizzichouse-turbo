@@ -1,12 +1,12 @@
 import { MatchEditForm } from "@/features/match/components/match-edit-form";
 import { Detail, DetailHeader } from "@/components/detail";
+import { GET_MATCH_BY_ID, MATCH_QUERY_KEY } from "@/features/match/match.query";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { MATCH_QUERY_KEY } from "@/features/match/match.query";
-import { getMatchById } from "@/features/match/match.actions";
+import { gqlRequest } from "@/utils/query";
 
 export default async function EditMatchPage({
   params,
@@ -19,9 +19,8 @@ export default async function EditMatchPage({
 
   await queryClient.prefetchQuery({
     queryKey: [MATCH_QUERY_KEY, id],
-    queryFn: () => getMatchById(id),
+    queryFn: () => gqlRequest(GET_MATCH_BY_ID, { id }),
   });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Detail>
@@ -29,9 +28,9 @@ export default async function EditMatchPage({
           editHref={`/matches/${id}`}
           headingText="Edit match"
           subHeadingText="Update the details, rules, and players for this match."
-        ></DetailHeader>
+        />
         <div className="grid gap-4">
-          <MatchEditForm matchId={id} />
+          <MatchEditForm id={id} />
         </div>
       </Detail>
     </HydrationBoundary>

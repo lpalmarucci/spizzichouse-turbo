@@ -1,11 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import cookieParser from 'cookie-parser';
+import { PrismaClientExceptionFilter } from './filters/prisma-expection-fiter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(cookieParser('aisdgf98234y9572'));
   app.enableCors();
 
   app.useGlobalPipes(
@@ -15,6 +14,8 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
+  app.useGlobalFilters(new PrismaClientExceptionFilter());
 
   await app.listen(process.env.PORT ?? 3000);
 }

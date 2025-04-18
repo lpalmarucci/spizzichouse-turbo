@@ -1,8 +1,8 @@
 "use client";
 
 import { Filter, Users } from "lucide-react";
-import { PlayerLevel, PlayerStatus } from "@workspace/db";
 import { Button } from "@workspace/ui/components/button";
+import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
 
 interface PlayerNotFoundProps {
   searchQuery: string;

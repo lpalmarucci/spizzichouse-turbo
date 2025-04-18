@@ -1,10 +1,13 @@
 {
-  "name": "api",
+  "name": "@workspace/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "exports": {
+    "./qgl-types": "./src/@graphql/types.ts"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,23 +20,27 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "generate-gql-types": "gql-gen --config codegen.yml",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@apollo/server": "^4.12.0",
+    "@nestjs/apollo": "^13.1.0",
     "@nestjs/class-validator": "^0.13.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/graphql": "^13.1.0",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "6.5.0",
     "@supabase/supabase-js": "^2.49.4",
-    "@workspace/db": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "cookie-parser": "^1.4.7",
+    "graphql": "^16.10.0",
     "passport": "^0.7.0",
     "passport-custom": "^1.1.1",
     "passport-google-oauth2": "^0.2.0",
@@ -43,6 +50,9 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-resolvers": "^4.5.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
@@ -70,7 +80,8 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "graphql-codegen-typescript-common": "0.18.2"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -1,36 +1,45 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Player } from "@workspace/db";
-import {
-  getPlayerById,
-  getPlayers,
-  updatePlayer,
-} from "@/features/player/player.actions";
+import { gql } from "graphql-request";
 
-export const PLAYER_QUERY_KEY = "player";
+export const PLAYER_QUERY_KEY = "players";
 
-export function useGetPlayers() {
-  return useQuery<Player[]>({
-    queryKey: [PLAYER_QUERY_KEY],
-    queryFn: getPlayers,
-  });
-}
+export const GET_PLAYERS = gql`
+  query getPlayers {
+    players {
+      bio
+      createdAt
+      email
+      full_name
+      id
+      level
+      status
+    }
+  }
+`;
 
-export function useGetPlayerById(id: string) {
-  return useQuery<Player>({
-    enabled: !!id,
-    queryKey: [PLAYER_QUERY_KEY, id],
-    queryFn: async ({ queryKey }) => {
-      const [_, playerId] = queryKey;
-      return getPlayerById(playerId as string);
-    },
-    retry: false,
-  });
-}
+export const GET_PLAYER_BY_ID = gql`
+  query getPlayerById($id: String!) {
+    player(id: $id) {
+      bio
+      createdAt
+      email
+      full_name
+      id
+      level
+      status
+    }
+  }
+`;
 
-export function useUpdatePlayer(onSuccess?: () => void) {
-  return useMutation({
-    mutationFn: updatePlayer,
-    onSuccess,
-    retry: false,
-  });
-}
+export const UPDATE_PLAYER = gql`
+  mutation UpdatePlayer($id: String!, $player: UpdatePlayer!) {
+    updatePlayer(id: $id, player: $player) {
+      bio
+      createdAt
+      email
+      full_name
+      id
+      level
+      status
+    }
+  }
+`;

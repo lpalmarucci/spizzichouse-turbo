@@ -25,7 +25,7 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import UserAvatar from "@/components/user-avatar";
-import { MatchStatus, Player } from "@workspace/db";
+import { MatchStatus, Player } from "@workspace/api/qgl-types";
 import { getStatusColor } from "@/features/match/match.utils";
 
 export function MatchCard({
@@ -42,11 +42,11 @@ export function MatchCard({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case MatchStatus.UPCOMING:
+      case MatchStatus.Upcoming:
         return "Upcoming";
-      case MatchStatus.IN_PROGRESS:
+      case MatchStatus.InProgress:
         return "In Progress";
-      case MatchStatus.COMPLETED:
+      case MatchStatus.Completed:
         return "Completed";
       default:
         return status.charAt(0).toUpperCase() + status.slice(1);
