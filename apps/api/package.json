@@ -9,7 +9,7 @@
     "./qgl-types": "./src/@graphql/types.ts"
   },
   "scripts": {
-    "build": "nest build",
+    "build": "pnpm run prisma:generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
@@ -21,7 +21,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate-gql-types": "gql-gen --config codegen.yml"
+    "generate-gql-types": "gql-gen --config codegen.yml",
+    "prisma:generate": "pnpx prisma generate"
   },
   "dependencies": {
     "@apollo/server": "^4.12.0",
