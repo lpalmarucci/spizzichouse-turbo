@@ -32,7 +32,7 @@ export function PlayerSection() {
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
   const [sortField, setSortField] = useState<keyof Player>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const { data, isLoading, error } = useGetPlayers();
+  const { data, isFetching, error } = useGetPlayers();
 
   if (error) {
     toast.error(error.message);
@@ -42,12 +42,12 @@ export function PlayerSection() {
     return;
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return <ScreenLoader />;
   }
 
   if (!data) {
-    toast.warning("No match found!");
+    toast.warning("No players found!");
     setTimeout(() => {
       redirect("/");
     }, 500);
@@ -70,11 +70,7 @@ export function PlayerSection() {
         return false;
       }
 
-      if (statusFilter && player.status !== statusFilter) {
-        return false;
-      }
-
-      return true;
+      return !(statusFilter && player.status !== statusFilter);
     });
   }, [players, searchQuery, statusFilter]);
 
@@ -175,7 +171,7 @@ export function PlayerSection() {
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {sortedPlayers.map((player, index) => (
+              {sortedPlayers.map((player) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />
                 </div>
@@ -188,7 +184,7 @@ export function PlayerSection() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
               .filter((player) => player.status === PlayerStatus.Active)
-              .map((player, index) => (
+              .map((player) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />
                 </div>
@@ -200,7 +196,7 @@ export function PlayerSection() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedPlayers
               .filter((player) => player.status === PlayerStatus.Inactive)
-              .map((player, index) => (
+              .map((player) => (
                 <div key={player.id}>
                   <PlayerCard player={player} />
                 </div>
