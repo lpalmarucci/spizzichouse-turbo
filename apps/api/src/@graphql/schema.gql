@@ -19,6 +19,11 @@ input CreatePlayer {
   status: PlayerStatus! = ACTIVE
 }
 
+input CreateRoundInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -43,10 +48,13 @@ enum MatchStatus {
 type Mutation {
   createMatch(match: CreateMatch!): Match!
   createPlayer(player: CreatePlayer!): Player!
+  createRound(createRoundInput: CreateRoundInput!): Round!
   deleteMatch(id: String!): Match!
   deletePlayer(id: String!): Player!
+  removeRound(id: Int!): Round!
   updateMatch(id: String!, match: UpdateMatch!): Match!
   updatePlayer(id: String!, player: UpdatePlayer!): Player!
+  updateRound(updateRoundInput: UpdateRoundInput!): Round!
 }
 
 type Player {
@@ -76,6 +84,13 @@ type Query {
   matches: [Match!]!
   player(id: String!): Player!
   players: [Player!]!
+  round(id: Int!): Round!
+  rounds: [Round!]!
+}
+
+type Round {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 input UpdateMatch {
@@ -92,4 +107,10 @@ input UpdatePlayer {
   full_name: String
   level: PlayerLevel = BEGINNER
   status: PlayerStatus = ACTIVE
+}
+
+input UpdateRoundInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
