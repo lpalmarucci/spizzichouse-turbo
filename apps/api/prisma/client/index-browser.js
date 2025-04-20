@@ -133,14 +133,15 @@ exports.Prisma.MatchScalarFieldEnum = {
   description: 'description',
   status: 'status',
   date: 'date',
-  duration: 'duration',
-  roundId: 'roundId'
+  duration: 'duration'
 };
 
 exports.Prisma.RoundScalarFieldEnum = {
   id: 'id',
   status: 'status',
-  createdAt: 'createdAt'
+  score: 'score',
+  createdAt: 'createdAt',
+  matchId: 'matchId'
 };
 
 exports.Prisma.SortOrder = {

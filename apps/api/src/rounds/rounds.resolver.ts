@@ -22,8 +22,8 @@ export class RoundsResolver {
   }
 
   @Query(() => [Round], { name: 'rounds' })
-  findAll() {
-    return this.roundsService.findAll();
+  findAll(@Args('matchId', { type: () => String }) matchId: string) {
+    return this.roundsService.findAll(matchId);
   }
 
   @Query(() => Round, { name: 'round' })
@@ -63,7 +63,11 @@ export class RoundsResolver {
     const { id } = round;
     return this.matchService.findFirst({
       where: {
-        roundId: id,
+        rounds: {
+          some: {
+            id,
+          },
+        },
       },
     });
   }

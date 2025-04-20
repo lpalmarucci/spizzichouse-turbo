@@ -23,10 +23,11 @@ export class RoundsService {
     return this.prismaService.round.create({
       data: {
         status: createRoundInput.status,
+        score: createRoundInput.score,
         players: {
           connect: newPlayerIds,
         },
-        matches: {
+        match: {
           connect: {
             id: match.id,
           },
@@ -35,8 +36,12 @@ export class RoundsService {
     });
   }
 
-  findAll() {
-    return this.prismaService.round.findMany();
+  findAll(matchId: string) {
+    return this.prismaService.round.findMany({
+      where: {
+        matchId,
+      },
+    });
   }
 
   async findOne(id: string) {
@@ -60,6 +65,7 @@ export class RoundsService {
       },
       data: {
         status: updateRoundInput.status,
+        score: updateRoundInput.score,
         players: {
           disconnect: playersToDisconnect,
           connect: playersToConnect,

@@ -22,6 +22,7 @@ input CreatePlayer {
 input CreateRoundInput {
   matchId: String!
   playerIds: [String!]!
+  score: Int! = 0
   status: RoundStatus! = IN_PROGRESS
 }
 
@@ -88,7 +89,7 @@ type Query {
   player(id: String!): Player!
   players: [Player!]!
   round(id: String!): Round!
-  rounds: [Round!]!
+  rounds(matchId: String!): [Round!]!
 }
 
 type Round {
@@ -96,6 +97,7 @@ type Round {
   id: String!
   match: Match!
   players: [Player!]!
+  score: Int!
   status: RoundStatus!
 }
 
@@ -122,5 +124,6 @@ input UpdatePlayer {
 
 input UpdateRoundInput {
   playerIds: [String!]
+  score: Int = 0
   status: RoundStatus = IN_PROGRESS
 }

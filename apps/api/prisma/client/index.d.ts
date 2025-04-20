@@ -1146,10 +1146,12 @@ export namespace Prisma {
    */
 
   export type MatchCountOutputType = {
+    rounds: number
     players: number
   }
 
   export type MatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rounds?: boolean | MatchCountOutputTypeCountRoundsArgs
     players?: boolean | MatchCountOutputTypeCountPlayersArgs
   }
 
@@ -1167,6 +1169,13 @@ export namespace Prisma {
   /**
    * MatchCountOutputType without action
    */
+  export type MatchCountOutputTypeCountRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoundWhereInput
+  }
+
+  /**
+   * MatchCountOutputType without action
+   */
   export type MatchCountOutputTypeCountPlayersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PlayerWhereInput
   }
@@ -1177,12 +1186,10 @@ export namespace Prisma {
    */
 
   export type RoundCountOutputType = {
-    matches: number
     players: number
   }
 
   export type RoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    matches?: boolean | RoundCountOutputTypeCountMatchesArgs
     players?: boolean | RoundCountOutputTypeCountPlayersArgs
   }
 
@@ -1195,13 +1202,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the RoundCountOutputType
      */
     select?: RoundCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * RoundCountOutputType without action
-   */
-  export type RoundCountOutputTypeCountMatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MatchWhereInput
   }
 
   /**
@@ -2367,7 +2367,6 @@ export namespace Prisma {
     status: $Enums.MatchStatus | null
     date: Date | null
     duration: number | null
-    roundId: string | null
   }
 
   export type MatchMaxAggregateOutputType = {
@@ -2377,7 +2376,6 @@ export namespace Prisma {
     status: $Enums.MatchStatus | null
     date: Date | null
     duration: number | null
-    roundId: string | null
   }
 
   export type MatchCountAggregateOutputType = {
@@ -2387,7 +2385,6 @@ export namespace Prisma {
     status: number
     date: number
     duration: number
-    roundId: number
     _all: number
   }
 
@@ -2407,7 +2404,6 @@ export namespace Prisma {
     status?: true
     date?: true
     duration?: true
-    roundId?: true
   }
 
   export type MatchMaxAggregateInputType = {
@@ -2417,7 +2413,6 @@ export namespace Prisma {
     status?: true
     date?: true
     duration?: true
-    roundId?: true
   }
 
   export type MatchCountAggregateInputType = {
@@ -2427,7 +2422,6 @@ export namespace Prisma {
     status?: true
     date?: true
     duration?: true
-    roundId?: true
     _all?: true
   }
 
@@ -2524,7 +2518,6 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date: Date
     duration: number | null
-    roundId: string | null
     _count: MatchCountAggregateOutputType | null
     _avg: MatchAvgAggregateOutputType | null
     _sum: MatchSumAggregateOutputType | null
@@ -2553,8 +2546,7 @@ export namespace Prisma {
     status?: boolean
     date?: boolean
     duration?: boolean
-    roundId?: boolean
-    Round?: boolean | Match$RoundArgs<ExtArgs>
+    rounds?: boolean | Match$roundsArgs<ExtArgs>
     players?: boolean | Match$playersArgs<ExtArgs>
     _count?: boolean | MatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["match"]>
@@ -2566,8 +2558,6 @@ export namespace Prisma {
     status?: boolean
     date?: boolean
     duration?: boolean
-    roundId?: boolean
-    Round?: boolean | Match$RoundArgs<ExtArgs>
   }, ExtArgs["result"]["match"]>
 
   export type MatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2577,8 +2567,6 @@ export namespace Prisma {
     status?: boolean
     date?: boolean
     duration?: boolean
-    roundId?: boolean
-    Round?: boolean | Match$RoundArgs<ExtArgs>
   }, ExtArgs["result"]["match"]>
 
   export type MatchSelectScalar = {
@@ -2588,26 +2576,21 @@ export namespace Prisma {
     status?: boolean
     date?: boolean
     duration?: boolean
-    roundId?: boolean
   }
 
-  export type MatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "date" | "duration" | "roundId", ExtArgs["result"]["match"]>
+  export type MatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "date" | "duration", ExtArgs["result"]["match"]>
   export type MatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Round?: boolean | Match$RoundArgs<ExtArgs>
+    rounds?: boolean | Match$roundsArgs<ExtArgs>
     players?: boolean | Match$playersArgs<ExtArgs>
     _count?: boolean | MatchCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type MatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Round?: boolean | Match$RoundArgs<ExtArgs>
-  }
-  export type MatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Round?: boolean | Match$RoundArgs<ExtArgs>
-  }
+  export type MatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $MatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Match"
     objects: {
-      Round: Prisma.$RoundPayload<ExtArgs> | null
+      rounds: Prisma.$RoundPayload<ExtArgs>[]
       players: Prisma.$PlayerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2617,7 +2600,6 @@ export namespace Prisma {
       status: $Enums.MatchStatus
       date: Date
       duration: number | null
-      roundId: string | null
     }, ExtArgs["result"]["match"]>
     composites: {}
   }
@@ -3012,7 +2994,7 @@ export namespace Prisma {
    */
   export interface Prisma__MatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Round<T extends Match$RoundArgs<ExtArgs> = {}>(args?: Subset<T, Match$RoundArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    rounds<T extends Match$roundsArgs<ExtArgs> = {}>(args?: Subset<T, Match$roundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     players<T extends Match$playersArgs<ExtArgs> = {}>(args?: Subset<T, Match$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3049,7 +3031,6 @@ export namespace Prisma {
     readonly status: FieldRef<"Match", 'MatchStatus'>
     readonly date: FieldRef<"Match", 'DateTime'>
     readonly duration: FieldRef<"Match", 'Float'>
-    readonly roundId: FieldRef<"Match", 'String'>
   }
     
 
@@ -3299,10 +3280,6 @@ export namespace Prisma {
      */
     data: MatchCreateManyInput | MatchCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MatchIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3373,10 +3350,6 @@ export namespace Prisma {
      * Limit how many Matches to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MatchIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3446,9 +3419,9 @@ export namespace Prisma {
   }
 
   /**
-   * Match.Round
+   * Match.rounds
    */
-  export type Match$RoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Match$roundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Round
      */
@@ -3462,6 +3435,11 @@ export namespace Prisma {
      */
     include?: RoundInclude<ExtArgs> | null
     where?: RoundWhereInput
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    cursor?: RoundWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
   }
 
   /**
@@ -3513,46 +3491,76 @@ export namespace Prisma {
 
   export type AggregateRound = {
     _count: RoundCountAggregateOutputType | null
+    _avg: RoundAvgAggregateOutputType | null
+    _sum: RoundSumAggregateOutputType | null
     _min: RoundMinAggregateOutputType | null
     _max: RoundMaxAggregateOutputType | null
+  }
+
+  export type RoundAvgAggregateOutputType = {
+    score: number | null
+  }
+
+  export type RoundSumAggregateOutputType = {
+    score: number | null
   }
 
   export type RoundMinAggregateOutputType = {
     id: string | null
     status: $Enums.RoundStatus | null
+    score: number | null
     createdAt: Date | null
+    matchId: string | null
   }
 
   export type RoundMaxAggregateOutputType = {
     id: string | null
     status: $Enums.RoundStatus | null
+    score: number | null
     createdAt: Date | null
+    matchId: string | null
   }
 
   export type RoundCountAggregateOutputType = {
     id: number
     status: number
+    score: number
     createdAt: number
+    matchId: number
     _all: number
   }
 
 
+  export type RoundAvgAggregateInputType = {
+    score?: true
+  }
+
+  export type RoundSumAggregateInputType = {
+    score?: true
+  }
+
   export type RoundMinAggregateInputType = {
     id?: true
     status?: true
+    score?: true
     createdAt?: true
+    matchId?: true
   }
 
   export type RoundMaxAggregateInputType = {
     id?: true
     status?: true
+    score?: true
     createdAt?: true
+    matchId?: true
   }
 
   export type RoundCountAggregateInputType = {
     id?: true
     status?: true
+    score?: true
     createdAt?: true
+    matchId?: true
     _all?: true
   }
 
@@ -3594,6 +3602,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: RoundAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoundSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RoundMinAggregateInputType
@@ -3624,6 +3644,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RoundCountAggregateInputType | true
+    _avg?: RoundAvgAggregateInputType
+    _sum?: RoundSumAggregateInputType
     _min?: RoundMinAggregateInputType
     _max?: RoundMaxAggregateInputType
   }
@@ -3631,8 +3653,12 @@ export namespace Prisma {
   export type RoundGroupByOutputType = {
     id: string
     status: $Enums.RoundStatus
+    score: number
     createdAt: Date
+    matchId: string
     _count: RoundCountAggregateOutputType | null
+    _avg: RoundAvgAggregateOutputType | null
+    _sum: RoundSumAggregateOutputType | null
     _min: RoundMinAggregateOutputType | null
     _max: RoundMaxAggregateOutputType | null
   }
@@ -3654,49 +3680,65 @@ export namespace Prisma {
   export type RoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     status?: boolean
+    score?: boolean
     createdAt?: boolean
-    matches?: boolean | Round$matchesArgs<ExtArgs>
+    matchId?: boolean
     players?: boolean | Round$playersArgs<ExtArgs>
+    match?: boolean | MatchDefaultArgs<ExtArgs>
     _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round"]>
 
   export type RoundSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     status?: boolean
+    score?: boolean
     createdAt?: boolean
+    matchId?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round"]>
 
   export type RoundSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     status?: boolean
+    score?: boolean
     createdAt?: boolean
+    matchId?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round"]>
 
   export type RoundSelectScalar = {
     id?: boolean
     status?: boolean
+    score?: boolean
     createdAt?: boolean
+    matchId?: boolean
   }
 
-  export type RoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "createdAt", ExtArgs["result"]["round"]>
+  export type RoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "score" | "createdAt" | "matchId", ExtArgs["result"]["round"]>
   export type RoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    matches?: boolean | Round$matchesArgs<ExtArgs>
     players?: boolean | Round$playersArgs<ExtArgs>
+    match?: boolean | MatchDefaultArgs<ExtArgs>
     _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type RoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type RoundIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type RoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }
+  export type RoundIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }
 
   export type $RoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Round"
     objects: {
-      matches: Prisma.$MatchPayload<ExtArgs>[]
       players: Prisma.$PlayerPayload<ExtArgs>[]
+      match: Prisma.$MatchPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       status: $Enums.RoundStatus
+      score: number
       createdAt: Date
+      matchId: string
     }, ExtArgs["result"]["round"]>
     composites: {}
   }
@@ -4091,8 +4133,8 @@ export namespace Prisma {
    */
   export interface Prisma__RoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    matches<T extends Round$matchesArgs<ExtArgs> = {}>(args?: Subset<T, Round$matchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     players<T extends Round$playersArgs<ExtArgs> = {}>(args?: Subset<T, Round$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    match<T extends MatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MatchDefaultArgs<ExtArgs>>): Prisma__MatchClient<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4124,7 +4166,9 @@ export namespace Prisma {
   interface RoundFieldRefs {
     readonly id: FieldRef<"Round", 'String'>
     readonly status: FieldRef<"Round", 'RoundStatus'>
+    readonly score: FieldRef<"Round", 'Int'>
     readonly createdAt: FieldRef<"Round", 'DateTime'>
+    readonly matchId: FieldRef<"Round", 'String'>
   }
     
 
@@ -4343,7 +4387,7 @@ export namespace Prisma {
     /**
      * The data needed to create a Round.
      */
-    data?: XOR<RoundCreateInput, RoundUncheckedCreateInput>
+    data: XOR<RoundCreateInput, RoundUncheckedCreateInput>
   }
 
   /**
@@ -4374,6 +4418,10 @@ export namespace Prisma {
      */
     data: RoundCreateManyInput | RoundCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4444,6 +4492,10 @@ export namespace Prisma {
      * Limit how many Rounds to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4510,30 +4562,6 @@ export namespace Prisma {
      * Limit how many Rounds to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Round.matches
-   */
-  export type Round$matchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Match
-     */
-    select?: MatchSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Match
-     */
-    omit?: MatchOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MatchInclude<ExtArgs> | null
-    where?: MatchWhereInput
-    orderBy?: MatchOrderByWithRelationInput | MatchOrderByWithRelationInput[]
-    cursor?: MatchWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MatchScalarFieldEnum | MatchScalarFieldEnum[]
   }
 
   /**
@@ -4612,8 +4640,7 @@ export namespace Prisma {
     description: 'description',
     status: 'status',
     date: 'date',
-    duration: 'duration',
-    roundId: 'roundId'
+    duration: 'duration'
   };
 
   export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
@@ -4622,7 +4649,9 @@ export namespace Prisma {
   export const RoundScalarFieldEnum: {
     id: 'id',
     status: 'status',
-    createdAt: 'createdAt'
+    score: 'score',
+    createdAt: 'createdAt',
+    matchId: 'matchId'
   };
 
   export type RoundScalarFieldEnum = (typeof RoundScalarFieldEnum)[keyof typeof RoundScalarFieldEnum]
@@ -4850,8 +4879,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
-    roundId?: StringNullableFilter<"Match"> | string | null
-    Round?: XOR<RoundNullableScalarRelationFilter, RoundWhereInput> | null
+    rounds?: RoundListRelationFilter
     players?: PlayerListRelationFilter
   }
 
@@ -4862,8 +4890,7 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
-    roundId?: SortOrderInput | SortOrder
-    Round?: RoundOrderByWithRelationInput
+    rounds?: RoundOrderByRelationAggregateInput
     players?: PlayerOrderByRelationAggregateInput
   }
 
@@ -4877,8 +4904,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
-    roundId?: StringNullableFilter<"Match"> | string | null
-    Round?: XOR<RoundNullableScalarRelationFilter, RoundWhereInput> | null
+    rounds?: RoundListRelationFilter
     players?: PlayerListRelationFilter
   }, "id">
 
@@ -4889,7 +4915,6 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
-    roundId?: SortOrderInput | SortOrder
     _count?: MatchCountOrderByAggregateInput
     _avg?: MatchAvgOrderByAggregateInput
     _max?: MatchMaxOrderByAggregateInput
@@ -4907,7 +4932,6 @@ export namespace Prisma {
     status?: EnumMatchStatusWithAggregatesFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeWithAggregatesFilter<"Match"> | Date | string
     duration?: FloatNullableWithAggregatesFilter<"Match"> | number | null
-    roundId?: StringNullableWithAggregatesFilter<"Match"> | string | null
   }
 
   export type RoundWhereInput = {
@@ -4916,17 +4940,21 @@ export namespace Prisma {
     NOT?: RoundWhereInput | RoundWhereInput[]
     id?: StringFilter<"Round"> | string
     status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    score?: IntFilter<"Round"> | number
     createdAt?: DateTimeFilter<"Round"> | Date | string
-    matches?: MatchListRelationFilter
+    matchId?: StringFilter<"Round"> | string
     players?: PlayerListRelationFilter
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
   }
 
   export type RoundOrderByWithRelationInput = {
     id?: SortOrder
     status?: SortOrder
+    score?: SortOrder
     createdAt?: SortOrder
-    matches?: MatchOrderByRelationAggregateInput
+    matchId?: SortOrder
     players?: PlayerOrderByRelationAggregateInput
+    match?: MatchOrderByWithRelationInput
   }
 
   export type RoundWhereUniqueInput = Prisma.AtLeast<{
@@ -4935,18 +4963,24 @@ export namespace Prisma {
     OR?: RoundWhereInput[]
     NOT?: RoundWhereInput | RoundWhereInput[]
     status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    score?: IntFilter<"Round"> | number
     createdAt?: DateTimeFilter<"Round"> | Date | string
-    matches?: MatchListRelationFilter
+    matchId?: StringFilter<"Round"> | string
     players?: PlayerListRelationFilter
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
   }, "id">
 
   export type RoundOrderByWithAggregationInput = {
     id?: SortOrder
     status?: SortOrder
+    score?: SortOrder
     createdAt?: SortOrder
+    matchId?: SortOrder
     _count?: RoundCountOrderByAggregateInput
+    _avg?: RoundAvgOrderByAggregateInput
     _max?: RoundMaxOrderByAggregateInput
     _min?: RoundMinOrderByAggregateInput
+    _sum?: RoundSumOrderByAggregateInput
   }
 
   export type RoundScalarWhereWithAggregatesInput = {
@@ -4955,7 +4989,9 @@ export namespace Prisma {
     NOT?: RoundScalarWhereWithAggregatesInput | RoundScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Round"> | string
     status?: EnumRoundStatusWithAggregatesFilter<"Round"> | $Enums.RoundStatus
+    score?: IntWithAggregatesFilter<"Round"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Round"> | Date | string
+    matchId?: StringWithAggregatesFilter<"Round"> | string
   }
 
   export type PlayerCreateInput = {
@@ -5043,7 +5079,7 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    Round?: RoundCreateNestedOneWithoutMatchesInput
+    rounds?: RoundCreateNestedManyWithoutMatchInput
     players?: PlayerCreateNestedManyWithoutMatchesInput
   }
 
@@ -5054,7 +5090,7 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    roundId?: string | null
+    rounds?: RoundUncheckedCreateNestedManyWithoutMatchInput
     players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
   }
 
@@ -5065,7 +5101,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    Round?: RoundUpdateOneWithoutMatchesNestedInput
+    rounds?: RoundUpdateManyWithoutMatchNestedInput
     players?: PlayerUpdateManyWithoutMatchesNestedInput
   }
 
@@ -5076,7 +5112,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    roundId?: NullableStringFieldUpdateOperationsInput | string | null
+    rounds?: RoundUncheckedUpdateManyWithoutMatchNestedInput
     players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
   }
 
@@ -5087,7 +5123,6 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    roundId?: string | null
   }
 
   export type MatchUpdateManyMutationInput = {
@@ -5106,57 +5141,65 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    roundId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RoundCreateInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
-    matches?: MatchCreateNestedManyWithoutRoundInput
     players?: PlayerCreateNestedManyWithoutRoundsInput
+    match: MatchCreateNestedOneWithoutRoundsInput
   }
 
   export type RoundUncheckedCreateInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
-    matches?: MatchUncheckedCreateNestedManyWithoutRoundInput
+    matchId: string
     players?: PlayerUncheckedCreateNestedManyWithoutRoundsInput
   }
 
   export type RoundUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches?: MatchUpdateManyWithoutRoundNestedInput
     players?: PlayerUpdateManyWithoutRoundsNestedInput
+    match?: MatchUpdateOneRequiredWithoutRoundsNestedInput
   }
 
   export type RoundUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches?: MatchUncheckedUpdateManyWithoutRoundNestedInput
+    matchId?: StringFieldUpdateOperationsInput | string
     players?: PlayerUncheckedUpdateManyWithoutRoundsNestedInput
   }
 
   export type RoundCreateManyInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
+    matchId: string
   }
 
   export type RoundUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoundUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchId?: StringFieldUpdateOperationsInput | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -5384,11 +5427,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type RoundNullableScalarRelationFilter = {
-    is?: RoundWhereInput | null
-    isNot?: RoundWhereInput | null
-  }
-
   export type PlayerListRelationFilter = {
     every?: PlayerWhereInput
     some?: PlayerWhereInput
@@ -5406,7 +5444,6 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
-    roundId?: SortOrder
   }
 
   export type MatchAvgOrderByAggregateInput = {
@@ -5420,7 +5457,6 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
-    roundId?: SortOrder
   }
 
   export type MatchMinOrderByAggregateInput = {
@@ -5430,7 +5466,6 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrder
-    roundId?: SortOrder
   }
 
   export type MatchSumOrderByAggregateInput = {
@@ -5470,22 +5505,52 @@ export namespace Prisma {
     not?: NestedEnumRoundStatusFilter<$PrismaModel> | $Enums.RoundStatus
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type MatchScalarRelationFilter = {
+    is?: MatchWhereInput
+    isNot?: MatchWhereInput
+  }
+
   export type RoundCountOrderByAggregateInput = {
     id?: SortOrder
     status?: SortOrder
+    score?: SortOrder
     createdAt?: SortOrder
+    matchId?: SortOrder
+  }
+
+  export type RoundAvgOrderByAggregateInput = {
+    score?: SortOrder
   }
 
   export type RoundMaxOrderByAggregateInput = {
     id?: SortOrder
     status?: SortOrder
+    score?: SortOrder
     createdAt?: SortOrder
+    matchId?: SortOrder
   }
 
   export type RoundMinOrderByAggregateInput = {
     id?: SortOrder
     status?: SortOrder
+    score?: SortOrder
     createdAt?: SortOrder
+    matchId?: SortOrder
+  }
+
+  export type RoundSumOrderByAggregateInput = {
+    score?: SortOrder
   }
 
   export type EnumRoundStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5496,6 +5561,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoundStatusFilter<$PrismaModel>
     _max?: NestedEnumRoundStatusFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type MatchCreateNestedManyWithoutPlayersInput = {
@@ -5594,16 +5675,24 @@ export namespace Prisma {
     deleteMany?: RoundScalarWhereInput | RoundScalarWhereInput[]
   }
 
-  export type RoundCreateNestedOneWithoutMatchesInput = {
-    create?: XOR<RoundCreateWithoutMatchesInput, RoundUncheckedCreateWithoutMatchesInput>
-    connectOrCreate?: RoundCreateOrConnectWithoutMatchesInput
-    connect?: RoundWhereUniqueInput
+  export type RoundCreateNestedManyWithoutMatchInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
   }
 
   export type PlayerCreateNestedManyWithoutMatchesInput = {
     create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
     connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type RoundUncheckedCreateNestedManyWithoutMatchInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
   }
 
   export type PlayerUncheckedCreateNestedManyWithoutMatchesInput = {
@@ -5624,14 +5713,18 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type RoundUpdateOneWithoutMatchesNestedInput = {
-    create?: XOR<RoundCreateWithoutMatchesInput, RoundUncheckedCreateWithoutMatchesInput>
-    connectOrCreate?: RoundCreateOrConnectWithoutMatchesInput
-    upsert?: RoundUpsertWithoutMatchesInput
-    disconnect?: RoundWhereInput | boolean
-    delete?: RoundWhereInput | boolean
-    connect?: RoundWhereUniqueInput
-    update?: XOR<XOR<RoundUpdateToOneWithWhereWithoutMatchesInput, RoundUpdateWithoutMatchesInput>, RoundUncheckedUpdateWithoutMatchesInput>
+  export type RoundUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    upsert?: RoundUpsertWithWhereUniqueWithoutMatchInput | RoundUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    set?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    disconnect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    delete?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    update?: RoundUpdateWithWhereUniqueWithoutMatchInput | RoundUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: RoundUpdateManyWithWhereWithoutMatchInput | RoundUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: RoundScalarWhereInput | RoundScalarWhereInput[]
   }
 
   export type PlayerUpdateManyWithoutMatchesNestedInput = {
@@ -5647,6 +5740,20 @@ export namespace Prisma {
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
   }
 
+  export type RoundUncheckedUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    upsert?: RoundUpsertWithWhereUniqueWithoutMatchInput | RoundUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    set?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    disconnect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    delete?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    update?: RoundUpdateWithWhereUniqueWithoutMatchInput | RoundUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: RoundUpdateManyWithWhereWithoutMatchInput | RoundUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: RoundScalarWhereInput | RoundScalarWhereInput[]
+  }
+
   export type PlayerUncheckedUpdateManyWithoutMatchesNestedInput = {
     create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
     connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
@@ -5660,24 +5767,16 @@ export namespace Prisma {
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
   }
 
-  export type MatchCreateNestedManyWithoutRoundInput = {
-    create?: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput> | MatchCreateWithoutRoundInput[] | MatchUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: MatchCreateOrConnectWithoutRoundInput | MatchCreateOrConnectWithoutRoundInput[]
-    createMany?: MatchCreateManyRoundInputEnvelope
-    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-  }
-
   export type PlayerCreateNestedManyWithoutRoundsInput = {
     create?: XOR<PlayerCreateWithoutRoundsInput, PlayerUncheckedCreateWithoutRoundsInput> | PlayerCreateWithoutRoundsInput[] | PlayerUncheckedCreateWithoutRoundsInput[]
     connectOrCreate?: PlayerCreateOrConnectWithoutRoundsInput | PlayerCreateOrConnectWithoutRoundsInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
   }
 
-  export type MatchUncheckedCreateNestedManyWithoutRoundInput = {
-    create?: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput> | MatchCreateWithoutRoundInput[] | MatchUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: MatchCreateOrConnectWithoutRoundInput | MatchCreateOrConnectWithoutRoundInput[]
-    createMany?: MatchCreateManyRoundInputEnvelope
-    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+  export type MatchCreateNestedOneWithoutRoundsInput = {
+    create?: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutRoundsInput
+    connect?: MatchWhereUniqueInput
   }
 
   export type PlayerUncheckedCreateNestedManyWithoutRoundsInput = {
@@ -5690,18 +5789,12 @@ export namespace Prisma {
     set?: $Enums.RoundStatus
   }
 
-  export type MatchUpdateManyWithoutRoundNestedInput = {
-    create?: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput> | MatchCreateWithoutRoundInput[] | MatchUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: MatchCreateOrConnectWithoutRoundInput | MatchCreateOrConnectWithoutRoundInput[]
-    upsert?: MatchUpsertWithWhereUniqueWithoutRoundInput | MatchUpsertWithWhereUniqueWithoutRoundInput[]
-    createMany?: MatchCreateManyRoundInputEnvelope
-    set?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    disconnect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    delete?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    update?: MatchUpdateWithWhereUniqueWithoutRoundInput | MatchUpdateWithWhereUniqueWithoutRoundInput[]
-    updateMany?: MatchUpdateManyWithWhereWithoutRoundInput | MatchUpdateManyWithWhereWithoutRoundInput[]
-    deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type PlayerUpdateManyWithoutRoundsNestedInput = {
@@ -5717,18 +5810,12 @@ export namespace Prisma {
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
   }
 
-  export type MatchUncheckedUpdateManyWithoutRoundNestedInput = {
-    create?: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput> | MatchCreateWithoutRoundInput[] | MatchUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: MatchCreateOrConnectWithoutRoundInput | MatchCreateOrConnectWithoutRoundInput[]
-    upsert?: MatchUpsertWithWhereUniqueWithoutRoundInput | MatchUpsertWithWhereUniqueWithoutRoundInput[]
-    createMany?: MatchCreateManyRoundInputEnvelope
-    set?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    disconnect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    delete?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
-    update?: MatchUpdateWithWhereUniqueWithoutRoundInput | MatchUpdateWithWhereUniqueWithoutRoundInput[]
-    updateMany?: MatchUpdateManyWithWhereWithoutRoundInput | MatchUpdateManyWithWhereWithoutRoundInput[]
-    deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
+  export type MatchUpdateOneRequiredWithoutRoundsNestedInput = {
+    create?: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutRoundsInput
+    upsert?: MatchUpsertWithoutRoundsInput
+    connect?: MatchWhereUniqueInput
+    update?: XOR<XOR<MatchUpdateToOneWithWhereWithoutRoundsInput, MatchUpdateWithoutRoundsInput>, MatchUncheckedUpdateWithoutRoundsInput>
   }
 
   export type PlayerUncheckedUpdateManyWithoutRoundsNestedInput = {
@@ -5973,6 +6060,33 @@ export namespace Prisma {
     _max?: NestedEnumRoundStatusFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type MatchCreateWithoutPlayersInput = {
     id?: string
     title: string
@@ -5980,7 +6094,7 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    Round?: RoundCreateNestedOneWithoutMatchesInput
+    rounds?: RoundCreateNestedManyWithoutMatchInput
   }
 
   export type MatchUncheckedCreateWithoutPlayersInput = {
@@ -5990,7 +6104,7 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    roundId?: string | null
+    rounds?: RoundUncheckedCreateNestedManyWithoutMatchInput
   }
 
   export type MatchCreateOrConnectWithoutPlayersInput = {
@@ -6001,15 +6115,17 @@ export namespace Prisma {
   export type RoundCreateWithoutPlayersInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
-    matches?: MatchCreateNestedManyWithoutRoundInput
+    match: MatchCreateNestedOneWithoutRoundsInput
   }
 
   export type RoundUncheckedCreateWithoutPlayersInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
-    matches?: MatchUncheckedCreateNestedManyWithoutRoundInput
+    matchId: string
   }
 
   export type RoundCreateOrConnectWithoutPlayersInput = {
@@ -6043,7 +6159,6 @@ export namespace Prisma {
     status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
-    roundId?: StringNullableFilter<"Match"> | string | null
   }
 
   export type RoundUpsertWithWhereUniqueWithoutPlayersInput = {
@@ -6068,26 +6183,35 @@ export namespace Prisma {
     NOT?: RoundScalarWhereInput | RoundScalarWhereInput[]
     id?: StringFilter<"Round"> | string
     status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    score?: IntFilter<"Round"> | number
     createdAt?: DateTimeFilter<"Round"> | Date | string
+    matchId?: StringFilter<"Round"> | string
   }
 
-  export type RoundCreateWithoutMatchesInput = {
+  export type RoundCreateWithoutMatchInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
     players?: PlayerCreateNestedManyWithoutRoundsInput
   }
 
-  export type RoundUncheckedCreateWithoutMatchesInput = {
+  export type RoundUncheckedCreateWithoutMatchInput = {
     id?: string
     status?: $Enums.RoundStatus
+    score?: number
     createdAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutRoundsInput
   }
 
-  export type RoundCreateOrConnectWithoutMatchesInput = {
+  export type RoundCreateOrConnectWithoutMatchInput = {
     where: RoundWhereUniqueInput
-    create: XOR<RoundCreateWithoutMatchesInput, RoundUncheckedCreateWithoutMatchesInput>
+    create: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput>
+  }
+
+  export type RoundCreateManyMatchInputEnvelope = {
+    data: RoundCreateManyMatchInput | RoundCreateManyMatchInput[]
+    skipDuplicates?: boolean
   }
 
   export type PlayerCreateWithoutMatchesInput = {
@@ -6117,29 +6241,20 @@ export namespace Prisma {
     create: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput>
   }
 
-  export type RoundUpsertWithoutMatchesInput = {
-    update: XOR<RoundUpdateWithoutMatchesInput, RoundUncheckedUpdateWithoutMatchesInput>
-    create: XOR<RoundCreateWithoutMatchesInput, RoundUncheckedCreateWithoutMatchesInput>
-    where?: RoundWhereInput
+  export type RoundUpsertWithWhereUniqueWithoutMatchInput = {
+    where: RoundWhereUniqueInput
+    update: XOR<RoundUpdateWithoutMatchInput, RoundUncheckedUpdateWithoutMatchInput>
+    create: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput>
   }
 
-  export type RoundUpdateToOneWithWhereWithoutMatchesInput = {
-    where?: RoundWhereInput
-    data: XOR<RoundUpdateWithoutMatchesInput, RoundUncheckedUpdateWithoutMatchesInput>
+  export type RoundUpdateWithWhereUniqueWithoutMatchInput = {
+    where: RoundWhereUniqueInput
+    data: XOR<RoundUpdateWithoutMatchInput, RoundUncheckedUpdateWithoutMatchInput>
   }
 
-  export type RoundUpdateWithoutMatchesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    players?: PlayerUpdateManyWithoutRoundsNestedInput
-  }
-
-  export type RoundUncheckedUpdateWithoutMatchesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    players?: PlayerUncheckedUpdateManyWithoutRoundsNestedInput
+  export type RoundUpdateManyWithWhereWithoutMatchInput = {
+    where: RoundScalarWhereInput
+    data: XOR<RoundUpdateManyMutationInput, RoundUncheckedUpdateManyWithoutMatchInput>
   }
 
   export type PlayerUpsertWithWhereUniqueWithoutMatchesInput = {
@@ -6171,36 +6286,6 @@ export namespace Prisma {
     status?: EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
   }
 
-  export type MatchCreateWithoutRoundInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status: $Enums.MatchStatus
-    date?: Date | string
-    duration?: number | null
-    players?: PlayerCreateNestedManyWithoutMatchesInput
-  }
-
-  export type MatchUncheckedCreateWithoutRoundInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status: $Enums.MatchStatus
-    date?: Date | string
-    duration?: number | null
-    players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
-  }
-
-  export type MatchCreateOrConnectWithoutRoundInput = {
-    where: MatchWhereUniqueInput
-    create: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput>
-  }
-
-  export type MatchCreateManyRoundInputEnvelope = {
-    data: MatchCreateManyRoundInput | MatchCreateManyRoundInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PlayerCreateWithoutRoundsInput = {
     id?: string
     full_name: string
@@ -6228,20 +6313,29 @@ export namespace Prisma {
     create: XOR<PlayerCreateWithoutRoundsInput, PlayerUncheckedCreateWithoutRoundsInput>
   }
 
-  export type MatchUpsertWithWhereUniqueWithoutRoundInput = {
-    where: MatchWhereUniqueInput
-    update: XOR<MatchUpdateWithoutRoundInput, MatchUncheckedUpdateWithoutRoundInput>
-    create: XOR<MatchCreateWithoutRoundInput, MatchUncheckedCreateWithoutRoundInput>
+  export type MatchCreateWithoutRoundsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerCreateNestedManyWithoutMatchesInput
   }
 
-  export type MatchUpdateWithWhereUniqueWithoutRoundInput = {
-    where: MatchWhereUniqueInput
-    data: XOR<MatchUpdateWithoutRoundInput, MatchUncheckedUpdateWithoutRoundInput>
+  export type MatchUncheckedCreateWithoutRoundsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
   }
 
-  export type MatchUpdateManyWithWhereWithoutRoundInput = {
-    where: MatchScalarWhereInput
-    data: XOR<MatchUpdateManyMutationInput, MatchUncheckedUpdateManyWithoutRoundInput>
+  export type MatchCreateOrConnectWithoutRoundsInput = {
+    where: MatchWhereUniqueInput
+    create: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
   }
 
   export type PlayerUpsertWithWhereUniqueWithoutRoundsInput = {
@@ -6260,6 +6354,37 @@ export namespace Prisma {
     data: XOR<PlayerUpdateManyMutationInput, PlayerUncheckedUpdateManyWithoutRoundsInput>
   }
 
+  export type MatchUpsertWithoutRoundsInput = {
+    update: XOR<MatchUpdateWithoutRoundsInput, MatchUncheckedUpdateWithoutRoundsInput>
+    create: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    where?: MatchWhereInput
+  }
+
+  export type MatchUpdateToOneWithWhereWithoutRoundsInput = {
+    where?: MatchWhereInput
+    data: XOR<MatchUpdateWithoutRoundsInput, MatchUncheckedUpdateWithoutRoundsInput>
+  }
+
+  export type MatchUpdateWithoutRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUpdateManyWithoutMatchesNestedInput
+  }
+
+  export type MatchUncheckedUpdateWithoutRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
+  }
+
   export type MatchUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -6267,7 +6392,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    Round?: RoundUpdateOneWithoutMatchesNestedInput
+    rounds?: RoundUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchUncheckedUpdateWithoutPlayersInput = {
@@ -6277,7 +6402,7 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    roundId?: NullableStringFieldUpdateOperationsInput | string | null
+    rounds?: RoundUncheckedUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchUncheckedUpdateManyWithoutPlayersInput = {
@@ -6287,26 +6412,59 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    roundId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RoundUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches?: MatchUpdateManyWithoutRoundNestedInput
+    match?: MatchUpdateOneRequiredWithoutRoundsNestedInput
   }
 
   export type RoundUncheckedUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches?: MatchUncheckedUpdateManyWithoutRoundNestedInput
+    matchId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RoundUncheckedUpdateManyWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type RoundCreateManyMatchInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    score?: number
+    createdAt?: Date | string
+  }
+
+  export type RoundUpdateWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUpdateManyWithoutRoundsNestedInput
+  }
+
+  export type RoundUncheckedUpdateWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUncheckedUpdateManyWithoutRoundsNestedInput
+  }
+
+  export type RoundUncheckedUpdateManyWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    score?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6340,44 +6498,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
-  }
-
-  export type MatchCreateManyRoundInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status: $Enums.MatchStatus
-    date?: Date | string
-    duration?: number | null
-  }
-
-  export type MatchUpdateWithoutRoundInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    players?: PlayerUpdateManyWithoutMatchesNestedInput
-  }
-
-  export type MatchUncheckedUpdateWithoutRoundInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
-  }
-
-  export type MatchUncheckedUpdateManyWithoutRoundInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type PlayerUpdateWithoutRoundsInput = {

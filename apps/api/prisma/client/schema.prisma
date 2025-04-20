@@ -30,8 +30,7 @@ model Match {
   status      MatchStatus
   date        DateTime    @default(now())
   duration    Float?
-  roundId     String?
-  Round       Round?      @relation(fields: [roundId], references: [id])
+  rounds      Round[]
   players     Player[]    @relation("MatchToPlayer")
 
   @@map("matches")
@@ -40,9 +39,11 @@ model Match {
 model Round {
   id        String      @id @default(uuid())
   status    RoundStatus @default(IN_PROGRESS)
+  score     Int         @default(0)
   createdAt DateTime    @default(now())
-  matches   Match[]
   players   Player[]    @relation("RoundsToPlayer")
+  matchId   String
+  match     Match       @relation(fields: [matchId], references: [id])
 
   @@map("rounds")
 }

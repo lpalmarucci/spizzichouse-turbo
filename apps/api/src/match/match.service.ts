@@ -64,32 +64,11 @@ export class MatchService {
   async update(id: string, updateMatchDto: UpdateMatch) {
     const match = await this.findOne(id);
 
-    let users: Player[] = [];
-    if (updateMatchDto.playerIds && updateMatchDto.playerIds.length > 0) {
-      users = await this.playerService.findMany({
-        where: {
-          id: {
-            in: updateMatchDto.playerIds,
-          },
-        },
-      });
-      delete updateMatchDto?.playerIds;
-    }
-    const userIds = users.map((user) => ({
-      id: user.id,
-    }));
+    const currentPlayerIds = match.players.map((player) => player.id);
+    const newPlayerIds = updateMatchDto.playerIds ?? [];
 
-    //Deleting old players related to the match
-    await this._prismaService.match.update({
-      where: {
-        id,
-      },
-      data: {
-        players: {
-          disconnect: match.players.map((player) => ({ id: player.id })),
-        },
-      },
-    });
+    const playersToDisconnect = currentPlayerIds.filter((id) => !newPlayerIds.includes(id)).map((id) => ({ id }));
+    const playersToConnect = newPlayerIds.filter((id) => !currentPlayerIds.includes(id)).map((id) => ({ id }));
 
     //Updating the record
     return this._prismaService.match.update({
@@ -99,7 +78,8 @@ export class MatchService {
       data: {
         ...updateMatchDto,
         players: {
-          connect: userIds,
+          disconnect: playersToDisconnect,
+          connect: playersToConnect,
         },
       },
       include: {
