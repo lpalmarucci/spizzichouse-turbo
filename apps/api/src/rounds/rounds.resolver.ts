@@ -1,12 +1,20 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { RoundsService } from './rounds.service';
 import { Round } from './round.entity';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
+import { Player } from '../players/models/player.model';
+import { Match } from '../match/models/match.model';
+import { PlayersService } from '../players/players.service';
+import { MatchService } from '../match/match.service';
 
 @Resolver(() => Round)
 export class RoundsResolver {
-  constructor(private readonly roundsService: RoundsService) {}
+  constructor(
+    private readonly roundsService: RoundsService,
+    private readonly playersService: PlayersService,
+    private readonly matchService: MatchService,
+  ) {}
 
   @Mutation(() => Round)
   createRound(@Args('createRoundInput') createRoundInput: CreateRoundInput) {
@@ -19,17 +27,44 @@ export class RoundsResolver {
   }
 
   @Query(() => Round, { name: 'round' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.roundsService.findOne(id);
   }
 
   @Mutation(() => Round)
-  updateRound(@Args('updateRoundInput') updateRoundInput: UpdateRoundInput) {
-    return this.roundsService.update(updateRoundInput.id, updateRoundInput);
+  updateRound(
+    @Args('id', { type: () => String }) id: string,
+    @Args('updateRoundInput') updateRoundInput: UpdateRoundInput,
+  ) {
+    return this.roundsService.update(id, updateRoundInput);
   }
 
   @Mutation(() => Round)
-  removeRound(@Args('id', { type: () => Int }) id: number) {
+  removeRound(@Args('id', { type: () => String }) id: string) {
     return this.roundsService.remove(id);
+  }
+
+  @ResolveField('players', () => [Player])
+  async players(@Parent() round: Round) {
+    const { id } = round;
+    return this.playersService.findMany({
+      where: {
+        rounds: {
+          some: {
+            id,
+          },
+        },
+      },
+    });
+  }
+
+  @ResolveField('match', () => Match)
+  async match(@Parent() round: Round) {
+    const { id } = round;
+    return this.matchService.findFirst({
+      where: {
+        roundId: id,
+      },
+    });
   }
 }

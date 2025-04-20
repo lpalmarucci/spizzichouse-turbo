@@ -43,7 +43,7 @@ export class MatchResolver {
     const { id } = match;
     return this.playersService.findMany({
       where: {
-        Match: {
+        matches: {
           some: {
             id,
           },

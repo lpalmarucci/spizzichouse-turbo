@@ -20,8 +20,9 @@ input CreatePlayer {
 }
 
 input CreateRoundInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  matchId: String!
+  playerIds: [String!]!
+  status: RoundStatus! = IN_PROGRESS
 }
 
 """
@@ -35,6 +36,7 @@ type Match {
   duration: Int
   id: String!
   players: [Player!]!
+  rounds: [Round!]!
   status: MatchStatus!
   title: String!
 }
@@ -51,10 +53,10 @@ type Mutation {
   createRound(createRoundInput: CreateRoundInput!): Round!
   deleteMatch(id: String!): Match!
   deletePlayer(id: String!): Player!
-  removeRound(id: Int!): Round!
+  removeRound(id: String!): Round!
   updateMatch(id: String!, match: UpdateMatch!): Match!
   updatePlayer(id: String!, player: UpdatePlayer!): Player!
-  updateRound(updateRoundInput: UpdateRoundInput!): Round!
+  updateRound(id: String!, updateRoundInput: UpdateRoundInput!): Round!
 }
 
 type Player {
@@ -65,6 +67,7 @@ type Player {
   id: String!
   level: PlayerLevel!
   matches: [Match!]
+  rounds: [Round!]
   status: PlayerStatus!
 }
 
@@ -84,13 +87,21 @@ type Query {
   matches: [Match!]!
   player(id: String!): Player!
   players: [Player!]!
-  round(id: Int!): Round!
+  round(id: String!): Round!
   rounds: [Round!]!
 }
 
 type Round {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  createdAt: DateTime!
+  id: String!
+  match: Match!
+  players: [Player!]!
+  status: RoundStatus!
+}
+
+enum RoundStatus {
+  COMPLETED
+  IN_PROGRESS
 }
 
 input UpdateMatch {
@@ -110,7 +121,6 @@ input UpdatePlayer {
 }
 
 input UpdateRoundInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  playerIds: [String!]
+  status: RoundStatus = IN_PROGRESS
 }

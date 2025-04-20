@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Users } from "lucide-react";
+import { Calendar, Trophy, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -21,6 +21,8 @@ import { useGetMatch } from "@/features/match/match.hook";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { ScreenLoader } from "@/components/screen-loader";
+import { Button } from "@workspace/ui/components/button";
+import Link from "next/link";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -121,10 +123,18 @@ export default function MatchDetail({ id }: MatchDetailProps) {
         </div>
 
         <Tabs defaultValue="players">
-          <TabsList>
-            <TabsTrigger value="players">Players</TabsTrigger>
-            <TabsTrigger value="results">Results</TabsTrigger>
-          </TabsList>
+          <div className="w-full flex items-center justify-between gap-2">
+            <TabsList>
+              <TabsTrigger value="players">Players</TabsTrigger>
+              <TabsTrigger value="results">Results</TabsTrigger>
+            </TabsList>
+            <Button variant="outline" asChild>
+              <Link href={`/matches/${id}/rounds`}>
+                <Trophy />
+                Manage rounds
+              </Link>
+            </Button>
+          </div>
           <TabsContent value="players">
             <Card>
               <CardHeader>

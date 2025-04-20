@@ -1,6 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { PlayerLevel, PlayerStatus } from '@prisma/client/output';
 import { Match } from '../../match/models/match.model';
+import { Round } from '../../rounds/round.entity';
 
 registerEnumType(PlayerLevel, { name: 'PlayerLevel' });
 registerEnumType(PlayerStatus, { name: 'PlayerStatus' });
@@ -30,4 +31,7 @@ export class Player {
 
   @Field((type) => [Match], { nullable: true })
   matches?: Match[];
+
+  @Field(() => [Round], { nullable: true })
+  rounds?: Round[];
 }

@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match, Player } from '@prisma/client/output';
+import { Match, Player, Prisma } from '@prisma/client/output';
 import { PlayersService } from '../players/players.service';
 import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
+import MatchFindManyArgs = Prisma.MatchFindManyArgs;
+import MatchFindFirstArgs = Prisma.MatchFindFirstArgs;
 
 @Injectable()
 export class MatchService {
@@ -49,6 +51,14 @@ export class MatchService {
     const match = await this._prismaService.match.findUnique({ where: { id }, include: { players: true } });
     if (!match) throw new NotFoundException(`Match with id ${id} not found`);
     return match;
+  }
+
+  findFirst(options: MatchFindFirstArgs) {
+    return this._prismaService.match.findFirst(options);
+  }
+
+  findMany(options: MatchFindManyArgs): Promise<Match[]> {
+    return this._prismaService.match.findMany(options);
   }
 
   async update(id: string, updateMatchDto: UpdateMatch) {
