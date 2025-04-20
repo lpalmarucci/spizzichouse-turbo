@@ -17,7 +17,8 @@ model Player {
   createdAt DateTime     @default(now())
   level     PlayerLevel  @default(BEGINNER)
   status    PlayerStatus @default(ACTIVE)
-  Match     Match[]      @relation("MatchToPlayer")
+  matches   Match[]      @relation("MatchToPlayer")
+  rounds    Round[]      @relation("RoundsToPlayer")
 
   @@map("players")
 }
@@ -30,8 +31,25 @@ model Match {
   date        DateTime    @default(now())
   duration    Float?
   players     Player[]    @relation("MatchToPlayer")
+  Round       Round?      @relation(fields: [roundId], references: [id])
+  roundId     String?
 
   @@map("matches")
+}
+
+model Round {
+  id        String      @id @default(uuid())
+  stauts    RoundStatus @default(IN_PROGRESS)
+  createdAt DateTime    @default(now())
+  players   Player[]    @relation("RoundsToPlayer")
+  matches   Match[]
+
+  @@map("rounds")
+}
+
+enum RoundStatus {
+  IN_PROGRESS
+  COMPLETED
 }
 
 enum MatchStatus {
