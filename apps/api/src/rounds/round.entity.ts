@@ -1,7 +1,8 @@
 import { Field, GraphQLISODateTime, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { RoundStatus } from '@prisma/client/output';
 import { Player } from '../players/models/player.model';
-import { Match } from '../match/models/match.model';
+import { Match } from '../match/match.entity';
+import { Score } from '../score/entities/score.entity';
 
 registerEnumType(RoundStatus, { name: 'RoundStatus' });
 
@@ -27,4 +28,7 @@ export class Round {
 
   @Field(() => Match)
   match: Match;
+
+  @Field(() => [Score])
+  scores: Score[];
 }

@@ -62,9 +62,10 @@ model Score {
   playerId String
   player   Player @relation(fields: [playerId], references: [id])
 
-  points Int
+  points Int @default(0)
 
   @@unique([playerId, matchId, roundId])
+  @@map("scores")
 }
 
 enum RoundStatus {

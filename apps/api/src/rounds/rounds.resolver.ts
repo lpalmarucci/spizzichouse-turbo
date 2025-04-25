@@ -4,7 +4,7 @@ import { Round } from './round.entity';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
 import { Player } from '../players/models/player.model';
-import { Match } from '../match/models/match.model';
+import { Match } from '../match/match.entity';
 import { PlayersService } from '../players/players.service';
 import { MatchService } from '../match/match.service';
 

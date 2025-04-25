@@ -11,6 +11,7 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { RoundsModule } from './rounds/rounds.module';
+import { ScoreModule } from './score/score.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { RoundsModule } from './rounds/rounds.module';
     PlayersModule,
     MatchModule,
     RoundsModule,
+    ScoreModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
