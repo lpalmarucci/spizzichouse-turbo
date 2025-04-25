@@ -14,6 +14,9 @@ export class Round {
   status: RoundStatus;
 
   @Field(() => Int)
+  number: number;
+
+  @Field(() => Int)
   score: number;
 
   @Field(() => GraphQLISODateTime)

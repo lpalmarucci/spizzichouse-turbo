@@ -1,6 +1,11 @@
-import { QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { GET_ROUNDS, ROUNDS_QUERY_KEY } from "@/features/rounds/rounds.query";
 import { gqlRequest } from "@/utils/query";
+import { RoundsSection } from "@/features/rounds/components/rounds-section";
 
 export default async function Page({
   params,
@@ -9,7 +14,7 @@ export default async function Page({
     id: string;
   }>;
 }) {
-  const id = await params;
+  const { id } = await params;
 
   const queryClient = new QueryClient();
 
@@ -18,5 +23,9 @@ export default async function Page({
     queryFn: () => gqlRequest(GET_ROUNDS),
   });
 
-  return <div></div>;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <RoundsSection matchId={id} />
+    </HydrationBoundary>
+  );
 }

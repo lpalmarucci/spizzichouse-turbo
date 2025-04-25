@@ -18,14 +18,13 @@ export class RoundsService {
       throw new BadRequestException(`Match not found for id ${createRoundInput.matchId}`);
     }
 
-    const newPlayerIds = createRoundInput.playerIds.map((playerId) => ({ id: playerId }));
-
     return this.prismaService.round.create({
       data: {
         status: createRoundInput.status,
         score: createRoundInput.score,
-        players: {
-          connect: newPlayerIds,
+        number: createRoundInput.number,
+        player: {
+          connect: { id: createRoundInput.playerId },
         },
         match: {
           connect: {
@@ -45,7 +44,7 @@ export class RoundsService {
   }
 
   async findOne(id: string) {
-    const round = await this.prismaService.round.findFirst({ where: { id }, include: { players: true } });
+    const round = await this.prismaService.round.findFirst({ where: { id } });
     if (!round) throw new NotFoundException(`Round with id ${id} not found`);
     return round;
   }
@@ -53,22 +52,16 @@ export class RoundsService {
   async update(id: string, updateRoundInput: UpdateRoundInput) {
     const round = await this.findOne(id);
 
-    const currentPlayerIds = round.players.map((p) => p.id);
-    const newPlayerIds = updateRoundInput.playerIds || [];
-
-    const playersToDisconnect = currentPlayerIds.filter((id) => !newPlayerIds.includes(id)).map((id) => ({ id }));
-    const playersToConnect = newPlayerIds.filter((id) => !currentPlayerIds.includes(id)).map((id) => ({ id }));
-
     return this.prismaService.round.update({
       where: {
         id,
       },
       data: {
+        number: updateRoundInput.number,
         status: updateRoundInput.status,
         score: updateRoundInput.score,
-        players: {
-          disconnect: playersToDisconnect,
-          connect: playersToConnect,
+        player: {
+          connect: { id: updateRoundInput.playerId },
         },
       },
     });

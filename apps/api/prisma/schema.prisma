@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Player {
-  id        String       @id @default(uuid()) @db.Uuid
+  id        String       @id @default(uuid())
   full_name String
   email     String
   bio       String?
@@ -18,7 +18,8 @@ model Player {
   level     PlayerLevel  @default(BEGINNER)
   status    PlayerStatus @default(ACTIVE)
   matches   Match[]      @relation("MatchToPlayer")
-  rounds    Round[]      @relation("RoundsToPlayer")
+  rounds    Round[]
+  scores    Score[]
 
   @@map("players")
 }
@@ -32,6 +33,7 @@ model Match {
   duration    Float?
   rounds      Round[]
   players     Player[]    @relation("MatchToPlayer")
+  scores      Score[]
 
   @@map("matches")
 }
@@ -39,13 +41,30 @@ model Match {
 model Round {
   id        String      @id @default(uuid())
   status    RoundStatus @default(IN_PROGRESS)
-  score     Int         @default(0)
+  number    Int
   createdAt DateTime    @default(now())
-  players   Player[]    @relation("RoundsToPlayer")
   matchId   String
   match     Match       @relation(fields: [matchId], references: [id])
+  playerId  String
+  player    Player      @relation(fields: [playerId], references: [id])
+  scores    Score[]
 
   @@map("rounds")
+}
+
+model Score {
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id])
+
+  roundId String
+  round   Round  @relation(fields: [roundId], references: [id])
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id])
+
+  points Int
+
+  @@unique([playerId, matchId, roundId])
 }
 
 enum RoundStatus {
