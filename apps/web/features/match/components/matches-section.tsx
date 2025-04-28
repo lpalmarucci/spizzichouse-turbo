@@ -96,6 +96,8 @@ export function MatchesSection() {
     return true;
   });
 
+  console.log(filteredMatches);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -193,7 +195,7 @@ export function MatchesSection() {
 
         <div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredMatches.map((match, index) => (
+            {filteredMatches.map((match) => (
               <div key={match.id}>
                 <MatchCard match={match} onDelete={handleDeleteMatch} />
               </div>

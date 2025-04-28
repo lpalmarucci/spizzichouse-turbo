@@ -34,6 +34,30 @@ export type CreatePlayer = {
   status?: PlayerStatus;
 };
 
+export type CreateRoundInput = {
+  matchId: Scalars['String']['input'];
+  number?: Scalars['Int']['input'];
+  scores: Array<CreateScore>;
+  status?: RoundStatus;
+};
+
+export type CreateScore = {
+  playerId: Scalars['String']['input'];
+  points: Scalars['Int']['input'];
+};
+
+export type CreateScoreInput = {
+  matchId: Scalars['String']['input'];
+  playerId: Scalars['String']['input'];
+  points: Scalars['Int']['input'];
+  roundId: Scalars['String']['input'];
+};
+
+export type DeleteManyOutput = {
+  __typename?: 'DeleteManyOutput';
+  count: Scalars['Int']['output'];
+};
+
 export type Match = {
   __typename?: 'Match';
   date: Scalars['DateTime']['output'];
@@ -41,6 +65,7 @@ export type Match = {
   duration?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   players: Array<Player>;
+  rounds: Array<Round>;
   status: MatchStatus;
   title: Scalars['String']['output'];
 };
@@ -53,12 +78,23 @@ export enum MatchStatus {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addScore: Score;
   createMatch: Match;
   createPlayer: Player;
+  createRound: Round;
   deleteMatch: Match;
   deletePlayer: Player;
+  removeRound: Round;
+  removeScoreFromRound: DeleteManyOutput;
   updateMatch: Match;
   updatePlayer: Player;
+  updateRound: Round;
+  updateScore: Score;
+};
+
+
+export type MutationAddScoreArgs = {
+  createScoreInput: CreateScoreInput;
 };
 
 
@@ -72,6 +108,11 @@ export type MutationCreatePlayerArgs = {
 };
 
 
+export type MutationCreateRoundArgs = {
+  createRoundInput: CreateRoundInput;
+};
+
+
 export type MutationDeleteMatchArgs = {
   id: Scalars['String']['input'];
 };
@@ -79,6 +120,17 @@ export type MutationDeleteMatchArgs = {
 
 export type MutationDeletePlayerArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationRemoveRoundArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationRemoveScoreFromRoundArgs = {
+  matchId: Scalars['String']['input'];
+  roundId: Scalars['String']['input'];
 };
 
 
@@ -93,6 +145,20 @@ export type MutationUpdatePlayerArgs = {
   player: UpdatePlayer;
 };
 
+
+export type MutationUpdateRoundArgs = {
+  id: Scalars['String']['input'];
+  updateRoundInput: UpdateRoundInput;
+};
+
+
+export type MutationUpdateScoreArgs = {
+  matchId: Scalars['String']['input'];
+  playerId: Scalars['String']['input'];
+  roundId: Scalars['String']['input'];
+  updateScoreInput: UpdateScoreInput;
+};
+
 export type Player = {
   __typename?: 'Player';
   bio?: Maybe<Scalars['String']['output']>;
@@ -102,6 +168,7 @@ export type Player = {
   id: Scalars['String']['output'];
   level: PlayerLevel;
   matches?: Maybe<Array<Match>>;
+  rounds?: Maybe<Array<Round>>;
   status: PlayerStatus;
 };
 
@@ -122,6 +189,9 @@ export type Query = {
   matches: Array<Match>;
   player: Player;
   players: Array<Player>;
+  round: Round;
+  rounds: Array<Round>;
+  scores: Array<Score>;
 };
 
 
@@ -132,6 +202,40 @@ export type QueryMatchArgs = {
 
 export type QueryPlayerArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryRoundArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryRoundsArgs = {
+  matchId: Scalars['String']['input'];
+};
+
+export type Round = {
+  __typename?: 'Round';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  match: Match;
+  number: Scalars['Int']['output'];
+  score: Scalars['Int']['output'];
+  scores: Array<Score>;
+  status: RoundStatus;
+};
+
+export enum RoundStatus {
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS'
+}
+
+export type Score = {
+  __typename?: 'Score';
+  match: Match;
+  player: Player;
+  points: Scalars['Int']['output'];
+  round: Round;
 };
 
 export type UpdateMatch = {
@@ -148,6 +252,20 @@ export type UpdatePlayer = {
   full_name?: InputMaybe<Scalars['String']['input']>;
   level?: InputMaybe<PlayerLevel>;
   status?: InputMaybe<PlayerStatus>;
+};
+
+export type UpdateRoundInput = {
+  number?: InputMaybe<Scalars['Int']['input']>;
+  scores?: InputMaybe<Array<CreateScore>>;
+  status?: InputMaybe<RoundStatus>;
+};
+
+export type UpdateScoreInput = {
+  id: Scalars['String']['input'];
+  matchId?: InputMaybe<Scalars['String']['input']>;
+  playerId?: InputMaybe<Scalars['String']['input']>;
+  points?: InputMaybe<Scalars['Int']['input']>;
+  roundId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -224,7 +342,11 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
+  CreateRoundInput: CreateRoundInput;
+  CreateScore: CreateScore;
+  CreateScoreInput: CreateScoreInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  DeleteManyOutput: ResolverTypeWrapper<DeleteManyOutput>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Match: ResolverTypeWrapper<Match>;
   MatchStatus: MatchStatus;
@@ -233,9 +355,14 @@ export type ResolversTypes = {
   PlayerLevel: PlayerLevel;
   PlayerStatus: PlayerStatus;
   Query: ResolverTypeWrapper<{}>;
+  Round: ResolverTypeWrapper<Round>;
+  RoundStatus: RoundStatus;
+  Score: ResolverTypeWrapper<Score>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateMatch: UpdateMatch;
   UpdatePlayer: UpdatePlayer;
+  UpdateRoundInput: UpdateRoundInput;
+  UpdateScoreInput: UpdateScoreInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -243,20 +370,33 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
+  CreateRoundInput: CreateRoundInput;
+  CreateScore: CreateScore;
+  CreateScoreInput: CreateScoreInput;
   DateTime: Scalars['DateTime']['output'];
+  DeleteManyOutput: DeleteManyOutput;
   Int: Scalars['Int']['output'];
   Match: Match;
   Mutation: {};
   Player: Player;
   Query: {};
+  Round: Round;
+  Score: Score;
   String: Scalars['String']['output'];
   UpdateMatch: UpdateMatch;
   UpdatePlayer: UpdatePlayer;
+  UpdateRoundInput: UpdateRoundInput;
+  UpdateScoreInput: UpdateScoreInput;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type DeleteManyOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteManyOutput'] = ResolversParentTypes['DeleteManyOutput']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type MatchResolvers<ContextType = any, ParentType extends ResolversParentTypes['Match'] = ResolversParentTypes['Match']> = {
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -264,18 +404,25 @@ export type MatchResolvers<ContextType = any, ParentType extends ResolversParent
   duration?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
+  rounds?: Resolver<Array<ResolversTypes['Round']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['MatchStatus'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addScore?: Resolver<ResolversTypes['Score'], ParentType, ContextType, RequireFields<MutationAddScoreArgs, 'createScoreInput'>>;
   createMatch?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<MutationCreateMatchArgs, 'match'>>;
   createPlayer?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<MutationCreatePlayerArgs, 'player'>>;
+  createRound?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<MutationCreateRoundArgs, 'createRoundInput'>>;
   deleteMatch?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<MutationDeleteMatchArgs, 'id'>>;
   deletePlayer?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<MutationDeletePlayerArgs, 'id'>>;
+  removeRound?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<MutationRemoveRoundArgs, 'id'>>;
+  removeScoreFromRound?: Resolver<ResolversTypes['DeleteManyOutput'], ParentType, ContextType, RequireFields<MutationRemoveScoreFromRoundArgs, 'matchId' | 'roundId'>>;
   updateMatch?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<MutationUpdateMatchArgs, 'id' | 'match'>>;
   updatePlayer?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<MutationUpdatePlayerArgs, 'id' | 'player'>>;
+  updateRound?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<MutationUpdateRoundArgs, 'id' | 'updateRoundInput'>>;
+  updateScore?: Resolver<ResolversTypes['Score'], ParentType, ContextType, RequireFields<MutationUpdateScoreArgs, 'matchId' | 'playerId' | 'roundId' | 'updateScoreInput'>>;
 };
 
 export type PlayerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Player'] = ResolversParentTypes['Player']> = {
@@ -286,6 +433,7 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   level?: Resolver<ResolversTypes['PlayerLevel'], ParentType, ContextType>;
   matches?: Resolver<Maybe<Array<ResolversTypes['Match']>>, ParentType, ContextType>;
+  rounds?: Resolver<Maybe<Array<ResolversTypes['Round']>>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['PlayerStatus'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -295,13 +443,38 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   matches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType>;
   player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
+  round?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<QueryRoundArgs, 'id'>>;
+  rounds?: Resolver<Array<ResolversTypes['Round']>, ParentType, ContextType, RequireFields<QueryRoundsArgs, 'matchId'>>;
+  scores?: Resolver<Array<ResolversTypes['Score']>, ParentType, ContextType>;
+};
+
+export type RoundResolvers<ContextType = any, ParentType extends ResolversParentTypes['Round'] = ResolversParentTypes['Round']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  match?: Resolver<ResolversTypes['Match'], ParentType, ContextType>;
+  number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  score?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  scores?: Resolver<Array<ResolversTypes['Score']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['RoundStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ScoreResolvers<ContextType = any, ParentType extends ResolversParentTypes['Score'] = ResolversParentTypes['Score']> = {
+  match?: Resolver<ResolversTypes['Match'], ParentType, ContextType>;
+  player?: Resolver<ResolversTypes['Player'], ParentType, ContextType>;
+  points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  round?: Resolver<ResolversTypes['Round'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
+  DeleteManyOutput?: DeleteManyOutputResolvers<ContextType>;
   Match?: MatchResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Round?: RoundResolvers<ContextType>;
+  Score?: ScoreResolvers<ContextType>;
 };
 

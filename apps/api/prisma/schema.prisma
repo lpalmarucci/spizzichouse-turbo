@@ -10,14 +10,15 @@ datasource db {
 }
 
 model Player {
-  id        String       @id @default(uuid()) @db.Uuid
+  id        String       @id @default(uuid())
   full_name String
   email     String
   bio       String?
   createdAt DateTime     @default(now())
   level     PlayerLevel  @default(BEGINNER)
   status    PlayerStatus @default(ACTIVE)
-  Match     Match[]      @relation("MatchToPlayer")
+  matches   Match[]      @relation("MatchToPlayer")
+  scores    Score[]
 
   @@map("players")
 }
@@ -29,9 +30,45 @@ model Match {
   status      MatchStatus
   date        DateTime    @default(now())
   duration    Float?
+  rounds      Round[]
   players     Player[]    @relation("MatchToPlayer")
+  scores      Score[]
 
   @@map("matches")
+}
+
+model Round {
+  id        String      @id @default(uuid())
+  status    RoundStatus @default(IN_PROGRESS)
+  number    Int
+  createdAt DateTime    @default(now())
+  matchId   String
+  match     Match       @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  scores    Score[]
+
+  @@map("rounds")
+}
+
+model Score {
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  roundId String
+  round   Round  @relation(fields: [roundId], references: [id], onDelete: Cascade)
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  points Int @default(0)
+
+  @@id([matchId, roundId, playerId])
+  @@unique([playerId, matchId, roundId])
+  @@map("scores")
+}
+
+enum RoundStatus {
+  IN_PROGRESS
+  COMPLETED
 }
 
 enum MatchStatus {

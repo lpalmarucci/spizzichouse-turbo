@@ -1,4 +1,4 @@
-import { Catch, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Catch, ConflictException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { GqlExceptionFilter } from '@nestjs/graphql';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
@@ -7,9 +7,9 @@ export class PrismaClientExceptionFilter implements GqlExceptionFilter {
   catch(exception: PrismaClientKnownRequestError): any {
     console.log(exception.code);
     switch (exception.code) {
-      // case 'P2002': {
-      //   throw new ConflictException('Not Unique Email');
-      // }
+      case 'P2002': {
+        throw new ConflictException('Not Unique fields');
+      }
       case 'P2003': {
         throw new UnprocessableEntityException('Entity Not Exist');
       }

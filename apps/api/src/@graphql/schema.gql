@@ -19,10 +19,33 @@ input CreatePlayer {
   status: PlayerStatus! = ACTIVE
 }
 
+input CreateRoundInput {
+  matchId: String!
+  number: Int! = 0
+  scores: [CreateScore!]!
+  status: RoundStatus! = IN_PROGRESS
+}
+
+input CreateScore {
+  playerId: String!
+  points: Int!
+}
+
+input CreateScoreInput {
+  matchId: String!
+  playerId: String!
+  points: Int!
+  roundId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type DeleteManyOutput {
+  count: Int!
+}
 
 type Match {
   date: DateTime!
@@ -30,6 +53,7 @@ type Match {
   duration: Int
   id: String!
   players: [Player!]!
+  rounds: [Round!]!
   status: MatchStatus!
   title: String!
 }
@@ -41,12 +65,18 @@ enum MatchStatus {
 }
 
 type Mutation {
+  addScore(createScoreInput: CreateScoreInput!): Score!
   createMatch(match: CreateMatch!): Match!
   createPlayer(player: CreatePlayer!): Player!
+  createRound(createRoundInput: CreateRoundInput!): Round!
   deleteMatch(id: String!): Match!
   deletePlayer(id: String!): Player!
+  removeRound(id: String!): Round!
+  removeScoreFromRound(matchId: String!, roundId: String!): DeleteManyOutput!
   updateMatch(id: String!, match: UpdateMatch!): Match!
   updatePlayer(id: String!, player: UpdatePlayer!): Player!
+  updateRound(id: String!, updateRoundInput: UpdateRoundInput!): Round!
+  updateScore(matchId: String!, playerId: String!, roundId: String!, updateScoreInput: UpdateScoreInput!): Score!
 }
 
 type Player {
@@ -57,6 +87,7 @@ type Player {
   id: String!
   level: PlayerLevel!
   matches: [Match!]
+  rounds: [Round!]
   status: PlayerStatus!
 }
 
@@ -76,6 +107,31 @@ type Query {
   matches: [Match!]!
   player(id: String!): Player!
   players: [Player!]!
+  round(id: String!): Round!
+  rounds(matchId: String!): [Round!]!
+  scores: [Score!]!
+}
+
+type Round {
+  createdAt: DateTime!
+  id: String!
+  match: Match!
+  number: Int!
+  score: Int!
+  scores: [Score!]!
+  status: RoundStatus!
+}
+
+enum RoundStatus {
+  COMPLETED
+  IN_PROGRESS
+}
+
+type Score {
+  match: Match!
+  player: Player!
+  points: Int!
+  round: Round!
 }
 
 input UpdateMatch {
@@ -92,4 +148,18 @@ input UpdatePlayer {
   full_name: String
   level: PlayerLevel = BEGINNER
   status: PlayerStatus = ACTIVE
+}
+
+input UpdateRoundInput {
+  number: Int = 0
+  scores: [CreateScore!]
+  status: RoundStatus = IN_PROGRESS
+}
+
+input UpdateScoreInput {
+  id: String!
+  matchId: String
+  playerId: String
+  points: Int
+  roundId: String
 }

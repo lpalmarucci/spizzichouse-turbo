@@ -25,7 +25,6 @@ export default async function EditMatchPage({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Detail>
         <DetailHeader
-          editHref={`/matches/${id}`}
           headingText="Edit match"
           subHeadingText="Update the details, rules, and players for this match."
         />

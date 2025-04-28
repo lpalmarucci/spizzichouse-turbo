@@ -1,6 +1,6 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { MatchService } from './match.service';
-import { Match } from './models/match.model';
+import { Match } from './match.entity';
 import { CreateMatch } from './models/create-match.model';
 import { PlayersService } from '../players/players.service';
 import { Player } from '../players/models/player.model';
@@ -43,7 +43,7 @@ export class MatchResolver {
     const { id } = match;
     return this.playersService.findMany({
       where: {
-        Match: {
+        matches: {
           some: {
             id,
           },

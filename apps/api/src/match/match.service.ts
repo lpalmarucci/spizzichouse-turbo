@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match, Player } from '@prisma/client/output';
+import { Match, Player, Prisma } from '@prisma/client/output';
 import { PlayersService } from '../players/players.service';
 import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
+import MatchFindManyArgs = Prisma.MatchFindManyArgs;
+import MatchFindFirstArgs = Prisma.MatchFindFirstArgs;
 
 @Injectable()
 export class MatchService {
@@ -51,36 +53,24 @@ export class MatchService {
     return match;
   }
 
+  findFirst(options: MatchFindFirstArgs) {
+    return this._prismaService.match.findFirst(options);
+  }
+
+  findMany(options: MatchFindManyArgs): Promise<Match[]> {
+    return this._prismaService.match.findMany(options);
+  }
+
   async update(id: string, updateMatchDto: UpdateMatch) {
     const match = await this.findOne(id);
 
-    let users: Player[] = [];
-    if (updateMatchDto.playerIds && updateMatchDto.playerIds.length > 0) {
-      users = await this.playerService.findMany({
-        where: {
-          id: {
-            in: updateMatchDto.playerIds,
-          },
-        },
-      });
-      delete updateMatchDto?.playerIds;
-    }
-    const userIds = users.map((user) => ({
-      id: user.id,
-    }));
+    const currentPlayerIds = match.players.map((player) => player.id);
+    const newPlayerIds = updateMatchDto.playerIds ?? [];
 
-    //Deleting old players related to the match
-    await this._prismaService.match.update({
-      where: {
-        id,
-      },
-      data: {
-        players: {
-          disconnect: match.players.map((player) => ({ id: player.id })),
-        },
-      },
-    });
+    const playersToDisconnect = currentPlayerIds.filter((id) => !newPlayerIds.includes(id)).map((id) => ({ id }));
+    const playersToConnect = newPlayerIds.filter((id) => !currentPlayerIds.includes(id)).map((id) => ({ id }));
 
+    delete updateMatchDto.playerIds;
     //Updating the record
     return this._prismaService.match.update({
       where: {
@@ -88,12 +78,12 @@ export class MatchService {
       },
       data: {
         ...updateMatchDto,
-        players: {
-          connect: userIds,
-        },
-      },
-      include: {
-        players: true,
+        ...(playersToConnect.length > 0
+          ? {
+              disconnect: playersToDisconnect,
+              connect: playersToConnect,
+            }
+          : null),
       },
     });
   }

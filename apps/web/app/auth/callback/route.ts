@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";
       const { data } = await supabase.auth.getSession();
-      await fetch(`${process.env.BACKEND_URL}/auth/user/exists`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/exists`, {
         headers: {
           Authorization: `Bearer ${data.session?.access_token}`,
         },

@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
-import { UserPlus } from "lucide-react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +8,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
+import { Textarea } from "@workspace/ui/components/textarea";
 import {
   Select,
   SelectContent,
@@ -20,25 +20,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import { Textarea } from "@workspace/ui/components/textarea";
 import { Switch } from "@workspace/ui/components/switch";
 import { Button } from "@workspace/ui/components/button";
+import { UserPlus } from "lucide-react";
+import { Player } from "@workspace/api/qgl-types";
 
-interface CreatePlayerDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+interface CreateRoundDialogProps {
+  matchId: string;
 }
 
-export function CreatePlayerDialog({
-  open,
-  onOpenChange,
-}: CreatePlayerDialogProps) {
+export function CreateRoundDialog({ matchId }: CreateRoundDialogProps) {
+  const [number, setNumber] = useState();
+  const [score, setScore] = useState<number>(0);
+  const [player, setPlayer] = useState<Player>();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
   const [level, setLevel] = useState("Principiante");
   const [favoriteRuleSet, setFavoriteRuleSet] = useState("Standard");
   const [isActive, setIsActive] = useState(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,11 +61,14 @@ export function CreatePlayerDialog({
     setFavoriteRuleSet("Standard");
     setIsActive(true);
 
-    onOpenChange(false);
+    setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+      <DialogTrigger asChild>
+        <Button>Create round</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -175,7 +179,7 @@ export function CreatePlayerDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => setOpen(false)}
             >
               Annulla
             </Button>

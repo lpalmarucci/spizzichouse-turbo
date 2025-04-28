@@ -18,6 +18,7 @@ type ConfirmationDialogProps = {
   title?: string;
   subtitle?: string;
   onConfirm: () => void;
+  isPending?: boolean;
 } & PropsWithChildren;
 
 export function ConfirmationDialog({
@@ -26,6 +27,7 @@ export function ConfirmationDialog({
   title = "Sei sicuro di voler procedere?",
   subtitle = "L'azione è irreversibile",
   onConfirm,
+  isPending,
 }: ConfirmationDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -44,7 +46,7 @@ export function ConfirmationDialog({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <SubmitButton>Confirm</SubmitButton>
+            <SubmitButton isLoading={isPending}>Confirm</SubmitButton>
           </form>
         </DialogBody>
       </DialogContent>

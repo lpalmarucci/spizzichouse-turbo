@@ -136,6 +136,21 @@ exports.Prisma.MatchScalarFieldEnum = {
   duration: 'duration'
 };
 
+exports.Prisma.RoundScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  number: 'number',
+  createdAt: 'createdAt',
+  matchId: 'matchId'
+};
+
+exports.Prisma.ScoreScalarFieldEnum = {
+  matchId: 'matchId',
+  roundId: 'roundId',
+  playerId: 'playerId',
+  points: 'points'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -167,9 +182,16 @@ exports.MatchStatus = exports.$Enums.MatchStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.RoundStatus = exports.$Enums.RoundStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.Prisma.ModelName = {
   Player: 'Player',
-  Match: 'Match'
+  Match: 'Match',
+  Round: 'Round',
+  Score: 'Score'
 };
 
 /**

@@ -23,12 +23,30 @@ export type Player = $Result.DefaultSelection<Prisma.$PlayerPayload>
  * 
  */
 export type Match = $Result.DefaultSelection<Prisma.$MatchPayload>
+/**
+ * Model Round
+ * 
+ */
+export type Round = $Result.DefaultSelection<Prisma.$RoundPayload>
+/**
+ * Model Score
+ * 
+ */
+export type Score = $Result.DefaultSelection<Prisma.$ScorePayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const MatchStatus: {
+  export const RoundStatus: {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+};
+
+export type RoundStatus = (typeof RoundStatus)[keyof typeof RoundStatus]
+
+
+export const MatchStatus: {
   UPCOMING: 'UPCOMING',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED'
@@ -54,6 +72,10 @@ export const PlayerStatus: {
 export type PlayerStatus = (typeof PlayerStatus)[keyof typeof PlayerStatus]
 
 }
+
+export type RoundStatus = $Enums.RoundStatus
+
+export const RoundStatus: typeof $Enums.RoundStatus
 
 export type MatchStatus = $Enums.MatchStatus
 
@@ -211,6 +233,26 @@ export class PrismaClient<
     * ```
     */
   get match(): Prisma.MatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.round`: Exposes CRUD operations for the **Round** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Rounds
+    * const rounds = await prisma.round.findMany()
+    * ```
+    */
+  get round(): Prisma.RoundDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.score`: Exposes CRUD operations for the **Score** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Scores
+    * const scores = await prisma.score.findMany()
+    * ```
+    */
+  get score(): Prisma.ScoreDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -652,7 +694,9 @@ export namespace Prisma {
 
   export const ModelName: {
     Player: 'Player',
-    Match: 'Match'
+    Match: 'Match',
+    Round: 'Round',
+    Score: 'Score'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -671,7 +715,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "player" | "match"
+      modelProps: "player" | "match" | "round" | "score"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -823,6 +867,154 @@ export namespace Prisma {
           }
         }
       }
+      Round: {
+        payload: Prisma.$RoundPayload<ExtArgs>
+        fields: Prisma.RoundFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoundFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoundFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          findFirst: {
+            args: Prisma.RoundFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoundFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          findMany: {
+            args: Prisma.RoundFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>[]
+          }
+          create: {
+            args: Prisma.RoundCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          createMany: {
+            args: Prisma.RoundCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoundCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>[]
+          }
+          delete: {
+            args: Prisma.RoundDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          update: {
+            args: Prisma.RoundUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoundDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoundUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RoundUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>[]
+          }
+          upsert: {
+            args: Prisma.RoundUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+          }
+          aggregate: {
+            args: Prisma.RoundAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRound>
+          }
+          groupBy: {
+            args: Prisma.RoundGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoundGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoundCountArgs<ExtArgs>
+            result: $Utils.Optional<RoundCountAggregateOutputType> | number
+          }
+        }
+      }
+      Score: {
+        payload: Prisma.$ScorePayload<ExtArgs>
+        fields: Prisma.ScoreFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScoreFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScoreFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          findFirst: {
+            args: Prisma.ScoreFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScoreFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          findMany: {
+            args: Prisma.ScoreFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>[]
+          }
+          create: {
+            args: Prisma.ScoreCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          createMany: {
+            args: Prisma.ScoreCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScoreCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>[]
+          }
+          delete: {
+            args: Prisma.ScoreDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          update: {
+            args: Prisma.ScoreUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          deleteMany: {
+            args: Prisma.ScoreDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScoreUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScoreUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>[]
+          }
+          upsert: {
+            args: Prisma.ScoreUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScorePayload>
+          }
+          aggregate: {
+            args: Prisma.ScoreAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScore>
+          }
+          groupBy: {
+            args: Prisma.ScoreGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScoreGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScoreCountArgs<ExtArgs>
+            result: $Utils.Optional<ScoreCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -909,6 +1101,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     player?: PlayerOmit
     match?: MatchOmit
+    round?: RoundOmit
+    score?: ScoreOmit
   }
 
   /* Types for Logging */
@@ -1003,11 +1197,13 @@ export namespace Prisma {
    */
 
   export type PlayerCountOutputType = {
-    Match: number
+    matches: number
+    scores: number
   }
 
   export type PlayerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Match?: boolean | PlayerCountOutputTypeCountMatchArgs
+    matches?: boolean | PlayerCountOutputTypeCountMatchesArgs
+    scores?: boolean | PlayerCountOutputTypeCountScoresArgs
   }
 
   // Custom InputTypes
@@ -1024,8 +1220,15 @@ export namespace Prisma {
   /**
    * PlayerCountOutputType without action
    */
-  export type PlayerCountOutputTypeCountMatchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PlayerCountOutputTypeCountMatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MatchWhereInput
+  }
+
+  /**
+   * PlayerCountOutputType without action
+   */
+  export type PlayerCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
   }
 
 
@@ -1034,11 +1237,15 @@ export namespace Prisma {
    */
 
   export type MatchCountOutputType = {
+    rounds: number
     players: number
+    scores: number
   }
 
   export type MatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rounds?: boolean | MatchCountOutputTypeCountRoundsArgs
     players?: boolean | MatchCountOutputTypeCountPlayersArgs
+    scores?: boolean | MatchCountOutputTypeCountScoresArgs
   }
 
   // Custom InputTypes
@@ -1055,8 +1262,53 @@ export namespace Prisma {
   /**
    * MatchCountOutputType without action
    */
+  export type MatchCountOutputTypeCountRoundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoundWhereInput
+  }
+
+  /**
+   * MatchCountOutputType without action
+   */
   export type MatchCountOutputTypeCountPlayersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PlayerWhereInput
+  }
+
+  /**
+   * MatchCountOutputType without action
+   */
+  export type MatchCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
+  }
+
+
+  /**
+   * Count Type RoundCountOutputType
+   */
+
+  export type RoundCountOutputType = {
+    scores: number
+  }
+
+  export type RoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    scores?: boolean | RoundCountOutputTypeCountScoresArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoundCountOutputType without action
+   */
+  export type RoundCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoundCountOutputType
+     */
+    select?: RoundCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoundCountOutputType without action
+   */
+  export type RoundCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
   }
 
 
@@ -1244,7 +1496,8 @@ export namespace Prisma {
     createdAt?: boolean
     level?: boolean
     status?: boolean
-    Match?: boolean | Player$MatchArgs<ExtArgs>
+    matches?: boolean | Player$matchesArgs<ExtArgs>
+    scores?: boolean | Player$scoresArgs<ExtArgs>
     _count?: boolean | PlayerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["player"]>
 
@@ -1280,7 +1533,8 @@ export namespace Prisma {
 
   export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "full_name" | "email" | "bio" | "createdAt" | "level" | "status", ExtArgs["result"]["player"]>
   export type PlayerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Match?: boolean | Player$MatchArgs<ExtArgs>
+    matches?: boolean | Player$matchesArgs<ExtArgs>
+    scores?: boolean | Player$scoresArgs<ExtArgs>
     _count?: boolean | PlayerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PlayerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1289,7 +1543,8 @@ export namespace Prisma {
   export type $PlayerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Player"
     objects: {
-      Match: Prisma.$MatchPayload<ExtArgs>[]
+      matches: Prisma.$MatchPayload<ExtArgs>[]
+      scores: Prisma.$ScorePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1693,7 +1948,8 @@ export namespace Prisma {
    */
   export interface Prisma__PlayerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Match<T extends Player$MatchArgs<ExtArgs> = {}>(args?: Subset<T, Player$MatchArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    matches<T extends Player$matchesArgs<ExtArgs> = {}>(args?: Subset<T, Player$matchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    scores<T extends Player$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Player$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2118,9 +2374,9 @@ export namespace Prisma {
   }
 
   /**
-   * Player.Match
+   * Player.matches
    */
-  export type Player$MatchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Player$matchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Match
      */
@@ -2139,6 +2395,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MatchScalarFieldEnum | MatchScalarFieldEnum[]
+  }
+
+  /**
+   * Player.scores
+   */
+  export type Player$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    where?: ScoreWhereInput
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    cursor?: ScoreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
   }
 
   /**
@@ -2366,7 +2646,9 @@ export namespace Prisma {
     status?: boolean
     date?: boolean
     duration?: boolean
+    rounds?: boolean | Match$roundsArgs<ExtArgs>
     players?: boolean | Match$playersArgs<ExtArgs>
+    scores?: boolean | Match$scoresArgs<ExtArgs>
     _count?: boolean | MatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["match"]>
 
@@ -2399,7 +2681,9 @@ export namespace Prisma {
 
   export type MatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "date" | "duration", ExtArgs["result"]["match"]>
   export type MatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rounds?: boolean | Match$roundsArgs<ExtArgs>
     players?: boolean | Match$playersArgs<ExtArgs>
+    scores?: boolean | Match$scoresArgs<ExtArgs>
     _count?: boolean | MatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2408,7 +2692,9 @@ export namespace Prisma {
   export type $MatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Match"
     objects: {
+      rounds: Prisma.$RoundPayload<ExtArgs>[]
       players: Prisma.$PlayerPayload<ExtArgs>[]
+      scores: Prisma.$ScorePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2811,7 +3097,9 @@ export namespace Prisma {
    */
   export interface Prisma__MatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    rounds<T extends Match$roundsArgs<ExtArgs> = {}>(args?: Subset<T, Match$roundsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     players<T extends Match$playersArgs<ExtArgs> = {}>(args?: Subset<T, Match$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    scores<T extends Match$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Match$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3235,6 +3523,30 @@ export namespace Prisma {
   }
 
   /**
+   * Match.rounds
+   */
+  export type Match$roundsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    where?: RoundWhereInput
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    cursor?: RoundWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+  }
+
+  /**
    * Match.players
    */
   export type Match$playersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3259,6 +3571,30 @@ export namespace Prisma {
   }
 
   /**
+   * Match.scores
+   */
+  export type Match$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    where?: ScoreWhereInput
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    cursor?: ScoreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
    * Match without action
    */
   export type MatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3274,6 +3610,2223 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Round
+   */
+
+  export type AggregateRound = {
+    _count: RoundCountAggregateOutputType | null
+    _avg: RoundAvgAggregateOutputType | null
+    _sum: RoundSumAggregateOutputType | null
+    _min: RoundMinAggregateOutputType | null
+    _max: RoundMaxAggregateOutputType | null
+  }
+
+  export type RoundAvgAggregateOutputType = {
+    number: number | null
+  }
+
+  export type RoundSumAggregateOutputType = {
+    number: number | null
+  }
+
+  export type RoundMinAggregateOutputType = {
+    id: string | null
+    status: $Enums.RoundStatus | null
+    number: number | null
+    createdAt: Date | null
+    matchId: string | null
+  }
+
+  export type RoundMaxAggregateOutputType = {
+    id: string | null
+    status: $Enums.RoundStatus | null
+    number: number | null
+    createdAt: Date | null
+    matchId: string | null
+  }
+
+  export type RoundCountAggregateOutputType = {
+    id: number
+    status: number
+    number: number
+    createdAt: number
+    matchId: number
+    _all: number
+  }
+
+
+  export type RoundAvgAggregateInputType = {
+    number?: true
+  }
+
+  export type RoundSumAggregateInputType = {
+    number?: true
+  }
+
+  export type RoundMinAggregateInputType = {
+    id?: true
+    status?: true
+    number?: true
+    createdAt?: true
+    matchId?: true
+  }
+
+  export type RoundMaxAggregateInputType = {
+    id?: true
+    status?: true
+    number?: true
+    createdAt?: true
+    matchId?: true
+  }
+
+  export type RoundCountAggregateInputType = {
+    id?: true
+    status?: true
+    number?: true
+    createdAt?: true
+    matchId?: true
+    _all?: true
+  }
+
+  export type RoundAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Round to aggregate.
+     */
+    where?: RoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rounds to fetch.
+     */
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Rounds
+    **/
+    _count?: true | RoundCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoundAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoundSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoundMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoundMaxAggregateInputType
+  }
+
+  export type GetRoundAggregateType<T extends RoundAggregateArgs> = {
+        [P in keyof T & keyof AggregateRound]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRound[P]>
+      : GetScalarType<T[P], AggregateRound[P]>
+  }
+
+
+
+
+  export type RoundGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoundWhereInput
+    orderBy?: RoundOrderByWithAggregationInput | RoundOrderByWithAggregationInput[]
+    by: RoundScalarFieldEnum[] | RoundScalarFieldEnum
+    having?: RoundScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoundCountAggregateInputType | true
+    _avg?: RoundAvgAggregateInputType
+    _sum?: RoundSumAggregateInputType
+    _min?: RoundMinAggregateInputType
+    _max?: RoundMaxAggregateInputType
+  }
+
+  export type RoundGroupByOutputType = {
+    id: string
+    status: $Enums.RoundStatus
+    number: number
+    createdAt: Date
+    matchId: string
+    _count: RoundCountAggregateOutputType | null
+    _avg: RoundAvgAggregateOutputType | null
+    _sum: RoundSumAggregateOutputType | null
+    _min: RoundMinAggregateOutputType | null
+    _max: RoundMaxAggregateOutputType | null
+  }
+
+  type GetRoundGroupByPayload<T extends RoundGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoundGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoundGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoundGroupByOutputType[P]>
+            : GetScalarType<T[P], RoundGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    number?: boolean
+    createdAt?: boolean
+    matchId?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    scores?: boolean | Round$scoresArgs<ExtArgs>
+    _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["round"]>
+
+  export type RoundSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    number?: boolean
+    createdAt?: boolean
+    matchId?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["round"]>
+
+  export type RoundSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    number?: boolean
+    createdAt?: boolean
+    matchId?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["round"]>
+
+  export type RoundSelectScalar = {
+    id?: boolean
+    status?: boolean
+    number?: boolean
+    createdAt?: boolean
+    matchId?: boolean
+  }
+
+  export type RoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "number" | "createdAt" | "matchId", ExtArgs["result"]["round"]>
+  export type RoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    scores?: boolean | Round$scoresArgs<ExtArgs>
+    _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }
+  export type RoundIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+  }
+
+  export type $RoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Round"
+    objects: {
+      match: Prisma.$MatchPayload<ExtArgs>
+      scores: Prisma.$ScorePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      status: $Enums.RoundStatus
+      number: number
+      createdAt: Date
+      matchId: string
+    }, ExtArgs["result"]["round"]>
+    composites: {}
+  }
+
+  type RoundGetPayload<S extends boolean | null | undefined | RoundDefaultArgs> = $Result.GetResult<Prisma.$RoundPayload, S>
+
+  type RoundCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoundFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoundCountAggregateInputType | true
+    }
+
+  export interface RoundDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Round'], meta: { name: 'Round' } }
+    /**
+     * Find zero or one Round that matches the filter.
+     * @param {RoundFindUniqueArgs} args - Arguments to find a Round
+     * @example
+     * // Get one Round
+     * const round = await prisma.round.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoundFindUniqueArgs>(args: SelectSubset<T, RoundFindUniqueArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Round that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoundFindUniqueOrThrowArgs} args - Arguments to find a Round
+     * @example
+     * // Get one Round
+     * const round = await prisma.round.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoundFindUniqueOrThrowArgs>(args: SelectSubset<T, RoundFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Round that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundFindFirstArgs} args - Arguments to find a Round
+     * @example
+     * // Get one Round
+     * const round = await prisma.round.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoundFindFirstArgs>(args?: SelectSubset<T, RoundFindFirstArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Round that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundFindFirstOrThrowArgs} args - Arguments to find a Round
+     * @example
+     * // Get one Round
+     * const round = await prisma.round.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoundFindFirstOrThrowArgs>(args?: SelectSubset<T, RoundFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Rounds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Rounds
+     * const rounds = await prisma.round.findMany()
+     * 
+     * // Get first 10 Rounds
+     * const rounds = await prisma.round.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const roundWithIdOnly = await prisma.round.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoundFindManyArgs>(args?: SelectSubset<T, RoundFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Round.
+     * @param {RoundCreateArgs} args - Arguments to create a Round.
+     * @example
+     * // Create one Round
+     * const Round = await prisma.round.create({
+     *   data: {
+     *     // ... data to create a Round
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoundCreateArgs>(args: SelectSubset<T, RoundCreateArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Rounds.
+     * @param {RoundCreateManyArgs} args - Arguments to create many Rounds.
+     * @example
+     * // Create many Rounds
+     * const round = await prisma.round.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoundCreateManyArgs>(args?: SelectSubset<T, RoundCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Rounds and returns the data saved in the database.
+     * @param {RoundCreateManyAndReturnArgs} args - Arguments to create many Rounds.
+     * @example
+     * // Create many Rounds
+     * const round = await prisma.round.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Rounds and only return the `id`
+     * const roundWithIdOnly = await prisma.round.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoundCreateManyAndReturnArgs>(args?: SelectSubset<T, RoundCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Round.
+     * @param {RoundDeleteArgs} args - Arguments to delete one Round.
+     * @example
+     * // Delete one Round
+     * const Round = await prisma.round.delete({
+     *   where: {
+     *     // ... filter to delete one Round
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoundDeleteArgs>(args: SelectSubset<T, RoundDeleteArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Round.
+     * @param {RoundUpdateArgs} args - Arguments to update one Round.
+     * @example
+     * // Update one Round
+     * const round = await prisma.round.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoundUpdateArgs>(args: SelectSubset<T, RoundUpdateArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Rounds.
+     * @param {RoundDeleteManyArgs} args - Arguments to filter Rounds to delete.
+     * @example
+     * // Delete a few Rounds
+     * const { count } = await prisma.round.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoundDeleteManyArgs>(args?: SelectSubset<T, RoundDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Rounds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Rounds
+     * const round = await prisma.round.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoundUpdateManyArgs>(args: SelectSubset<T, RoundUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Rounds and returns the data updated in the database.
+     * @param {RoundUpdateManyAndReturnArgs} args - Arguments to update many Rounds.
+     * @example
+     * // Update many Rounds
+     * const round = await prisma.round.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Rounds and only return the `id`
+     * const roundWithIdOnly = await prisma.round.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RoundUpdateManyAndReturnArgs>(args: SelectSubset<T, RoundUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Round.
+     * @param {RoundUpsertArgs} args - Arguments to update or create a Round.
+     * @example
+     * // Update or create a Round
+     * const round = await prisma.round.upsert({
+     *   create: {
+     *     // ... data to create a Round
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Round we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoundUpsertArgs>(args: SelectSubset<T, RoundUpsertArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Rounds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundCountArgs} args - Arguments to filter Rounds to count.
+     * @example
+     * // Count the number of Rounds
+     * const count = await prisma.round.count({
+     *   where: {
+     *     // ... the filter for the Rounds we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoundCountArgs>(
+      args?: Subset<T, RoundCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoundCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Round.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoundAggregateArgs>(args: Subset<T, RoundAggregateArgs>): Prisma.PrismaPromise<GetRoundAggregateType<T>>
+
+    /**
+     * Group by Round.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoundGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoundGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoundGroupByArgs['orderBy'] }
+        : { orderBy?: RoundGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoundGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoundGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Round model
+   */
+  readonly fields: RoundFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Round.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    match<T extends MatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MatchDefaultArgs<ExtArgs>>): Prisma__MatchClient<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    scores<T extends Round$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Round$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Round model
+   */ 
+  interface RoundFieldRefs {
+    readonly id: FieldRef<"Round", 'String'>
+    readonly status: FieldRef<"Round", 'RoundStatus'>
+    readonly number: FieldRef<"Round", 'Int'>
+    readonly createdAt: FieldRef<"Round", 'DateTime'>
+    readonly matchId: FieldRef<"Round", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Round findUnique
+   */
+  export type RoundFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter, which Round to fetch.
+     */
+    where: RoundWhereUniqueInput
+  }
+
+  /**
+   * Round findUniqueOrThrow
+   */
+  export type RoundFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter, which Round to fetch.
+     */
+    where: RoundWhereUniqueInput
+  }
+
+  /**
+   * Round findFirst
+   */
+  export type RoundFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter, which Round to fetch.
+     */
+    where?: RoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rounds to fetch.
+     */
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Rounds.
+     */
+    cursor?: RoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Rounds.
+     */
+    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+  }
+
+  /**
+   * Round findFirstOrThrow
+   */
+  export type RoundFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter, which Round to fetch.
+     */
+    where?: RoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rounds to fetch.
+     */
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Rounds.
+     */
+    cursor?: RoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rounds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Rounds.
+     */
+    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+  }
+
+  /**
+   * Round findMany
+   */
+  export type RoundFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter, which Rounds to fetch.
+     */
+    where?: RoundWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Rounds to fetch.
+     */
+    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Rounds.
+     */
+    cursor?: RoundWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Rounds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Rounds.
+     */
+    skip?: number
+    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+  }
+
+  /**
+   * Round create
+   */
+  export type RoundCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Round.
+     */
+    data: XOR<RoundCreateInput, RoundUncheckedCreateInput>
+  }
+
+  /**
+   * Round createMany
+   */
+  export type RoundCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Rounds.
+     */
+    data: RoundCreateManyInput | RoundCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Round createManyAndReturn
+   */
+  export type RoundCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * The data used to create many Rounds.
+     */
+    data: RoundCreateManyInput | RoundCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Round update
+   */
+  export type RoundUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Round.
+     */
+    data: XOR<RoundUpdateInput, RoundUncheckedUpdateInput>
+    /**
+     * Choose, which Round to update.
+     */
+    where: RoundWhereUniqueInput
+  }
+
+  /**
+   * Round updateMany
+   */
+  export type RoundUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Rounds.
+     */
+    data: XOR<RoundUpdateManyMutationInput, RoundUncheckedUpdateManyInput>
+    /**
+     * Filter which Rounds to update
+     */
+    where?: RoundWhereInput
+    /**
+     * Limit how many Rounds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Round updateManyAndReturn
+   */
+  export type RoundUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * The data used to update Rounds.
+     */
+    data: XOR<RoundUpdateManyMutationInput, RoundUncheckedUpdateManyInput>
+    /**
+     * Filter which Rounds to update
+     */
+    where?: RoundWhereInput
+    /**
+     * Limit how many Rounds to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Round upsert
+   */
+  export type RoundUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Round to update in case it exists.
+     */
+    where: RoundWhereUniqueInput
+    /**
+     * In case the Round found by the `where` argument doesn't exist, create a new Round with this data.
+     */
+    create: XOR<RoundCreateInput, RoundUncheckedCreateInput>
+    /**
+     * In case the Round was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoundUpdateInput, RoundUncheckedUpdateInput>
+  }
+
+  /**
+   * Round delete
+   */
+  export type RoundDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+    /**
+     * Filter which Round to delete.
+     */
+    where: RoundWhereUniqueInput
+  }
+
+  /**
+   * Round deleteMany
+   */
+  export type RoundDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Rounds to delete
+     */
+    where?: RoundWhereInput
+    /**
+     * Limit how many Rounds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Round.scores
+   */
+  export type Round$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    where?: ScoreWhereInput
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    cursor?: ScoreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
+   * Round without action
+   */
+  export type RoundDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round
+     */
+    select?: RoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round
+     */
+    omit?: RoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoundInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Score
+   */
+
+  export type AggregateScore = {
+    _count: ScoreCountAggregateOutputType | null
+    _avg: ScoreAvgAggregateOutputType | null
+    _sum: ScoreSumAggregateOutputType | null
+    _min: ScoreMinAggregateOutputType | null
+    _max: ScoreMaxAggregateOutputType | null
+  }
+
+  export type ScoreAvgAggregateOutputType = {
+    points: number | null
+  }
+
+  export type ScoreSumAggregateOutputType = {
+    points: number | null
+  }
+
+  export type ScoreMinAggregateOutputType = {
+    matchId: string | null
+    roundId: string | null
+    playerId: string | null
+    points: number | null
+  }
+
+  export type ScoreMaxAggregateOutputType = {
+    matchId: string | null
+    roundId: string | null
+    playerId: string | null
+    points: number | null
+  }
+
+  export type ScoreCountAggregateOutputType = {
+    matchId: number
+    roundId: number
+    playerId: number
+    points: number
+    _all: number
+  }
+
+
+  export type ScoreAvgAggregateInputType = {
+    points?: true
+  }
+
+  export type ScoreSumAggregateInputType = {
+    points?: true
+  }
+
+  export type ScoreMinAggregateInputType = {
+    matchId?: true
+    roundId?: true
+    playerId?: true
+    points?: true
+  }
+
+  export type ScoreMaxAggregateInputType = {
+    matchId?: true
+    roundId?: true
+    playerId?: true
+    points?: true
+  }
+
+  export type ScoreCountAggregateInputType = {
+    matchId?: true
+    roundId?: true
+    playerId?: true
+    points?: true
+    _all?: true
+  }
+
+  export type ScoreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Score to aggregate.
+     */
+    where?: ScoreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Scores to fetch.
+     */
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScoreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Scores from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Scores.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Scores
+    **/
+    _count?: true | ScoreCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScoreAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScoreSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScoreMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScoreMaxAggregateInputType
+  }
+
+  export type GetScoreAggregateType<T extends ScoreAggregateArgs> = {
+        [P in keyof T & keyof AggregateScore]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScore[P]>
+      : GetScalarType<T[P], AggregateScore[P]>
+  }
+
+
+
+
+  export type ScoreGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
+    orderBy?: ScoreOrderByWithAggregationInput | ScoreOrderByWithAggregationInput[]
+    by: ScoreScalarFieldEnum[] | ScoreScalarFieldEnum
+    having?: ScoreScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScoreCountAggregateInputType | true
+    _avg?: ScoreAvgAggregateInputType
+    _sum?: ScoreSumAggregateInputType
+    _min?: ScoreMinAggregateInputType
+    _max?: ScoreMaxAggregateInputType
+  }
+
+  export type ScoreGroupByOutputType = {
+    matchId: string
+    roundId: string
+    playerId: string
+    points: number
+    _count: ScoreCountAggregateOutputType | null
+    _avg: ScoreAvgAggregateOutputType | null
+    _sum: ScoreSumAggregateOutputType | null
+    _min: ScoreMinAggregateOutputType | null
+    _max: ScoreMaxAggregateOutputType | null
+  }
+
+  type GetScoreGroupByPayload<T extends ScoreGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScoreGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScoreGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScoreGroupByOutputType[P]>
+            : GetScalarType<T[P], ScoreGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScoreSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    matchId?: boolean
+    roundId?: boolean
+    playerId?: boolean
+    points?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["score"]>
+
+  export type ScoreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    matchId?: boolean
+    roundId?: boolean
+    playerId?: boolean
+    points?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["score"]>
+
+  export type ScoreSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    matchId?: boolean
+    roundId?: boolean
+    playerId?: boolean
+    points?: boolean
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["score"]>
+
+  export type ScoreSelectScalar = {
+    matchId?: boolean
+    roundId?: boolean
+    playerId?: boolean
+    points?: boolean
+  }
+
+  export type ScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"matchId" | "roundId" | "playerId" | "points", ExtArgs["result"]["score"]>
+  export type ScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }
+  export type ScoreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }
+  export type ScoreIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    match?: boolean | MatchDefaultArgs<ExtArgs>
+    round?: boolean | RoundDefaultArgs<ExtArgs>
+    player?: boolean | PlayerDefaultArgs<ExtArgs>
+  }
+
+  export type $ScorePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Score"
+    objects: {
+      match: Prisma.$MatchPayload<ExtArgs>
+      round: Prisma.$RoundPayload<ExtArgs>
+      player: Prisma.$PlayerPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      matchId: string
+      roundId: string
+      playerId: string
+      points: number
+    }, ExtArgs["result"]["score"]>
+    composites: {}
+  }
+
+  type ScoreGetPayload<S extends boolean | null | undefined | ScoreDefaultArgs> = $Result.GetResult<Prisma.$ScorePayload, S>
+
+  type ScoreCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScoreFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScoreCountAggregateInputType | true
+    }
+
+  export interface ScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Score'], meta: { name: 'Score' } }
+    /**
+     * Find zero or one Score that matches the filter.
+     * @param {ScoreFindUniqueArgs} args - Arguments to find a Score
+     * @example
+     * // Get one Score
+     * const score = await prisma.score.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScoreFindUniqueArgs>(args: SelectSubset<T, ScoreFindUniqueArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Score that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScoreFindUniqueOrThrowArgs} args - Arguments to find a Score
+     * @example
+     * // Get one Score
+     * const score = await prisma.score.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScoreFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Score that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFindFirstArgs} args - Arguments to find a Score
+     * @example
+     * // Get one Score
+     * const score = await prisma.score.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScoreFindFirstArgs>(args?: SelectSubset<T, ScoreFindFirstArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Score that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFindFirstOrThrowArgs} args - Arguments to find a Score
+     * @example
+     * // Get one Score
+     * const score = await prisma.score.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScoreFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Scores that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Scores
+     * const scores = await prisma.score.findMany()
+     * 
+     * // Get first 10 Scores
+     * const scores = await prisma.score.findMany({ take: 10 })
+     * 
+     * // Only select the `matchId`
+     * const scoreWithMatchIdOnly = await prisma.score.findMany({ select: { matchId: true } })
+     * 
+     */
+    findMany<T extends ScoreFindManyArgs>(args?: SelectSubset<T, ScoreFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Score.
+     * @param {ScoreCreateArgs} args - Arguments to create a Score.
+     * @example
+     * // Create one Score
+     * const Score = await prisma.score.create({
+     *   data: {
+     *     // ... data to create a Score
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScoreCreateArgs>(args: SelectSubset<T, ScoreCreateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Scores.
+     * @param {ScoreCreateManyArgs} args - Arguments to create many Scores.
+     * @example
+     * // Create many Scores
+     * const score = await prisma.score.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScoreCreateManyArgs>(args?: SelectSubset<T, ScoreCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Scores and returns the data saved in the database.
+     * @param {ScoreCreateManyAndReturnArgs} args - Arguments to create many Scores.
+     * @example
+     * // Create many Scores
+     * const score = await prisma.score.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Scores and only return the `matchId`
+     * const scoreWithMatchIdOnly = await prisma.score.createManyAndReturn({
+     *   select: { matchId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScoreCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Score.
+     * @param {ScoreDeleteArgs} args - Arguments to delete one Score.
+     * @example
+     * // Delete one Score
+     * const Score = await prisma.score.delete({
+     *   where: {
+     *     // ... filter to delete one Score
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScoreDeleteArgs>(args: SelectSubset<T, ScoreDeleteArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Score.
+     * @param {ScoreUpdateArgs} args - Arguments to update one Score.
+     * @example
+     * // Update one Score
+     * const score = await prisma.score.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScoreUpdateArgs>(args: SelectSubset<T, ScoreUpdateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Scores.
+     * @param {ScoreDeleteManyArgs} args - Arguments to filter Scores to delete.
+     * @example
+     * // Delete a few Scores
+     * const { count } = await prisma.score.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScoreDeleteManyArgs>(args?: SelectSubset<T, ScoreDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Scores.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Scores
+     * const score = await prisma.score.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScoreUpdateManyArgs>(args: SelectSubset<T, ScoreUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Scores and returns the data updated in the database.
+     * @param {ScoreUpdateManyAndReturnArgs} args - Arguments to update many Scores.
+     * @example
+     * // Update many Scores
+     * const score = await prisma.score.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Scores and only return the `matchId`
+     * const scoreWithMatchIdOnly = await prisma.score.updateManyAndReturn({
+     *   select: { matchId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScoreUpdateManyAndReturnArgs>(args: SelectSubset<T, ScoreUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Score.
+     * @param {ScoreUpsertArgs} args - Arguments to update or create a Score.
+     * @example
+     * // Update or create a Score
+     * const score = await prisma.score.upsert({
+     *   create: {
+     *     // ... data to create a Score
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Score we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScoreUpsertArgs>(args: SelectSubset<T, ScoreUpsertArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Scores.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreCountArgs} args - Arguments to filter Scores to count.
+     * @example
+     * // Count the number of Scores
+     * const count = await prisma.score.count({
+     *   where: {
+     *     // ... the filter for the Scores we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScoreCountArgs>(
+      args?: Subset<T, ScoreCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScoreCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Score.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScoreAggregateArgs>(args: Subset<T, ScoreAggregateArgs>): Prisma.PrismaPromise<GetScoreAggregateType<T>>
+
+    /**
+     * Group by Score.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScoreGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScoreGroupByArgs['orderBy'] }
+        : { orderBy?: ScoreGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScoreGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Score model
+   */
+  readonly fields: ScoreFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Score.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScoreClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    match<T extends MatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MatchDefaultArgs<ExtArgs>>): Prisma__MatchClient<$Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    round<T extends RoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoundDefaultArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    player<T extends PlayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlayerDefaultArgs<ExtArgs>>): Prisma__PlayerClient<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Score model
+   */ 
+  interface ScoreFieldRefs {
+    readonly matchId: FieldRef<"Score", 'String'>
+    readonly roundId: FieldRef<"Score", 'String'>
+    readonly playerId: FieldRef<"Score", 'String'>
+    readonly points: FieldRef<"Score", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Score findUnique
+   */
+  export type ScoreFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter, which Score to fetch.
+     */
+    where: ScoreWhereUniqueInput
+  }
+
+  /**
+   * Score findUniqueOrThrow
+   */
+  export type ScoreFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter, which Score to fetch.
+     */
+    where: ScoreWhereUniqueInput
+  }
+
+  /**
+   * Score findFirst
+   */
+  export type ScoreFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter, which Score to fetch.
+     */
+    where?: ScoreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Scores to fetch.
+     */
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Scores.
+     */
+    cursor?: ScoreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Scores from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Scores.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Scores.
+     */
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
+   * Score findFirstOrThrow
+   */
+  export type ScoreFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter, which Score to fetch.
+     */
+    where?: ScoreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Scores to fetch.
+     */
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Scores.
+     */
+    cursor?: ScoreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Scores from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Scores.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Scores.
+     */
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
+   * Score findMany
+   */
+  export type ScoreFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter, which Scores to fetch.
+     */
+    where?: ScoreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Scores to fetch.
+     */
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Scores.
+     */
+    cursor?: ScoreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Scores from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Scores.
+     */
+    skip?: number
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
+   * Score create
+   */
+  export type ScoreCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Score.
+     */
+    data: XOR<ScoreCreateInput, ScoreUncheckedCreateInput>
+  }
+
+  /**
+   * Score createMany
+   */
+  export type ScoreCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Scores.
+     */
+    data: ScoreCreateManyInput | ScoreCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Score createManyAndReturn
+   */
+  export type ScoreCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * The data used to create many Scores.
+     */
+    data: ScoreCreateManyInput | ScoreCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Score update
+   */
+  export type ScoreUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Score.
+     */
+    data: XOR<ScoreUpdateInput, ScoreUncheckedUpdateInput>
+    /**
+     * Choose, which Score to update.
+     */
+    where: ScoreWhereUniqueInput
+  }
+
+  /**
+   * Score updateMany
+   */
+  export type ScoreUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Scores.
+     */
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyInput>
+    /**
+     * Filter which Scores to update
+     */
+    where?: ScoreWhereInput
+    /**
+     * Limit how many Scores to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Score updateManyAndReturn
+   */
+  export type ScoreUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * The data used to update Scores.
+     */
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyInput>
+    /**
+     * Filter which Scores to update
+     */
+    where?: ScoreWhereInput
+    /**
+     * Limit how many Scores to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Score upsert
+   */
+  export type ScoreUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Score to update in case it exists.
+     */
+    where: ScoreWhereUniqueInput
+    /**
+     * In case the Score found by the `where` argument doesn't exist, create a new Score with this data.
+     */
+    create: XOR<ScoreCreateInput, ScoreUncheckedCreateInput>
+    /**
+     * In case the Score was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScoreUpdateInput, ScoreUncheckedUpdateInput>
+  }
+
+  /**
+   * Score delete
+   */
+  export type ScoreDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    /**
+     * Filter which Score to delete.
+     */
+    where: ScoreWhereUniqueInput
+  }
+
+  /**
+   * Score deleteMany
+   */
+  export type ScoreDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Scores to delete
+     */
+    where?: ScoreWhereInput
+    /**
+     * Limit how many Scores to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Score without action
+   */
+  export type ScoreDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Score
+     */
+    omit?: ScoreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
   }
 
 
@@ -3314,6 +5867,27 @@ export namespace Prisma {
   };
 
   export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
+
+
+  export const RoundScalarFieldEnum: {
+    id: 'id',
+    status: 'status',
+    number: 'number',
+    createdAt: 'createdAt',
+    matchId: 'matchId'
+  };
+
+  export type RoundScalarFieldEnum = (typeof RoundScalarFieldEnum)[keyof typeof RoundScalarFieldEnum]
+
+
+  export const ScoreScalarFieldEnum: {
+    matchId: 'matchId',
+    roundId: 'roundId',
+    playerId: 'playerId',
+    points: 'points'
+  };
+
+  export type ScoreScalarFieldEnum = (typeof ScoreScalarFieldEnum)[keyof typeof ScoreScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3430,6 +6004,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'RoundStatus'
+   */
+  export type EnumRoundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoundStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RoundStatus[]'
+   */
+  export type ListEnumRoundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoundStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -3450,14 +6038,15 @@ export namespace Prisma {
     AND?: PlayerWhereInput | PlayerWhereInput[]
     OR?: PlayerWhereInput[]
     NOT?: PlayerWhereInput | PlayerWhereInput[]
-    id?: UuidFilter<"Player"> | string
+    id?: StringFilter<"Player"> | string
     full_name?: StringFilter<"Player"> | string
     email?: StringFilter<"Player"> | string
     bio?: StringNullableFilter<"Player"> | string | null
     createdAt?: DateTimeFilter<"Player"> | Date | string
     level?: EnumPlayerLevelFilter<"Player"> | $Enums.PlayerLevel
     status?: EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
-    Match?: MatchListRelationFilter
+    matches?: MatchListRelationFilter
+    scores?: ScoreListRelationFilter
   }
 
   export type PlayerOrderByWithRelationInput = {
@@ -3468,7 +6057,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     level?: SortOrder
     status?: SortOrder
-    Match?: MatchOrderByRelationAggregateInput
+    matches?: MatchOrderByRelationAggregateInput
+    scores?: ScoreOrderByRelationAggregateInput
   }
 
   export type PlayerWhereUniqueInput = Prisma.AtLeast<{
@@ -3482,7 +6072,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Player"> | Date | string
     level?: EnumPlayerLevelFilter<"Player"> | $Enums.PlayerLevel
     status?: EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
-    Match?: MatchListRelationFilter
+    matches?: MatchListRelationFilter
+    scores?: ScoreListRelationFilter
   }, "id">
 
   export type PlayerOrderByWithAggregationInput = {
@@ -3502,7 +6093,7 @@ export namespace Prisma {
     AND?: PlayerScalarWhereWithAggregatesInput | PlayerScalarWhereWithAggregatesInput[]
     OR?: PlayerScalarWhereWithAggregatesInput[]
     NOT?: PlayerScalarWhereWithAggregatesInput | PlayerScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Player"> | string
+    id?: StringWithAggregatesFilter<"Player"> | string
     full_name?: StringWithAggregatesFilter<"Player"> | string
     email?: StringWithAggregatesFilter<"Player"> | string
     bio?: StringNullableWithAggregatesFilter<"Player"> | string | null
@@ -3521,7 +6112,9 @@ export namespace Prisma {
     status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
+    rounds?: RoundListRelationFilter
     players?: PlayerListRelationFilter
+    scores?: ScoreListRelationFilter
   }
 
   export type MatchOrderByWithRelationInput = {
@@ -3531,7 +6124,9 @@ export namespace Prisma {
     status?: SortOrder
     date?: SortOrder
     duration?: SortOrderInput | SortOrder
+    rounds?: RoundOrderByRelationAggregateInput
     players?: PlayerOrderByRelationAggregateInput
+    scores?: ScoreOrderByRelationAggregateInput
   }
 
   export type MatchWhereUniqueInput = Prisma.AtLeast<{
@@ -3544,7 +6139,9 @@ export namespace Prisma {
     status?: EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
     date?: DateTimeFilter<"Match"> | Date | string
     duration?: FloatNullableFilter<"Match"> | number | null
+    rounds?: RoundListRelationFilter
     players?: PlayerListRelationFilter
+    scores?: ScoreListRelationFilter
   }, "id">
 
   export type MatchOrderByWithAggregationInput = {
@@ -3573,6 +6170,126 @@ export namespace Prisma {
     duration?: FloatNullableWithAggregatesFilter<"Match"> | number | null
   }
 
+  export type RoundWhereInput = {
+    AND?: RoundWhereInput | RoundWhereInput[]
+    OR?: RoundWhereInput[]
+    NOT?: RoundWhereInput | RoundWhereInput[]
+    id?: StringFilter<"Round"> | string
+    status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    number?: IntFilter<"Round"> | number
+    createdAt?: DateTimeFilter<"Round"> | Date | string
+    matchId?: StringFilter<"Round"> | string
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
+    scores?: ScoreListRelationFilter
+  }
+
+  export type RoundOrderByWithRelationInput = {
+    id?: SortOrder
+    status?: SortOrder
+    number?: SortOrder
+    createdAt?: SortOrder
+    matchId?: SortOrder
+    match?: MatchOrderByWithRelationInput
+    scores?: ScoreOrderByRelationAggregateInput
+  }
+
+  export type RoundWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RoundWhereInput | RoundWhereInput[]
+    OR?: RoundWhereInput[]
+    NOT?: RoundWhereInput | RoundWhereInput[]
+    status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    number?: IntFilter<"Round"> | number
+    createdAt?: DateTimeFilter<"Round"> | Date | string
+    matchId?: StringFilter<"Round"> | string
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
+    scores?: ScoreListRelationFilter
+  }, "id">
+
+  export type RoundOrderByWithAggregationInput = {
+    id?: SortOrder
+    status?: SortOrder
+    number?: SortOrder
+    createdAt?: SortOrder
+    matchId?: SortOrder
+    _count?: RoundCountOrderByAggregateInput
+    _avg?: RoundAvgOrderByAggregateInput
+    _max?: RoundMaxOrderByAggregateInput
+    _min?: RoundMinOrderByAggregateInput
+    _sum?: RoundSumOrderByAggregateInput
+  }
+
+  export type RoundScalarWhereWithAggregatesInput = {
+    AND?: RoundScalarWhereWithAggregatesInput | RoundScalarWhereWithAggregatesInput[]
+    OR?: RoundScalarWhereWithAggregatesInput[]
+    NOT?: RoundScalarWhereWithAggregatesInput | RoundScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Round"> | string
+    status?: EnumRoundStatusWithAggregatesFilter<"Round"> | $Enums.RoundStatus
+    number?: IntWithAggregatesFilter<"Round"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Round"> | Date | string
+    matchId?: StringWithAggregatesFilter<"Round"> | string
+  }
+
+  export type ScoreWhereInput = {
+    AND?: ScoreWhereInput | ScoreWhereInput[]
+    OR?: ScoreWhereInput[]
+    NOT?: ScoreWhereInput | ScoreWhereInput[]
+    matchId?: StringFilter<"Score"> | string
+    roundId?: StringFilter<"Score"> | string
+    playerId?: StringFilter<"Score"> | string
+    points?: IntFilter<"Score"> | number
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
+    round?: XOR<RoundScalarRelationFilter, RoundWhereInput>
+    player?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
+  }
+
+  export type ScoreOrderByWithRelationInput = {
+    matchId?: SortOrder
+    roundId?: SortOrder
+    playerId?: SortOrder
+    points?: SortOrder
+    match?: MatchOrderByWithRelationInput
+    round?: RoundOrderByWithRelationInput
+    player?: PlayerOrderByWithRelationInput
+  }
+
+  export type ScoreWhereUniqueInput = Prisma.AtLeast<{
+    playerId_matchId_roundId?: ScorePlayerIdMatchIdRoundIdCompoundUniqueInput
+    matchId_roundId_playerId?: ScoreMatchIdRoundIdPlayerIdCompoundUniqueInput
+    AND?: ScoreWhereInput | ScoreWhereInput[]
+    OR?: ScoreWhereInput[]
+    NOT?: ScoreWhereInput | ScoreWhereInput[]
+    matchId?: StringFilter<"Score"> | string
+    roundId?: StringFilter<"Score"> | string
+    playerId?: StringFilter<"Score"> | string
+    points?: IntFilter<"Score"> | number
+    match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
+    round?: XOR<RoundScalarRelationFilter, RoundWhereInput>
+    player?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
+  }, "matchId_roundId_playerId" | "playerId_matchId_roundId">
+
+  export type ScoreOrderByWithAggregationInput = {
+    matchId?: SortOrder
+    roundId?: SortOrder
+    playerId?: SortOrder
+    points?: SortOrder
+    _count?: ScoreCountOrderByAggregateInput
+    _avg?: ScoreAvgOrderByAggregateInput
+    _max?: ScoreMaxOrderByAggregateInput
+    _min?: ScoreMinOrderByAggregateInput
+    _sum?: ScoreSumOrderByAggregateInput
+  }
+
+  export type ScoreScalarWhereWithAggregatesInput = {
+    AND?: ScoreScalarWhereWithAggregatesInput | ScoreScalarWhereWithAggregatesInput[]
+    OR?: ScoreScalarWhereWithAggregatesInput[]
+    NOT?: ScoreScalarWhereWithAggregatesInput | ScoreScalarWhereWithAggregatesInput[]
+    matchId?: StringWithAggregatesFilter<"Score"> | string
+    roundId?: StringWithAggregatesFilter<"Score"> | string
+    playerId?: StringWithAggregatesFilter<"Score"> | string
+    points?: IntWithAggregatesFilter<"Score"> | number
+  }
+
   export type PlayerCreateInput = {
     id?: string
     full_name: string
@@ -3581,7 +6298,8 @@ export namespace Prisma {
     createdAt?: Date | string
     level?: $Enums.PlayerLevel
     status?: $Enums.PlayerStatus
-    Match?: MatchCreateNestedManyWithoutPlayersInput
+    matches?: MatchCreateNestedManyWithoutPlayersInput
+    scores?: ScoreCreateNestedManyWithoutPlayerInput
   }
 
   export type PlayerUncheckedCreateInput = {
@@ -3592,7 +6310,8 @@ export namespace Prisma {
     createdAt?: Date | string
     level?: $Enums.PlayerLevel
     status?: $Enums.PlayerStatus
-    Match?: MatchUncheckedCreateNestedManyWithoutPlayersInput
+    matches?: MatchUncheckedCreateNestedManyWithoutPlayersInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutPlayerInput
   }
 
   export type PlayerUpdateInput = {
@@ -3603,7 +6322,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
-    Match?: MatchUpdateManyWithoutPlayersNestedInput
+    matches?: MatchUpdateManyWithoutPlayersNestedInput
+    scores?: ScoreUpdateManyWithoutPlayerNestedInput
   }
 
   export type PlayerUncheckedUpdateInput = {
@@ -3614,7 +6334,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
-    Match?: MatchUncheckedUpdateManyWithoutPlayersNestedInput
+    matches?: MatchUncheckedUpdateManyWithoutPlayersNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutPlayerNestedInput
   }
 
   export type PlayerCreateManyInput = {
@@ -3654,7 +6375,9 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    players?: PlayerCreateNestedManyWithoutMatchInput
+    rounds?: RoundCreateNestedManyWithoutMatchInput
+    players?: PlayerCreateNestedManyWithoutMatchesInput
+    scores?: ScoreCreateNestedManyWithoutMatchInput
   }
 
   export type MatchUncheckedCreateInput = {
@@ -3664,7 +6387,9 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
-    players?: PlayerUncheckedCreateNestedManyWithoutMatchInput
+    rounds?: RoundUncheckedCreateNestedManyWithoutMatchInput
+    players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutMatchInput
   }
 
   export type MatchUpdateInput = {
@@ -3674,7 +6399,9 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    players?: PlayerUpdateManyWithoutMatchNestedInput
+    rounds?: RoundUpdateManyWithoutMatchNestedInput
+    players?: PlayerUpdateManyWithoutMatchesNestedInput
+    scores?: ScoreUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchUncheckedUpdateInput = {
@@ -3684,7 +6411,9 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
-    players?: PlayerUncheckedUpdateManyWithoutMatchNestedInput
+    rounds?: RoundUncheckedUpdateManyWithoutMatchNestedInput
+    players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchCreateManyInput = {
@@ -3714,16 +6443,109 @@ export namespace Prisma {
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
-  export type UuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidFilter<$PrismaModel> | string
+  export type RoundCreateInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    match: MatchCreateNestedOneWithoutRoundsInput
+    scores?: ScoreCreateNestedManyWithoutRoundInput
+  }
+
+  export type RoundUncheckedCreateInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    matchId: string
+    scores?: ScoreUncheckedCreateNestedManyWithoutRoundInput
+  }
+
+  export type RoundUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    match?: MatchUpdateOneRequiredWithoutRoundsNestedInput
+    scores?: ScoreUpdateManyWithoutRoundNestedInput
+  }
+
+  export type RoundUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchId?: StringFieldUpdateOperationsInput | string
+    scores?: ScoreUncheckedUpdateManyWithoutRoundNestedInput
+  }
+
+  export type RoundCreateManyInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    matchId: string
+  }
+
+  export type RoundUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoundUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ScoreCreateInput = {
+    points?: number
+    match: MatchCreateNestedOneWithoutScoresInput
+    round: RoundCreateNestedOneWithoutScoresInput
+    player: PlayerCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateInput = {
+    matchId: string
+    roundId: string
+    playerId: string
+    points?: number
+  }
+
+  export type ScoreUpdateInput = {
+    points?: IntFieldUpdateOperationsInput | number
+    match?: MatchUpdateOneRequiredWithoutScoresNestedInput
+    round?: RoundUpdateOneRequiredWithoutScoresNestedInput
+    player?: PlayerUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    roundId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreCreateManyInput = {
+    matchId: string
+    roundId: string
+    playerId: string
+    points?: number
+  }
+
+  export type ScoreUpdateManyMutationInput = {
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreUncheckedUpdateManyInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    roundId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3787,12 +6609,22 @@ export namespace Prisma {
     none?: MatchWhereInput
   }
 
+  export type ScoreListRelationFilter = {
+    every?: ScoreWhereInput
+    some?: ScoreWhereInput
+    none?: ScoreWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type MatchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ScoreOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3824,21 +6656,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     level?: SortOrder
     status?: SortOrder
-  }
-
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -3929,10 +6746,20 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type RoundListRelationFilter = {
+    every?: RoundWhereInput
+    some?: RoundWhereInput
+    none?: RoundWhereInput
+  }
+
   export type PlayerListRelationFilter = {
     every?: PlayerWhereInput
     some?: PlayerWhereInput
     none?: PlayerWhereInput
+  }
+
+  export type RoundOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PlayerOrderByRelationAggregateInput = {
@@ -4000,16 +6827,162 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type EnumRoundStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoundStatus | EnumRoundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoundStatusFilter<$PrismaModel> | $Enums.RoundStatus
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type MatchScalarRelationFilter = {
+    is?: MatchWhereInput
+    isNot?: MatchWhereInput
+  }
+
+  export type RoundCountOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    number?: SortOrder
+    createdAt?: SortOrder
+    matchId?: SortOrder
+  }
+
+  export type RoundAvgOrderByAggregateInput = {
+    number?: SortOrder
+  }
+
+  export type RoundMaxOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    number?: SortOrder
+    createdAt?: SortOrder
+    matchId?: SortOrder
+  }
+
+  export type RoundMinOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    number?: SortOrder
+    createdAt?: SortOrder
+    matchId?: SortOrder
+  }
+
+  export type RoundSumOrderByAggregateInput = {
+    number?: SortOrder
+  }
+
+  export type EnumRoundStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoundStatus | EnumRoundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoundStatusWithAggregatesFilter<$PrismaModel> | $Enums.RoundStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoundStatusFilter<$PrismaModel>
+    _max?: NestedEnumRoundStatusFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type RoundScalarRelationFilter = {
+    is?: RoundWhereInput
+    isNot?: RoundWhereInput
+  }
+
+  export type PlayerScalarRelationFilter = {
+    is?: PlayerWhereInput
+    isNot?: PlayerWhereInput
+  }
+
+  export type ScorePlayerIdMatchIdRoundIdCompoundUniqueInput = {
+    playerId: string
+    matchId: string
+    roundId: string
+  }
+
+  export type ScoreMatchIdRoundIdPlayerIdCompoundUniqueInput = {
+    matchId: string
+    roundId: string
+    playerId: string
+  }
+
+  export type ScoreCountOrderByAggregateInput = {
+    matchId?: SortOrder
+    roundId?: SortOrder
+    playerId?: SortOrder
+    points?: SortOrder
+  }
+
+  export type ScoreAvgOrderByAggregateInput = {
+    points?: SortOrder
+  }
+
+  export type ScoreMaxOrderByAggregateInput = {
+    matchId?: SortOrder
+    roundId?: SortOrder
+    playerId?: SortOrder
+    points?: SortOrder
+  }
+
+  export type ScoreMinOrderByAggregateInput = {
+    matchId?: SortOrder
+    roundId?: SortOrder
+    playerId?: SortOrder
+    points?: SortOrder
+  }
+
+  export type ScoreSumOrderByAggregateInput = {
+    points?: SortOrder
+  }
+
   export type MatchCreateNestedManyWithoutPlayersInput = {
     create?: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput> | MatchCreateWithoutPlayersInput[] | MatchUncheckedCreateWithoutPlayersInput[]
     connectOrCreate?: MatchCreateOrConnectWithoutPlayersInput | MatchCreateOrConnectWithoutPlayersInput[]
     connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
   }
 
+  export type ScoreCreateNestedManyWithoutPlayerInput = {
+    create?: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput> | ScoreCreateWithoutPlayerInput[] | ScoreUncheckedCreateWithoutPlayerInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutPlayerInput | ScoreCreateOrConnectWithoutPlayerInput[]
+    createMany?: ScoreCreateManyPlayerInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  }
+
   export type MatchUncheckedCreateNestedManyWithoutPlayersInput = {
     create?: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput> | MatchCreateWithoutPlayersInput[] | MatchUncheckedCreateWithoutPlayersInput[]
     connectOrCreate?: MatchCreateOrConnectWithoutPlayersInput | MatchCreateOrConnectWithoutPlayersInput[]
     connect?: MatchWhereUniqueInput | MatchWhereUniqueInput[]
+  }
+
+  export type ScoreUncheckedCreateNestedManyWithoutPlayerInput = {
+    create?: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput> | ScoreCreateWithoutPlayerInput[] | ScoreUncheckedCreateWithoutPlayerInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutPlayerInput | ScoreCreateOrConnectWithoutPlayerInput[]
+    createMany?: ScoreCreateManyPlayerInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4045,6 +7018,20 @@ export namespace Prisma {
     deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
   }
 
+  export type ScoreUpdateManyWithoutPlayerNestedInput = {
+    create?: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput> | ScoreCreateWithoutPlayerInput[] | ScoreUncheckedCreateWithoutPlayerInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutPlayerInput | ScoreCreateOrConnectWithoutPlayerInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutPlayerInput | ScoreUpsertWithWhereUniqueWithoutPlayerInput[]
+    createMany?: ScoreCreateManyPlayerInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutPlayerInput | ScoreUpdateWithWhereUniqueWithoutPlayerInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutPlayerInput | ScoreUpdateManyWithWhereWithoutPlayerInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
   export type MatchUncheckedUpdateManyWithoutPlayersNestedInput = {
     create?: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput> | MatchCreateWithoutPlayersInput[] | MatchUncheckedCreateWithoutPlayersInput[]
     connectOrCreate?: MatchCreateOrConnectWithoutPlayersInput | MatchCreateOrConnectWithoutPlayersInput[]
@@ -4058,16 +7045,58 @@ export namespace Prisma {
     deleteMany?: MatchScalarWhereInput | MatchScalarWhereInput[]
   }
 
-  export type PlayerCreateNestedManyWithoutMatchInput = {
-    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
-    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+  export type ScoreUncheckedUpdateManyWithoutPlayerNestedInput = {
+    create?: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput> | ScoreCreateWithoutPlayerInput[] | ScoreUncheckedCreateWithoutPlayerInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutPlayerInput | ScoreCreateOrConnectWithoutPlayerInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutPlayerInput | ScoreUpsertWithWhereUniqueWithoutPlayerInput[]
+    createMany?: ScoreCreateManyPlayerInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutPlayerInput | ScoreUpdateWithWhereUniqueWithoutPlayerInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutPlayerInput | ScoreUpdateManyWithWhereWithoutPlayerInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type RoundCreateNestedManyWithoutMatchInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+  }
+
+  export type PlayerCreateNestedManyWithoutMatchesInput = {
+    create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
   }
 
-  export type PlayerUncheckedCreateNestedManyWithoutMatchInput = {
-    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
-    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
+  export type ScoreCreateNestedManyWithoutMatchInput = {
+    create?: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput> | ScoreCreateWithoutMatchInput[] | ScoreUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutMatchInput | ScoreCreateOrConnectWithoutMatchInput[]
+    createMany?: ScoreCreateManyMatchInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  }
+
+  export type RoundUncheckedCreateNestedManyWithoutMatchInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+  }
+
+  export type PlayerUncheckedCreateNestedManyWithoutMatchesInput = {
+    create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type ScoreUncheckedCreateNestedManyWithoutMatchInput = {
+    create?: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput> | ScoreCreateWithoutMatchInput[] | ScoreUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutMatchInput | ScoreCreateOrConnectWithoutMatchInput[]
+    createMany?: ScoreCreateManyMatchInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type EnumMatchStatusFieldUpdateOperationsInput = {
@@ -4082,41 +7111,196 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type PlayerUpdateManyWithoutMatchNestedInput = {
-    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
-    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
-    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchInput | PlayerUpsertWithWhereUniqueWithoutMatchInput[]
+  export type RoundUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    upsert?: RoundUpsertWithWhereUniqueWithoutMatchInput | RoundUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    set?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    disconnect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    delete?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    update?: RoundUpdateWithWhereUniqueWithoutMatchInput | RoundUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: RoundUpdateManyWithWhereWithoutMatchInput | RoundUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: RoundScalarWhereInput | RoundScalarWhereInput[]
+  }
+
+  export type PlayerUpdateManyWithoutMatchesNestedInput = {
+    create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchesInput | PlayerUpsertWithWhereUniqueWithoutMatchesInput[]
     set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
-    update?: PlayerUpdateWithWhereUniqueWithoutMatchInput | PlayerUpdateWithWhereUniqueWithoutMatchInput[]
-    updateMany?: PlayerUpdateManyWithWhereWithoutMatchInput | PlayerUpdateManyWithWhereWithoutMatchInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutMatchesInput | PlayerUpdateWithWhereUniqueWithoutMatchesInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutMatchesInput | PlayerUpdateManyWithWhereWithoutMatchesInput[]
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
   }
 
-  export type PlayerUncheckedUpdateManyWithoutMatchNestedInput = {
-    create?: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput> | PlayerCreateWithoutMatchInput[] | PlayerUncheckedCreateWithoutMatchInput[]
-    connectOrCreate?: PlayerCreateOrConnectWithoutMatchInput | PlayerCreateOrConnectWithoutMatchInput[]
-    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchInput | PlayerUpsertWithWhereUniqueWithoutMatchInput[]
+  export type ScoreUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput> | ScoreCreateWithoutMatchInput[] | ScoreUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutMatchInput | ScoreCreateOrConnectWithoutMatchInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutMatchInput | ScoreUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: ScoreCreateManyMatchInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutMatchInput | ScoreUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutMatchInput | ScoreUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type RoundUncheckedUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput> | RoundCreateWithoutMatchInput[] | RoundUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: RoundCreateOrConnectWithoutMatchInput | RoundCreateOrConnectWithoutMatchInput[]
+    upsert?: RoundUpsertWithWhereUniqueWithoutMatchInput | RoundUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: RoundCreateManyMatchInputEnvelope
+    set?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    disconnect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    delete?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    connect?: RoundWhereUniqueInput | RoundWhereUniqueInput[]
+    update?: RoundUpdateWithWhereUniqueWithoutMatchInput | RoundUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: RoundUpdateManyWithWhereWithoutMatchInput | RoundUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: RoundScalarWhereInput | RoundScalarWhereInput[]
+  }
+
+  export type PlayerUncheckedUpdateManyWithoutMatchesNestedInput = {
+    create?: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput> | PlayerCreateWithoutMatchesInput[] | PlayerUncheckedCreateWithoutMatchesInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutMatchesInput | PlayerCreateOrConnectWithoutMatchesInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutMatchesInput | PlayerUpsertWithWhereUniqueWithoutMatchesInput[]
     set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
-    update?: PlayerUpdateWithWhereUniqueWithoutMatchInput | PlayerUpdateWithWhereUniqueWithoutMatchInput[]
-    updateMany?: PlayerUpdateManyWithWhereWithoutMatchInput | PlayerUpdateManyWithWhereWithoutMatchInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutMatchesInput | PlayerUpdateWithWhereUniqueWithoutMatchesInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutMatchesInput | PlayerUpdateManyWithWhereWithoutMatchesInput[]
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
   }
 
-  export type NestedUuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidFilter<$PrismaModel> | string
+  export type ScoreUncheckedUpdateManyWithoutMatchNestedInput = {
+    create?: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput> | ScoreCreateWithoutMatchInput[] | ScoreUncheckedCreateWithoutMatchInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutMatchInput | ScoreCreateOrConnectWithoutMatchInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutMatchInput | ScoreUpsertWithWhereUniqueWithoutMatchInput[]
+    createMany?: ScoreCreateManyMatchInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutMatchInput | ScoreUpdateWithWhereUniqueWithoutMatchInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutMatchInput | ScoreUpdateManyWithWhereWithoutMatchInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type MatchCreateNestedOneWithoutRoundsInput = {
+    create?: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutRoundsInput
+    connect?: MatchWhereUniqueInput
+  }
+
+  export type ScoreCreateNestedManyWithoutRoundInput = {
+    create?: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput> | ScoreCreateWithoutRoundInput[] | ScoreUncheckedCreateWithoutRoundInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutRoundInput | ScoreCreateOrConnectWithoutRoundInput[]
+    createMany?: ScoreCreateManyRoundInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  }
+
+  export type ScoreUncheckedCreateNestedManyWithoutRoundInput = {
+    create?: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput> | ScoreCreateWithoutRoundInput[] | ScoreUncheckedCreateWithoutRoundInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutRoundInput | ScoreCreateOrConnectWithoutRoundInput[]
+    createMany?: ScoreCreateManyRoundInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  }
+
+  export type EnumRoundStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RoundStatus
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type MatchUpdateOneRequiredWithoutRoundsNestedInput = {
+    create?: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutRoundsInput
+    upsert?: MatchUpsertWithoutRoundsInput
+    connect?: MatchWhereUniqueInput
+    update?: XOR<XOR<MatchUpdateToOneWithWhereWithoutRoundsInput, MatchUpdateWithoutRoundsInput>, MatchUncheckedUpdateWithoutRoundsInput>
+  }
+
+  export type ScoreUpdateManyWithoutRoundNestedInput = {
+    create?: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput> | ScoreCreateWithoutRoundInput[] | ScoreUncheckedCreateWithoutRoundInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutRoundInput | ScoreCreateOrConnectWithoutRoundInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutRoundInput | ScoreUpsertWithWhereUniqueWithoutRoundInput[]
+    createMany?: ScoreCreateManyRoundInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutRoundInput | ScoreUpdateWithWhereUniqueWithoutRoundInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutRoundInput | ScoreUpdateManyWithWhereWithoutRoundInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutRoundNestedInput = {
+    create?: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput> | ScoreCreateWithoutRoundInput[] | ScoreUncheckedCreateWithoutRoundInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutRoundInput | ScoreCreateOrConnectWithoutRoundInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutRoundInput | ScoreUpsertWithWhereUniqueWithoutRoundInput[]
+    createMany?: ScoreCreateManyRoundInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutRoundInput | ScoreUpdateWithWhereUniqueWithoutRoundInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutRoundInput | ScoreUpdateManyWithWhereWithoutRoundInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type MatchCreateNestedOneWithoutScoresInput = {
+    create?: XOR<MatchCreateWithoutScoresInput, MatchUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutScoresInput
+    connect?: MatchWhereUniqueInput
+  }
+
+  export type RoundCreateNestedOneWithoutScoresInput = {
+    create?: XOR<RoundCreateWithoutScoresInput, RoundUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: RoundCreateOrConnectWithoutScoresInput
+    connect?: RoundWhereUniqueInput
+  }
+
+  export type PlayerCreateNestedOneWithoutScoresInput = {
+    create?: XOR<PlayerCreateWithoutScoresInput, PlayerUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: PlayerCreateOrConnectWithoutScoresInput
+    connect?: PlayerWhereUniqueInput
+  }
+
+  export type MatchUpdateOneRequiredWithoutScoresNestedInput = {
+    create?: XOR<MatchCreateWithoutScoresInput, MatchUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: MatchCreateOrConnectWithoutScoresInput
+    upsert?: MatchUpsertWithoutScoresInput
+    connect?: MatchWhereUniqueInput
+    update?: XOR<XOR<MatchUpdateToOneWithWhereWithoutScoresInput, MatchUpdateWithoutScoresInput>, MatchUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type RoundUpdateOneRequiredWithoutScoresNestedInput = {
+    create?: XOR<RoundCreateWithoutScoresInput, RoundUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: RoundCreateOrConnectWithoutScoresInput
+    upsert?: RoundUpsertWithoutScoresInput
+    connect?: RoundWhereUniqueInput
+    update?: XOR<XOR<RoundUpdateToOneWithWhereWithoutScoresInput, RoundUpdateWithoutScoresInput>, RoundUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type PlayerUpdateOneRequiredWithoutScoresNestedInput = {
+    create?: XOR<PlayerCreateWithoutScoresInput, PlayerUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: PlayerCreateOrConnectWithoutScoresInput
+    upsert?: PlayerUpsertWithoutScoresInput
+    connect?: PlayerWhereUniqueInput
+    update?: XOR<XOR<PlayerUpdateToOneWithWhereWithoutScoresInput, PlayerUpdateWithoutScoresInput>, PlayerUncheckedUpdateWithoutScoresInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4172,31 +7356,6 @@ export namespace Prisma {
     not?: NestedEnumPlayerStatusFilter<$PrismaModel> | $Enums.PlayerStatus
   }
 
-  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -4212,6 +7371,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4320,6 +7490,50 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumRoundStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoundStatus | EnumRoundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoundStatusFilter<$PrismaModel> | $Enums.RoundStatus
+  }
+
+  export type NestedEnumRoundStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoundStatus | EnumRoundStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoundStatus[] | ListEnumRoundStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoundStatusWithAggregatesFilter<$PrismaModel> | $Enums.RoundStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoundStatusFilter<$PrismaModel>
+    _max?: NestedEnumRoundStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type MatchCreateWithoutPlayersInput = {
     id?: string
     title: string
@@ -4327,6 +7541,8 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
+    rounds?: RoundCreateNestedManyWithoutMatchInput
+    scores?: ScoreCreateNestedManyWithoutMatchInput
   }
 
   export type MatchUncheckedCreateWithoutPlayersInput = {
@@ -4336,11 +7552,35 @@ export namespace Prisma {
     status: $Enums.MatchStatus
     date?: Date | string
     duration?: number | null
+    rounds?: RoundUncheckedCreateNestedManyWithoutMatchInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutMatchInput
   }
 
   export type MatchCreateOrConnectWithoutPlayersInput = {
     where: MatchWhereUniqueInput
     create: XOR<MatchCreateWithoutPlayersInput, MatchUncheckedCreateWithoutPlayersInput>
+  }
+
+  export type ScoreCreateWithoutPlayerInput = {
+    points?: number
+    match: MatchCreateNestedOneWithoutScoresInput
+    round: RoundCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutPlayerInput = {
+    matchId: string
+    roundId: string
+    points?: number
+  }
+
+  export type ScoreCreateOrConnectWithoutPlayerInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput>
+  }
+
+  export type ScoreCreateManyPlayerInputEnvelope = {
+    data: ScoreCreateManyPlayerInput | ScoreCreateManyPlayerInput[]
+    skipDuplicates?: boolean
   }
 
   export type MatchUpsertWithWhereUniqueWithoutPlayersInput = {
@@ -4371,7 +7611,59 @@ export namespace Prisma {
     duration?: FloatNullableFilter<"Match"> | number | null
   }
 
-  export type PlayerCreateWithoutMatchInput = {
+  export type ScoreUpsertWithWhereUniqueWithoutPlayerInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutPlayerInput, ScoreUncheckedUpdateWithoutPlayerInput>
+    create: XOR<ScoreCreateWithoutPlayerInput, ScoreUncheckedCreateWithoutPlayerInput>
+  }
+
+  export type ScoreUpdateWithWhereUniqueWithoutPlayerInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutPlayerInput, ScoreUncheckedUpdateWithoutPlayerInput>
+  }
+
+  export type ScoreUpdateManyWithWhereWithoutPlayerInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutPlayerInput>
+  }
+
+  export type ScoreScalarWhereInput = {
+    AND?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+    OR?: ScoreScalarWhereInput[]
+    NOT?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+    matchId?: StringFilter<"Score"> | string
+    roundId?: StringFilter<"Score"> | string
+    playerId?: StringFilter<"Score"> | string
+    points?: IntFilter<"Score"> | number
+  }
+
+  export type RoundCreateWithoutMatchInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    scores?: ScoreCreateNestedManyWithoutRoundInput
+  }
+
+  export type RoundUncheckedCreateWithoutMatchInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutRoundInput
+  }
+
+  export type RoundCreateOrConnectWithoutMatchInput = {
+    where: RoundWhereUniqueInput
+    create: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput>
+  }
+
+  export type RoundCreateManyMatchInputEnvelope = {
+    data: RoundCreateManyMatchInput | RoundCreateManyMatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlayerCreateWithoutMatchesInput = {
     id?: string
     full_name: string
     email: string
@@ -4379,9 +7671,10 @@ export namespace Prisma {
     createdAt?: Date | string
     level?: $Enums.PlayerLevel
     status?: $Enums.PlayerStatus
+    scores?: ScoreCreateNestedManyWithoutPlayerInput
   }
 
-  export type PlayerUncheckedCreateWithoutMatchInput = {
+  export type PlayerUncheckedCreateWithoutMatchesInput = {
     id?: string
     full_name: string
     email: string
@@ -4389,40 +7682,378 @@ export namespace Prisma {
     createdAt?: Date | string
     level?: $Enums.PlayerLevel
     status?: $Enums.PlayerStatus
+    scores?: ScoreUncheckedCreateNestedManyWithoutPlayerInput
   }
 
-  export type PlayerCreateOrConnectWithoutMatchInput = {
+  export type PlayerCreateOrConnectWithoutMatchesInput = {
     where: PlayerWhereUniqueInput
-    create: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput>
+    create: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput>
   }
 
-  export type PlayerUpsertWithWhereUniqueWithoutMatchInput = {
+  export type ScoreCreateWithoutMatchInput = {
+    points?: number
+    round: RoundCreateNestedOneWithoutScoresInput
+    player: PlayerCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutMatchInput = {
+    roundId: string
+    playerId: string
+    points?: number
+  }
+
+  export type ScoreCreateOrConnectWithoutMatchInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput>
+  }
+
+  export type ScoreCreateManyMatchInputEnvelope = {
+    data: ScoreCreateManyMatchInput | ScoreCreateManyMatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RoundUpsertWithWhereUniqueWithoutMatchInput = {
+    where: RoundWhereUniqueInput
+    update: XOR<RoundUpdateWithoutMatchInput, RoundUncheckedUpdateWithoutMatchInput>
+    create: XOR<RoundCreateWithoutMatchInput, RoundUncheckedCreateWithoutMatchInput>
+  }
+
+  export type RoundUpdateWithWhereUniqueWithoutMatchInput = {
+    where: RoundWhereUniqueInput
+    data: XOR<RoundUpdateWithoutMatchInput, RoundUncheckedUpdateWithoutMatchInput>
+  }
+
+  export type RoundUpdateManyWithWhereWithoutMatchInput = {
+    where: RoundScalarWhereInput
+    data: XOR<RoundUpdateManyMutationInput, RoundUncheckedUpdateManyWithoutMatchInput>
+  }
+
+  export type RoundScalarWhereInput = {
+    AND?: RoundScalarWhereInput | RoundScalarWhereInput[]
+    OR?: RoundScalarWhereInput[]
+    NOT?: RoundScalarWhereInput | RoundScalarWhereInput[]
+    id?: StringFilter<"Round"> | string
+    status?: EnumRoundStatusFilter<"Round"> | $Enums.RoundStatus
+    number?: IntFilter<"Round"> | number
+    createdAt?: DateTimeFilter<"Round"> | Date | string
+    matchId?: StringFilter<"Round"> | string
+  }
+
+  export type PlayerUpsertWithWhereUniqueWithoutMatchesInput = {
     where: PlayerWhereUniqueInput
-    update: XOR<PlayerUpdateWithoutMatchInput, PlayerUncheckedUpdateWithoutMatchInput>
-    create: XOR<PlayerCreateWithoutMatchInput, PlayerUncheckedCreateWithoutMatchInput>
+    update: XOR<PlayerUpdateWithoutMatchesInput, PlayerUncheckedUpdateWithoutMatchesInput>
+    create: XOR<PlayerCreateWithoutMatchesInput, PlayerUncheckedCreateWithoutMatchesInput>
   }
 
-  export type PlayerUpdateWithWhereUniqueWithoutMatchInput = {
+  export type PlayerUpdateWithWhereUniqueWithoutMatchesInput = {
     where: PlayerWhereUniqueInput
-    data: XOR<PlayerUpdateWithoutMatchInput, PlayerUncheckedUpdateWithoutMatchInput>
+    data: XOR<PlayerUpdateWithoutMatchesInput, PlayerUncheckedUpdateWithoutMatchesInput>
   }
 
-  export type PlayerUpdateManyWithWhereWithoutMatchInput = {
+  export type PlayerUpdateManyWithWhereWithoutMatchesInput = {
     where: PlayerScalarWhereInput
-    data: XOR<PlayerUpdateManyMutationInput, PlayerUncheckedUpdateManyWithoutMatchInput>
+    data: XOR<PlayerUpdateManyMutationInput, PlayerUncheckedUpdateManyWithoutMatchesInput>
   }
 
   export type PlayerScalarWhereInput = {
     AND?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
     OR?: PlayerScalarWhereInput[]
     NOT?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
-    id?: UuidFilter<"Player"> | string
+    id?: StringFilter<"Player"> | string
     full_name?: StringFilter<"Player"> | string
     email?: StringFilter<"Player"> | string
     bio?: StringNullableFilter<"Player"> | string | null
     createdAt?: DateTimeFilter<"Player"> | Date | string
     level?: EnumPlayerLevelFilter<"Player"> | $Enums.PlayerLevel
     status?: EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
+  }
+
+  export type ScoreUpsertWithWhereUniqueWithoutMatchInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutMatchInput, ScoreUncheckedUpdateWithoutMatchInput>
+    create: XOR<ScoreCreateWithoutMatchInput, ScoreUncheckedCreateWithoutMatchInput>
+  }
+
+  export type ScoreUpdateWithWhereUniqueWithoutMatchInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutMatchInput, ScoreUncheckedUpdateWithoutMatchInput>
+  }
+
+  export type ScoreUpdateManyWithWhereWithoutMatchInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutMatchInput>
+  }
+
+  export type MatchCreateWithoutRoundsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerCreateNestedManyWithoutMatchesInput
+    scores?: ScoreCreateNestedManyWithoutMatchInput
+  }
+
+  export type MatchUncheckedCreateWithoutRoundsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutMatchInput
+  }
+
+  export type MatchCreateOrConnectWithoutRoundsInput = {
+    where: MatchWhereUniqueInput
+    create: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+  }
+
+  export type ScoreCreateWithoutRoundInput = {
+    points?: number
+    match: MatchCreateNestedOneWithoutScoresInput
+    player: PlayerCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutRoundInput = {
+    matchId: string
+    playerId: string
+    points?: number
+  }
+
+  export type ScoreCreateOrConnectWithoutRoundInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput>
+  }
+
+  export type ScoreCreateManyRoundInputEnvelope = {
+    data: ScoreCreateManyRoundInput | ScoreCreateManyRoundInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MatchUpsertWithoutRoundsInput = {
+    update: XOR<MatchUpdateWithoutRoundsInput, MatchUncheckedUpdateWithoutRoundsInput>
+    create: XOR<MatchCreateWithoutRoundsInput, MatchUncheckedCreateWithoutRoundsInput>
+    where?: MatchWhereInput
+  }
+
+  export type MatchUpdateToOneWithWhereWithoutRoundsInput = {
+    where?: MatchWhereInput
+    data: XOR<MatchUpdateWithoutRoundsInput, MatchUncheckedUpdateWithoutRoundsInput>
+  }
+
+  export type MatchUpdateWithoutRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUpdateManyWithoutMatchesNestedInput
+    scores?: ScoreUpdateManyWithoutMatchNestedInput
+  }
+
+  export type MatchUncheckedUpdateWithoutRoundsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutMatchNestedInput
+  }
+
+  export type ScoreUpsertWithWhereUniqueWithoutRoundInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutRoundInput, ScoreUncheckedUpdateWithoutRoundInput>
+    create: XOR<ScoreCreateWithoutRoundInput, ScoreUncheckedCreateWithoutRoundInput>
+  }
+
+  export type ScoreUpdateWithWhereUniqueWithoutRoundInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutRoundInput, ScoreUncheckedUpdateWithoutRoundInput>
+  }
+
+  export type ScoreUpdateManyWithWhereWithoutRoundInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutRoundInput>
+  }
+
+  export type MatchCreateWithoutScoresInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    rounds?: RoundCreateNestedManyWithoutMatchInput
+    players?: PlayerCreateNestedManyWithoutMatchesInput
+  }
+
+  export type MatchUncheckedCreateWithoutScoresInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status: $Enums.MatchStatus
+    date?: Date | string
+    duration?: number | null
+    rounds?: RoundUncheckedCreateNestedManyWithoutMatchInput
+    players?: PlayerUncheckedCreateNestedManyWithoutMatchesInput
+  }
+
+  export type MatchCreateOrConnectWithoutScoresInput = {
+    where: MatchWhereUniqueInput
+    create: XOR<MatchCreateWithoutScoresInput, MatchUncheckedCreateWithoutScoresInput>
+  }
+
+  export type RoundCreateWithoutScoresInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    match: MatchCreateNestedOneWithoutRoundsInput
+  }
+
+  export type RoundUncheckedCreateWithoutScoresInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+    matchId: string
+  }
+
+  export type RoundCreateOrConnectWithoutScoresInput = {
+    where: RoundWhereUniqueInput
+    create: XOR<RoundCreateWithoutScoresInput, RoundUncheckedCreateWithoutScoresInput>
+  }
+
+  export type PlayerCreateWithoutScoresInput = {
+    id?: string
+    full_name: string
+    email: string
+    bio?: string | null
+    createdAt?: Date | string
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
+    matches?: MatchCreateNestedManyWithoutPlayersInput
+  }
+
+  export type PlayerUncheckedCreateWithoutScoresInput = {
+    id?: string
+    full_name: string
+    email: string
+    bio?: string | null
+    createdAt?: Date | string
+    level?: $Enums.PlayerLevel
+    status?: $Enums.PlayerStatus
+    matches?: MatchUncheckedCreateNestedManyWithoutPlayersInput
+  }
+
+  export type PlayerCreateOrConnectWithoutScoresInput = {
+    where: PlayerWhereUniqueInput
+    create: XOR<PlayerCreateWithoutScoresInput, PlayerUncheckedCreateWithoutScoresInput>
+  }
+
+  export type MatchUpsertWithoutScoresInput = {
+    update: XOR<MatchUpdateWithoutScoresInput, MatchUncheckedUpdateWithoutScoresInput>
+    create: XOR<MatchCreateWithoutScoresInput, MatchUncheckedCreateWithoutScoresInput>
+    where?: MatchWhereInput
+  }
+
+  export type MatchUpdateToOneWithWhereWithoutScoresInput = {
+    where?: MatchWhereInput
+    data: XOR<MatchUpdateWithoutScoresInput, MatchUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type MatchUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    rounds?: RoundUpdateManyWithoutMatchNestedInput
+    players?: PlayerUpdateManyWithoutMatchesNestedInput
+  }
+
+  export type MatchUncheckedUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    rounds?: RoundUncheckedUpdateManyWithoutMatchNestedInput
+    players?: PlayerUncheckedUpdateManyWithoutMatchesNestedInput
+  }
+
+  export type RoundUpsertWithoutScoresInput = {
+    update: XOR<RoundUpdateWithoutScoresInput, RoundUncheckedUpdateWithoutScoresInput>
+    create: XOR<RoundCreateWithoutScoresInput, RoundUncheckedCreateWithoutScoresInput>
+    where?: RoundWhereInput
+  }
+
+  export type RoundUpdateToOneWithWhereWithoutScoresInput = {
+    where?: RoundWhereInput
+    data: XOR<RoundUpdateWithoutScoresInput, RoundUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type RoundUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    match?: MatchUpdateOneRequiredWithoutRoundsNestedInput
+  }
+
+  export type RoundUncheckedUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PlayerUpsertWithoutScoresInput = {
+    update: XOR<PlayerUpdateWithoutScoresInput, PlayerUncheckedUpdateWithoutScoresInput>
+    create: XOR<PlayerCreateWithoutScoresInput, PlayerUncheckedCreateWithoutScoresInput>
+    where?: PlayerWhereInput
+  }
+
+  export type PlayerUpdateToOneWithWhereWithoutScoresInput = {
+    where?: PlayerWhereInput
+    data: XOR<PlayerUpdateWithoutScoresInput, PlayerUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type PlayerUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
+    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+    matches?: MatchUpdateManyWithoutPlayersNestedInput
+  }
+
+  export type PlayerUncheckedUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
+    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+    matches?: MatchUncheckedUpdateManyWithoutPlayersNestedInput
+  }
+
+  export type ScoreCreateManyPlayerInput = {
+    matchId: string
+    roundId: string
+    points?: number
   }
 
   export type MatchUpdateWithoutPlayersInput = {
@@ -4432,6 +8063,8 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    rounds?: RoundUpdateManyWithoutMatchNestedInput
+    scores?: ScoreUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchUncheckedUpdateWithoutPlayersInput = {
@@ -4441,6 +8074,8 @@ export namespace Prisma {
     status?: EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
+    rounds?: RoundUncheckedUpdateManyWithoutMatchNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutMatchNestedInput
   }
 
   export type MatchUncheckedUpdateManyWithoutPlayersInput = {
@@ -4452,7 +8087,83 @@ export namespace Prisma {
     duration?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
-  export type PlayerUpdateWithoutMatchInput = {
+  export type ScoreUpdateWithoutPlayerInput = {
+    points?: IntFieldUpdateOperationsInput | number
+    match?: MatchUpdateOneRequiredWithoutScoresNestedInput
+    round?: RoundUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateWithoutPlayerInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    roundId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutPlayerInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    roundId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RoundCreateManyMatchInput = {
+    id?: string
+    status?: $Enums.RoundStatus
+    number: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreCreateManyMatchInput = {
+    roundId: string
+    playerId: string
+    points?: number
+  }
+
+  export type RoundUpdateWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUpdateManyWithoutRoundNestedInput
+  }
+
+  export type RoundUncheckedUpdateWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutRoundNestedInput
+  }
+
+  export type RoundUncheckedUpdateManyWithoutMatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRoundStatusFieldUpdateOperationsInput | $Enums.RoundStatus
+    number?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayerUpdateWithoutMatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
+    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+    scores?: ScoreUpdateManyWithoutPlayerNestedInput
+  }
+
+  export type PlayerUncheckedUpdateWithoutMatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
+    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+    scores?: ScoreUncheckedUpdateManyWithoutPlayerNestedInput
+  }
+
+  export type PlayerUncheckedUpdateManyWithoutMatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -4462,24 +8173,46 @@ export namespace Prisma {
     status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
   }
 
-  export type PlayerUncheckedUpdateWithoutMatchInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
-    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  export type ScoreUpdateWithoutMatchInput = {
+    points?: IntFieldUpdateOperationsInput | number
+    round?: RoundUpdateOneRequiredWithoutScoresNestedInput
+    player?: PlayerUpdateOneRequiredWithoutScoresNestedInput
   }
 
-  export type PlayerUncheckedUpdateManyWithoutMatchInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    level?: EnumPlayerLevelFieldUpdateOperationsInput | $Enums.PlayerLevel
-    status?: EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  export type ScoreUncheckedUpdateWithoutMatchInput = {
+    roundId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutMatchInput = {
+    roundId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreCreateManyRoundInput = {
+    matchId: string
+    playerId: string
+    points?: number
+  }
+
+  export type ScoreUpdateWithoutRoundInput = {
+    points?: IntFieldUpdateOperationsInput | number
+    match?: MatchUpdateOneRequiredWithoutScoresNestedInput
+    player?: PlayerUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateWithoutRoundInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutRoundInput = {
+    matchId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
   }
 
 
