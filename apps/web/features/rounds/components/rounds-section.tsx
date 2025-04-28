@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
+import { Leaderboard } from "@/components/leaderboard";
 
 interface RoundsSectionProps {
   matchId: string;
@@ -107,6 +108,9 @@ function Section({ matchId }: RoundsSectionProps) {
             </div>
 
             <RoundsList matchId={matchId} />
+          </TabsContent>
+          <TabsContent value="leaderboard" className="pt-4">
+            <Leaderboard />
           </TabsContent>
         </Tabs>
       </div>
