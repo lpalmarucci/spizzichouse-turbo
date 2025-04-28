@@ -34,31 +34,9 @@ export function PlayerSection() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const { data, isFetching, error } = useGetPlayers();
 
-  if (error) {
-    toast.error(error.message);
-    setTimeout(() => {
-      redirect("/");
-    }, 500);
-    return;
-  }
-
-  if (isFetching) {
-    return <ScreenLoader />;
-  }
-
-  if (!data) {
-    toast.warning("No players found!");
-    setTimeout(() => {
-      redirect("/");
-    }, 500);
-    return;
-  }
-
-  const { players } = data;
-
   const filteredPlayers = useMemo(() => {
-    if (!players) return [];
-    return players.filter((player) => {
+    if (!data || !data?.players) return [];
+    return data.players.filter((player) => {
       if (
         searchQuery &&
         !player.full_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -72,11 +50,11 @@ export function PlayerSection() {
 
       return !(statusFilter && player.status !== statusFilter);
     });
-  }, [players, searchQuery, statusFilter]);
+  }, [data, searchQuery, statusFilter]);
 
   const sortedPlayers = useMemo<Player[]>(() => {
     if (!filteredPlayers) return [];
-    return filteredPlayers.sort((a, b) => {
+    return filteredPlayers.sort((a: Player, b: Player) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
 
@@ -97,6 +75,26 @@ export function PlayerSection() {
         : (bValue as unknown as number) - (aValue as unknown as number);
     });
   }, [filteredPlayers, sortField]);
+
+  if (error) {
+    toast.error(error.message);
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
+
+  if (isFetching) {
+    return <ScreenLoader />;
+  }
+
+  if (!data) {
+    toast.warning("No players found!");
+    setTimeout(() => {
+      redirect("/");
+    }, 500);
+    return;
+  }
 
   return (
     <>

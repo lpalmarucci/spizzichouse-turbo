@@ -25,9 +25,14 @@ import {
 import UserAvatar from "@/components/user-avatar";
 import { Separator } from "@workspace/ui/components/separator";
 
+type LeaderboardScore = {
+  playerId: string;
+  score: number;
+};
+
 export function Leaderboard() {
   const { rounds, players } = use<RoundContextType>(RoundContext);
-  const leaderboardScoresMap = useMemo<Map<string, number>>(() => {
+  const leaderboardScores = useMemo<LeaderboardScore[]>(() => {
     const leaderboardMap = new Map<string, number>();
 
     for (let round of rounds) {
@@ -38,7 +43,12 @@ export function Leaderboard() {
       }
     }
 
-    return leaderboardMap;
+    return Array.from(leaderboardMap)
+      .map(([playerId, score]) => ({
+        playerId,
+        score,
+      }))
+      .sort((a, b) => (a.score > b.score ? -1 : 1));
   }, [rounds]);
 
   return (
@@ -63,46 +73,45 @@ export function Leaderboard() {
             <TableRow>
               <TableHead>Rank</TableHead>
               <TableHead>Player</TableHead>
-              <TableHead>Total score</TableHead>
+              <TableHead className="text-right">Total score</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from(leaderboardScoresMap).map(
-              ([playerId, score], index) => {
-                const player = players.find((p) => p.id === playerId);
-                if (!player) return;
-                return (
-                  <TableRow key={`${score}`}>
-                    <TableCell>
-                      <div className="flex items-center">
-                        {index === 0 ? (
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-yellow-300 to-yellow-500 flex items-center justify-center shadow-md border-2 border-yellow-200">
-                            <Trophy className="h-5 w-5 text-yellow-800" />
-                          </div>
-                        ) : index === 1 ? (
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-slate-200 to-slate-400 flex items-center justify-center shadow-md border-2 border-slate-200">
-                            <Medal className="h-5 w-5 text-slate-700" />
-                          </div>
-                        ) : index === 2 ? (
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 flex items-center justify-center shadow-md border-2 border-amber-500">
-                            <Medal className="h-5 w-5 text-amber-100" />
-                          </div>
-                        ) : (
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center font-medium text-blue-700">
-                            {index + 1}
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="h-16">
-                      <div className="w-full flex items-center gap-4">
-                        <UserAvatar name={player.full_name} />
-                        {player.full_name}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span
-                        className={`text-xl font-bold 
+            {leaderboardScores.map(({ playerId, score }, index) => {
+              const player = players.find((p) => p.id === playerId);
+              if (!player) return;
+              return (
+                <TableRow key={`${score}`}>
+                  <TableCell>
+                    <div className="flex items-center">
+                      {index === 0 ? (
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-yellow-300 to-yellow-500 flex items-center justify-center shadow-md border-2 border-yellow-200">
+                          <Trophy className="h-5 w-5 text-yellow-800" />
+                        </div>
+                      ) : index === 1 ? (
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-slate-200 to-slate-400 flex items-center justify-center shadow-md border-2 border-slate-200">
+                          <Medal className="h-5 w-5 text-slate-700" />
+                        </div>
+                      ) : index === 2 ? (
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 flex items-center justify-center shadow-md border-2 border-amber-500">
+                          <Medal className="h-5 w-5 text-amber-100" />
+                        </div>
+                      ) : (
+                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center font-medium text-blue-700">
+                          {index + 1}
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="h-16">
+                    <div className="w-full flex items-center gap-4">
+                      <UserAvatar name={player.full_name} />
+                      {player.full_name}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <span
+                      className={`text-xl font-bold 
                           ${
                             index === 0
                               ? "text-yellow-600"
@@ -112,14 +121,13 @@ export function Leaderboard() {
                                   ? "text-amber-700"
                                   : "text-blue-700"
                           }`}
-                      >
-                        {score}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                );
-              },
-            )}
+                    >
+                      {score}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </CardContent>
