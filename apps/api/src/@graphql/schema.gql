@@ -22,7 +22,13 @@ input CreatePlayer {
 input CreateRoundInput {
   matchId: String!
   number: Int! = 0
+  scores: [CreateScore!]!
   status: RoundStatus! = IN_PROGRESS
+}
+
+input CreateScore {
+  playerId: String!
+  points: Int!
 }
 
 input CreateScoreInput {
@@ -146,6 +152,7 @@ input UpdatePlayer {
 
 input UpdateRoundInput {
   number: Int = 0
+  scores: [CreateScore!]
   status: RoundStatus = IN_PROGRESS
 }
 

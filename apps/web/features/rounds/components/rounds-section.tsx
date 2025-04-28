@@ -14,14 +14,21 @@ import {
 } from "@workspace/ui/components/tabs";
 import { RoundsList } from "@/features/rounds/components/rounds-list";
 import { Button } from "@workspace/ui/components/button";
-import { Plus, Save } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   OfflineRound,
+  OfflineScore,
   RoundContext,
   RoundContextType,
 } from "@/features/rounds/round.context";
-import { use, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { RoundStatus } from "@workspace/api/qgl-types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
 
 interface RoundsSectionProps {
   matchId: string;
@@ -30,7 +37,7 @@ interface RoundsSectionProps {
 function Section({ matchId }: RoundsSectionProps) {
   const { data, isFetching, error } = useGetRounds(matchId);
   const { data: matchData, isFetching: isFetchingMatch } = useGetMatch(matchId);
-  const { setRounds } = use<RoundContextType>(RoundContext);
+  const { rounds, setRounds, players } = use<RoundContextType>(RoundContext);
 
   if (isFetching || isFetchingMatch) {
     return <ScreenLoader />;
@@ -43,11 +50,27 @@ function Section({ matchId }: RoundsSectionProps) {
   }
 
   function addRound() {
-    setRounds((r) => [
-      ...r,
-      { number: 1, scores: [], status: RoundStatus.InProgress },
-    ]);
+    const newScores: OfflineScore[] = players.map((p) => ({
+      playerId: p.id,
+      points: 0,
+      prevPoints: 0,
+    }));
+    setRounds((r) => {
+      const newRoundNumber = (r.slice().pop()?.number ?? 0) + 1;
+      return [
+        ...r,
+        {
+          number: newRoundNumber,
+          scores: newScores,
+          status: RoundStatus.InProgress,
+        },
+      ];
+    });
   }
+
+  const inProgressRound = useMemo<boolean>(() => {
+    return rounds.some((r) => r.status === RoundStatus.InProgress);
+  }, [rounds]);
 
   return (
     <Detail>
@@ -65,24 +88,21 @@ function Section({ matchId }: RoundsSectionProps) {
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium">Match Rounds</h3>
               <div className="flex gap-2">
-                {/*<CreateRoundDialog matchId={matchId} />*/}
-                <Button onClick={addRound}>
-                  <Plus />
-                  Add Round
-                </Button>
-                <Button variant="outline">
-                  <Save />
-                  Save all
-                </Button>
-                {/*<Button*/}
-                {/*  onClick={saveRounds}*/}
-                {/*  size="sm"*/}
-                {/*  variant="outline"*/}
-                {/*  disabled={isLoading}*/}
-                {/*>*/}
-                {/*  <Save className="h-4 w-4 mr-1" />*/}
-                {/*  Save All*/}
-                {/*</Button>*/}
+                <TooltipProvider>
+                  <Tooltip delayDuration={600}>
+                    <TooltipTrigger asChild>
+                      <Button onClick={addRound} disabled={inProgressRound}>
+                        <Plus />
+                        Add Round
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {inProgressRound
+                        ? "There's already a round in progress"
+                        : "Add new round e save scores"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
 
@@ -96,36 +116,46 @@ function Section({ matchId }: RoundsSectionProps) {
 
 export function RoundsSection(props: RoundsSectionProps) {
   const [rounds, setRounds] = useState<OfflineRound[]>([]);
-  const { data, isFetching, error } = useGetRounds(props.matchId);
-  if (isFetching) {
+  const { data: roundData, isFetching, error } = useGetRounds(props.matchId);
+  const {
+    data: matchData,
+    isFetching: isFetchingMatch,
+    error: errorMatch,
+  } = useGetMatch(props.matchId);
+
+  useEffect(() => {
+    if (!roundData) return;
+    const newRounds = roundData?.rounds.map((r) => ({
+      id: r.id,
+      number: r.number,
+      scores: r.scores.map((s) => ({
+        playerId: s.player.id,
+        points: s.points,
+        prevPoints: s.points,
+      })),
+      status: r.status,
+    }));
+    setRounds(newRounds);
+    localStorage;
+  }, [roundData]);
+
+  if (isFetching || isFetchingMatch) {
     return <ScreenLoader />;
   }
 
-  if (error) {
-    toast.error(error.message);
+  if (error || errorMatch) {
+    toast.error(error?.message ?? errorMatch?.message);
     redirect(`/matches/${props.matchId}`);
     return;
   }
 
-  const offlineRounds = rounds.map((r) => ({
-    number: r.number,
-    scores: r.scores,
-    status: r.status,
-  }));
-
-  console.log({ data });
-
-  // const players = rounds[0]?.scores.reduce((acc, score) => {
-  //   const player = score.playerId
-  // }, [] as Player[])
-
   return (
     <RoundContext
       value={{
-        rounds: offlineRounds,
+        rounds,
         setRounds,
         matchId: props.matchId,
-        players: [],
+        players: matchData?.match.players ?? [],
       }}
     >
       <Section {...props} />

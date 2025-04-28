@@ -6,6 +6,9 @@ import { UpdateRoundInput } from './dto/update-round.input';
 import { Match } from '../match/match.entity';
 import { PlayersService } from '../players/players.service';
 import { MatchService } from '../match/match.service';
+import { Score } from '../score/entities/score.entity';
+import { ScoreService } from '../score/score.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Resolver(() => Round)
 export class RoundsResolver {
@@ -13,6 +16,8 @@ export class RoundsResolver {
     private readonly roundsService: RoundsService,
     private readonly playersService: PlayersService,
     private readonly matchService: MatchService,
+    private readonly scoreService: ScoreService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   @Mutation(() => Round)
@@ -46,12 +51,24 @@ export class RoundsResolver {
   @ResolveField('match', () => Match)
   async match(@Parent() round: Round) {
     const { id } = round;
-    return this.matchService.findFirst({
+    return this.prismaService.match.findMany({
       where: {
         rounds: {
           some: {
             id,
           },
+        },
+      },
+    });
+  }
+
+  @ResolveField('scores', () => [Score])
+  async scores(@Parent() round: Round) {
+    const { id } = round;
+    return this.scoreService.findMany({
+      where: {
+        round: {
+          id,
         },
       },
     });

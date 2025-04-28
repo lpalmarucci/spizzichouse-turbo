@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
 import { PrismaService } from '../prisma/prisma.service';
@@ -8,27 +8,43 @@ export class RoundsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createRoundInput: CreateRoundInput) {
-    const match = await this.prismaService.match.findUnique({
-      where: {
-        id: createRoundInput.matchId.toString(),
-      },
-    });
-
-    if (!match) {
-      throw new BadRequestException(`Match not found for id ${createRoundInput.matchId}`);
-    }
-
-    return this.prismaService.round.create({
+    const round = await this.prismaService.round.create({
       data: {
         status: createRoundInput.status,
         number: createRoundInput.number,
         match: {
           connect: {
-            id: match.id,
+            id: createRoundInput.matchId.toString(),
           },
         },
       },
     });
+
+    for (let score of createRoundInput.scores) {
+      console.log({ score });
+      await this.prismaService.score.create({
+        data: {
+          points: score.points,
+          player: {
+            connect: {
+              id: score.playerId,
+            },
+          },
+          match: {
+            connect: {
+              id: createRoundInput.matchId.toString(),
+            },
+          },
+          round: {
+            connect: {
+              id: round.id,
+            },
+          },
+        },
+      });
+    }
+
+    return round;
   }
 
   findAll(matchId: string) {
@@ -36,6 +52,7 @@ export class RoundsService {
       where: {
         matchId,
       },
+      orderBy: { number: 'asc' },
     });
   }
 

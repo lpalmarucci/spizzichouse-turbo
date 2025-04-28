@@ -6255,6 +6255,7 @@ export namespace Prisma {
 
   export type ScoreWhereUniqueInput = Prisma.AtLeast<{
     playerId_matchId_roundId?: ScorePlayerIdMatchIdRoundIdCompoundUniqueInput
+    matchId_roundId_playerId?: ScoreMatchIdRoundIdPlayerIdCompoundUniqueInput
     AND?: ScoreWhereInput | ScoreWhereInput[]
     OR?: ScoreWhereInput[]
     NOT?: ScoreWhereInput | ScoreWhereInput[]
@@ -6265,7 +6266,7 @@ export namespace Prisma {
     match?: XOR<MatchScalarRelationFilter, MatchWhereInput>
     round?: XOR<RoundScalarRelationFilter, RoundWhereInput>
     player?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
-  }, "playerId_matchId_roundId">
+  }, "matchId_roundId_playerId" | "playerId_matchId_roundId">
 
   export type ScoreOrderByWithAggregationInput = {
     matchId?: SortOrder
@@ -6921,6 +6922,12 @@ export namespace Prisma {
     playerId: string
     matchId: string
     roundId: string
+  }
+
+  export type ScoreMatchIdRoundIdPlayerIdCompoundUniqueInput = {
+    matchId: string
+    roundId: string
+    playerId: string
   }
 
   export type ScoreCountOrderByAggregateInput = {

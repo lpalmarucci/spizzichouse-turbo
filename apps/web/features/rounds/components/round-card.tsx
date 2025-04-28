@@ -2,47 +2,103 @@
 
 import { RoundStatus } from "@workspace/api/qgl-types";
 import { getStatusColor } from "@/features/rounds/rounds.utils";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@workspace/ui/components/card";
+import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@workspace/ui/components/alert-dialog";
 import { Button } from "@workspace/ui/components/button";
-import { RotateCcw, Table, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import {
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-import { OfflineRound } from "@/features/rounds/round.context";
+import {
+  OfflineRound,
+  RoundContext,
+  RoundContextType,
+} from "@/features/rounds/round.context";
+import { use } from "react";
+import { getInitials } from "@/features/player/utils";
+import { Input } from "@workspace/ui/components/input";
+import { RoundDeleteButton } from "@/features/rounds/components/round-delete-button";
+import { SubmitButton } from "@/components/submit-button";
+import { useCreateRound, useDeleteRound } from "@/features/rounds/rounds.hook";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { ROUNDS_QUERY_KEY } from "@/features/rounds/rounds.query";
 
 interface RoundCardProps {
   round: OfflineRound;
 }
 
 export default function RoundCard({ round }: RoundCardProps) {
-  function deleteRound(round: OfflineRound) {
-    console.log(round);
+  const { players, setRounds, matchId } = use<RoundContextType>(RoundContext);
+  const { mutateAsync: createRound, isPending } = useCreateRound();
+  const { mutateAsync: deleteRound, isPending: isDeletingRound } =
+    useDeleteRound();
+  const queryClient = useQueryClient();
+
+  function handleDeleteRound() {
+    if (!round.id) {
+      toast.error("Unable to delete a round that is currently in progress!");
+      return;
+    }
+    deleteRound(round.id)
+      .then(() => {
+        toast.info(`Round #${round.number} deleted successfully!`);
+        queryClient.invalidateQueries({
+          queryKey: [ROUNDS_QUERY_KEY],
+        });
+      })
+      .catch((e) => {
+        console.log({ e });
+        toast.error(`Error while trying to delete round #${round.number}`);
+      });
+  }
+
+  function updateRoundScore(number: number, playerId: string, score: number) {
+    setRounds((prev) => {
+      const newRounds = structuredClone(prev);
+      const round = newRounds.find((r) => r.number === number);
+      if (!round) return prev;
+
+      const scoreIdx = round.scores.findIndex((s) => s.playerId === playerId);
+      if (scoreIdx === -1) return prev;
+
+      round.scores[scoreIdx]!.points = score;
+      return newRounds;
+    });
+  }
+
+  function handleCreateRound() {
+    console.log(round.scores);
+    createRound({
+      matchId,
+      number: round.number,
+      status: RoundStatus.Completed,
+      scores: round.scores.map((r) => ({
+        playerId: r.playerId,
+        points: r.points,
+      })),
+    })
+      .then(() => {
+        toast.info(`Round #${round.number} created successfully!`);
+        queryClient.invalidateQueries({
+          queryKey: [ROUNDS_QUERY_KEY],
+        });
+      })
+      .catch((e) => {
+        toast.error(`Error while trying to create round #${round.number}`);
+      });
   }
 
   return (
-    <Card key={round.id} className="overflow-hidden">
-      <div className={`h-1 w-full ${getStatusColor(round.status)}`} />
+    <Card className="overflow-hidden relative m-0">
+      <div
+        className={`h-1 w-full absolute top-0 bg-gradient-to-r ${getStatusColor(round.status)}`}
+      />
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -62,28 +118,55 @@ export default function RoundCard({ round }: RoundCardProps) {
                 : "In Progress"}
             </Badge>
           </div>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Remove Round {round.number}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to remove this round? This action cannot
-                  be undone and all scores for this round will be lost.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => deleteRound(round)}>
-                  Remove
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <div className="flex gap-2 items-center">
+            {round.status === RoundStatus.Completed ? (
+              <RoundDeleteButton
+                number={round.number}
+                onConfirm={handleDeleteRound}
+              />
+            ) : (
+              <>
+                {/*<AlertDialog>*/}
+                {/*  <AlertDialogTrigger asChild>*/}
+                {/*    <Tooltip delayDuration={1000}>*/}
+                {/*      <TooltipTrigger asChild>*/}
+                {/*        <Button variant="ghost">*/}
+                {/*          <RotateCcw />*/}
+                {/*        </Button>*/}
+                {/*      </TooltipTrigger>*/}
+                {/*      <TooltipContent>Reset scores</TooltipContent>*/}
+                {/*    </Tooltip>*/}
+                {/*  </AlertDialogTrigger>*/}
+                {/*  <AlertDialogContent>*/}
+                {/*    <AlertDialogHeader>*/}
+                {/*      <AlertDialogTitle>Reset All Scores</AlertDialogTitle>*/}
+                {/*      <AlertDialogDescription>*/}
+                {/*        Are you sure you want to reset all scores for this round*/}
+                {/*        to zero? This action cannot be undone.*/}
+                {/*      </AlertDialogDescription>*/}
+                {/*    </AlertDialogHeader>*/}
+                {/*    <AlertDialogFooter>*/}
+                {/*      <AlertDialogCancel>Cancel</AlertDialogCancel>*/}
+                {/*      <AlertDialogAction*/}
+                {/*        onClick={() => {*/}
+                {/*          // resetRoundScores(round.id)*/}
+                {/*        }}*/}
+                {/*      >*/}
+                {/*        Reset*/}
+                {/*      </AlertDialogAction>*/}
+                {/*    </AlertDialogFooter>*/}
+                {/*  </AlertDialogContent>*/}
+                {/*</AlertDialog>*/}
+                <SubmitButton
+                  className="bg-gradient-to-r from-green-500 to-green-600 transition-all hover:from-green-600 hover:to-green-700"
+                  onClick={handleCreateRound}
+                  isLoading={isPending}
+                >
+                  Complete
+                </SubmitButton>
+              </>
+            )}
+          </div>
         </div>
       </CardHeader>
 
@@ -98,30 +181,31 @@ export default function RoundCard({ round }: RoundCardProps) {
             </TableHeader>
             <TableBody>
               {round.scores.map((scoreEntry) => {
-                const player = getPlayerById(scoreEntry.playerId, players);
+                const player = players.find(
+                  (p) => p.id === scoreEntry.playerId,
+                );
                 if (!player) return null;
-
                 return (
-                  <TableRow key={scoreEntry.playerId}>
+                  <TableRow key={`${round.number}-${player.id}`}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary">
-                          {player.name.charAt(0).toUpperCase()}
+                          {getInitials(player.full_name)}
                         </div>
                         <div>
-                          <div>{player.name}</div>
-                          {player.house && (
-                            <div className="text-xs text-muted-foreground">
-                              {player.house}
-                            </div>
-                          )}
+                          <div>{player.full_name}</div>
+                          {/*{player.house && (*/}
+                          {/*  <div className="text-xs text-muted-foreground">*/}
+                          {/*    {player.house}*/}
+                          {/*  </div>*/}
+                          {/*)}*/}
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       {round.status === RoundStatus.Completed ? (
                         <span className="text-lg font-semibold">
-                          {scoreEntry.score}
+                          {scoreEntry.points}
                         </span>
                       ) : (
                         <div className="flex items-center gap-2">
@@ -130,24 +214,24 @@ export default function RoundCard({ round }: RoundCardProps) {
                             size="icon"
                             className="h-8 w-8"
                             onClick={() => {
-                              // updateRoundScore(
-                              //   round.id,
-                              //   scoreEntry.playerId,
-                              //   Math.max(0, scoreEntry.score - 1),
-                              // );
+                              updateRoundScore(
+                                round.number,
+                                scoreEntry.playerId,
+                                Math.max(0, scoreEntry.points - 1),
+                              );
                             }}
                           >
                             <ChevronDown className="h-4 w-4" />
                           </Button>
                           <Input
                             type="number"
-                            value={scoreEntry.score}
+                            value={scoreEntry.points}
                             onChange={(e) => {
-                              // updateRoundScore(
-                              //   round.id,
-                              //   scoreEntry.playerId,
-                              //   Number.parseInt(e.target.value) || 0,
-                              // )
+                              updateRoundScore(
+                                round.number,
+                                scoreEntry.playerId,
+                                Number.parseInt(e.target.value) || 0,
+                              );
                             }}
                             className="w-20 text-center"
                           />
@@ -156,11 +240,11 @@ export default function RoundCard({ round }: RoundCardProps) {
                             size="icon"
                             className="h-8 w-8"
                             onClick={() => {
-                              // updateRoundScore(
-                              //   round.id,
-                              //   scoreEntry.playerId,
-                              //   scoreEntry.score + 1,
-                              // );
+                              updateRoundScore(
+                                round.number,
+                                scoreEntry.playerId,
+                                scoreEntry.points + 1,
+                              );
                             }}
                           >
                             <ChevronUp className="h-4 w-4" />
@@ -175,40 +259,6 @@ export default function RoundCard({ round }: RoundCardProps) {
           </Table>
         </div>
       </CardContent>
-
-      <CardFooter>
-        <div className="w-full space-y-2">
-          <div className="flex justify-between">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button size="sm" variant="outline" className="h-8">
-                  <RotateCcw className="h-4 w-4 mr-1" />
-                  Reset Scores
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Reset All Scores</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to reset all scores for this round to
-                    zero? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      // resetRoundScores(round.id)
-                    }}
-                  >
-                    Reset
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

@@ -1,18 +1,18 @@
 import { GET_PLAYER_BY_ID } from "@/features/player/player.query";
 import { gqlRequest } from "@/utils/query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Round } from "@workspace/api/qgl-types";
+import { CreateRoundInput, Round } from "@workspace/api/qgl-types";
 import {
+  CREATE_ROUND,
   DELETE_ROUND,
   GET_ROUNDS,
   ROUNDS_QUERY_KEY,
 } from "@/features/rounds/rounds.query";
 
 export const useGetRounds = (matchId: string) =>
-  useQuery<{ rounds: Round[] }>({
-    queryKey: [ROUNDS_QUERY_KEY],
-    queryFn: () => gqlRequest(GET_ROUNDS, { matchId }),
-    initialData: () => ({ rounds: [] }),
+  useQuery({
+    queryKey: [ROUNDS_QUERY_KEY, matchId],
+    queryFn: () => gqlRequest<{ rounds: Round[] }>(GET_ROUNDS, { matchId }),
   });
 
 export const useGetRoundById = (id: string) =>
@@ -21,8 +21,16 @@ export const useGetRoundById = (id: string) =>
     queryFn: () => gqlRequest(GET_PLAYER_BY_ID, { id }),
   });
 
-export const useDeleteRound = (id: string) =>
+export const useCreateRound = () =>
   useMutation({
-    mutationKey: [DELETE_ROUND, id],
-    mutationFn: () => gqlRequest(DELETE_ROUND, { id }),
+    mutationKey: [ROUNDS_QUERY_KEY],
+    mutationFn: (createRoundInput: CreateRoundInput) =>
+      gqlRequest<{ round: Round }>(CREATE_ROUND, { createRoundInput }),
+  });
+
+export const useDeleteRound = () =>
+  useMutation({
+    mutationKey: [DELETE_ROUND],
+    mutationFn: (id: string) =>
+      gqlRequest<{ round: Round }>(DELETE_ROUND, { id }),
   });

@@ -15,6 +15,7 @@ export function SubmitButton({
   children,
   isLoading,
   className,
+  variant,
   ...props
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();

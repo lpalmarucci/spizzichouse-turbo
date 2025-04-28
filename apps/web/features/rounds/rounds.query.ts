@@ -7,7 +7,21 @@ export const GET_ROUNDS = gql`
     rounds(matchId: $matchId) {
       createdAt
       id
+      number
       status
+      match {
+        players {
+          id
+          full_name
+        }
+      }
+      scores {
+        points
+        player {
+          id
+          full_name
+        }
+      }
     }
   }
 `;
@@ -23,8 +37,8 @@ export const GET_ROUND_BY_ID = gql`
 `;
 
 export const CREATE_ROUND = gql`
-  mutation CreateRound($round: CreateRoundInput!) {
-    createRound(round: $round) {
+  mutation CreateRound($createRoundInput: CreateRoundInput!) {
+    createRound(createRoundInput: $createRoundInput) {
       createdAt
       id
       status
@@ -33,8 +47,8 @@ export const CREATE_ROUND = gql`
 `;
 
 export const DELETE_ROUND = gql`
-  mutation DeleteRound($id: String!) {
-    deleteRound(id: $id) {
+  mutation RemoveRound($id: String!) {
+    removeRound(id: $id) {
       createdAt
       id
       status

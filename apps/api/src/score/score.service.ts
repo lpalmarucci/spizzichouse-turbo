@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '@prisma/client/output';
+import ScoreFindManyArgs = Prisma.ScoreFindManyArgs;
 
 @Injectable()
 export class ScoreService {
@@ -26,6 +28,10 @@ export class ScoreService {
         },
       },
     });
+  }
+
+  findMany(options: ScoreFindManyArgs) {
+    return this.prismaService.score.findMany(options);
   }
 
   findAll() {

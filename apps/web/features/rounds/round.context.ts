@@ -3,10 +3,12 @@ import { Player, RoundStatus } from "@workspace/api/qgl-types";
 
 export type OfflineScore = {
   playerId: string;
-  score: number;
+  points: number;
+  prevPoints: number;
 };
 
 export type OfflineRound = {
+  id?: string;
   number: number;
   scores: OfflineScore[];
   status: RoundStatus;

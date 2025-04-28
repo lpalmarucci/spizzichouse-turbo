@@ -1,7 +1,12 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int, OmitType } from '@nestjs/graphql';
 import { RoundStatus } from '@prisma/client/output';
 import { IsEnum, IsString } from '@nestjs/class-validator';
-import { IsInt, IsNotEmpty, Min } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, Min } from 'class-validator';
+import { CreateScoreInput } from '../../score/dto/create-score.input';
+import { Type } from 'class-transformer';
+
+@InputType()
+class CreateScore extends OmitType(CreateScoreInput, ['roundId', 'matchId']) {}
 
 @InputType()
 export class CreateRoundInput {
@@ -18,4 +23,9 @@ export class CreateRoundInput {
   @IsString()
   @IsNotEmpty()
   matchId: String;
+
+  @Field(() => [CreateScore])
+  @IsArray()
+  @Type(() => CreateScore)
+  scores: CreateScore[];
 }

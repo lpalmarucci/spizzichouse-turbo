@@ -38,7 +38,7 @@ export function RoundsList({ matchId }: { matchId: string }) {
   }
 
   return (
-    <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
       {rounds.map((round, index) => (
         <RoundCard round={round} key={`${round.number}-${index}`} />
       ))}

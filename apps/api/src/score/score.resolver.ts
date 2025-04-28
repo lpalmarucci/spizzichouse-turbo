@@ -4,10 +4,14 @@ import { Score } from './entities/score.entity';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
 import { DeleteManyOutput } from '../shared/dto/delete-many-output.mode';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Resolver(() => Score)
 export class ScoreResolver {
-  constructor(private readonly scoreService: ScoreService) {}
+  constructor(
+    private readonly scoreService: ScoreService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
   @Mutation(() => Score, { name: 'addScore' })
   async createScore(@Args('createScoreInput') createScoreInput: CreateScoreInput) {
@@ -34,6 +38,9 @@ export class ScoreResolver {
     return this.scoreService.removeScoreFromRound(matchId, roundId);
   }
 
-  @ResolveField('match')
-  async match(@Parent() score: Score) {}
+  @ResolveField('player')
+  async player(@Parent() score: CreateScoreInput) {
+    const { playerId } = score;
+    return this.prismaService.player.findUnique({ where: { id: playerId } });
+  }
 }

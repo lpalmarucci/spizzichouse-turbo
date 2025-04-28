@@ -37,7 +37,13 @@ export type CreatePlayer = {
 export type CreateRoundInput = {
   matchId: Scalars['String']['input'];
   number?: Scalars['Int']['input'];
+  scores: Array<CreateScore>;
   status?: RoundStatus;
+};
+
+export type CreateScore = {
+  playerId: Scalars['String']['input'];
+  points: Scalars['Int']['input'];
 };
 
 export type CreateScoreInput = {
@@ -250,6 +256,7 @@ export type UpdatePlayer = {
 
 export type UpdateRoundInput = {
   number?: InputMaybe<Scalars['Int']['input']>;
+  scores?: InputMaybe<Array<CreateScore>>;
   status?: InputMaybe<RoundStatus>;
 };
 
@@ -336,6 +343,7 @@ export type ResolversTypes = {
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
   CreateRoundInput: CreateRoundInput;
+  CreateScore: CreateScore;
   CreateScoreInput: CreateScoreInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DeleteManyOutput: ResolverTypeWrapper<DeleteManyOutput>;
@@ -363,6 +371,7 @@ export type ResolversParentTypes = {
   CreateMatch: CreateMatch;
   CreatePlayer: CreatePlayer;
   CreateRoundInput: CreateRoundInput;
+  CreateScore: CreateScore;
   CreateScoreInput: CreateScoreInput;
   DateTime: Scalars['DateTime']['output'];
   DeleteManyOutput: DeleteManyOutput;
