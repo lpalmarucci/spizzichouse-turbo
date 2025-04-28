@@ -70,6 +70,7 @@ export class MatchService {
     const playersToDisconnect = currentPlayerIds.filter((id) => !newPlayerIds.includes(id)).map((id) => ({ id }));
     const playersToConnect = newPlayerIds.filter((id) => !currentPlayerIds.includes(id)).map((id) => ({ id }));
 
+    delete updateMatchDto.playerIds;
     //Updating the record
     return this._prismaService.match.update({
       where: {
@@ -81,9 +82,6 @@ export class MatchService {
           disconnect: playersToDisconnect,
           connect: playersToConnect,
         },
-      },
-      include: {
-        players: true,
       },
     });
   }
