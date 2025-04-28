@@ -13,14 +13,24 @@ import {
   TabsTrigger,
 } from "@workspace/ui/components/tabs";
 import { RoundsList } from "@/features/rounds/components/rounds-list";
+import { Button } from "@workspace/ui/components/button";
+import { Plus, Save } from "lucide-react";
+import {
+  OfflineRound,
+  RoundContext,
+  RoundContextType,
+} from "@/features/rounds/round.context";
+import { use, useState } from "react";
+import { RoundStatus } from "@workspace/api/qgl-types";
 
 interface RoundsSectionProps {
   matchId: string;
 }
 
-export function RoundsSection({ matchId }: RoundsSectionProps) {
+function Section({ matchId }: RoundsSectionProps) {
   const { data, isFetching, error } = useGetRounds(matchId);
   const { data: matchData, isFetching: isFetchingMatch } = useGetMatch(matchId);
+  const { setRounds } = use<RoundContextType>(RoundContext);
 
   if (isFetching || isFetchingMatch) {
     return <ScreenLoader />;
@@ -32,9 +42,12 @@ export function RoundsSection({ matchId }: RoundsSectionProps) {
     return;
   }
 
-  console.log({ data });
-
-  function addRound() {}
+  function addRound() {
+    setRounds((r) => [
+      ...r,
+      { number: 1, scores: [], status: RoundStatus.InProgress },
+    ]);
+  }
 
   return (
     <Detail>
@@ -52,7 +65,15 @@ export function RoundsSection({ matchId }: RoundsSectionProps) {
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium">Match Rounds</h3>
               <div className="flex gap-2">
-                <CreateRoundDialog />
+                {/*<CreateRoundDialog matchId={matchId} />*/}
+                <Button onClick={addRound}>
+                  <Plus />
+                  Add Round
+                </Button>
+                <Button variant="outline">
+                  <Save />
+                  Save all
+                </Button>
                 {/*<Button*/}
                 {/*  onClick={saveRounds}*/}
                 {/*  size="sm"*/}
@@ -70,5 +91,44 @@ export function RoundsSection({ matchId }: RoundsSectionProps) {
         </Tabs>
       </div>
     </Detail>
+  );
+}
+
+export function RoundsSection(props: RoundsSectionProps) {
+  const [rounds, setRounds] = useState<OfflineRound[]>([]);
+  const { data, isFetching, error } = useGetRounds(props.matchId);
+  if (isFetching) {
+    return <ScreenLoader />;
+  }
+
+  if (error) {
+    toast.error(error.message);
+    redirect(`/matches/${props.matchId}`);
+    return;
+  }
+
+  const offlineRounds = rounds.map((r) => ({
+    number: r.number,
+    scores: r.scores,
+    status: r.status,
+  }));
+
+  console.log({ data });
+
+  // const players = rounds[0]?.scores.reduce((acc, score) => {
+  //   const player = score.playerId
+  // }, [] as Player[])
+
+  return (
+    <RoundContext
+      value={{
+        rounds: offlineRounds,
+        setRounds,
+        matchId: props.matchId,
+        players: [],
+      }}
+    >
+      <Section {...props} />
+    </RoundContext>
   );
 }

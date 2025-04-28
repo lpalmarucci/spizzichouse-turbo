@@ -1,19 +1,20 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { ScoreService } from './score.service';
 import { Score } from './entities/score.entity';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
+import { DeleteManyOutput } from '../shared/dto/delete-many-output.mode';
 
 @Resolver(() => Score)
 export class ScoreResolver {
   constructor(private readonly scoreService: ScoreService) {}
 
-  @Mutation(() => Score)
-  createScore(@Args('createScoreInput') createScoreInput: CreateScoreInput) {
+  @Mutation(() => Score, { name: 'addScore' })
+  async createScore(@Args('createScoreInput') createScoreInput: CreateScoreInput) {
     return this.scoreService.create(createScoreInput);
   }
 
-  @Query(() => [Score], { name: 'score' })
+  @Query(() => [Score], { name: 'scores' })
   findAll() {
     return this.scoreService.findAll();
   }
@@ -27,4 +28,12 @@ export class ScoreResolver {
   ) {
     return this.scoreService.update(matchId, roundId, playerId, updateScoreInput);
   }
+
+  @Mutation(() => DeleteManyOutput, { name: 'removeScoreFromRound' })
+  removeScoreFromRound(@Args('matchId') matchId: string, @Args('roundId') roundId: string) {
+    return this.scoreService.removeScoreFromRound(matchId, roundId);
+  }
+
+  @ResolveField('match')
+  async match(@Parent() score: Score) {}
 }

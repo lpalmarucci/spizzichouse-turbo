@@ -21,11 +21,7 @@ export class RoundsService {
     return this.prismaService.round.create({
       data: {
         status: createRoundInput.status,
-        score: createRoundInput.score,
         number: createRoundInput.number,
-        player: {
-          connect: { id: createRoundInput.playerId },
-        },
         match: {
           connect: {
             id: match.id,
@@ -59,10 +55,6 @@ export class RoundsService {
       data: {
         number: updateRoundInput.number,
         status: updateRoundInput.status,
-        score: updateRoundInput.score,
-        player: {
-          connect: { id: updateRoundInput.playerId },
-        },
       },
     });
   }

@@ -5,9 +5,6 @@ import { Player } from '../../players/models/player.model';
 
 @ObjectType()
 export class Score {
-  @Field(() => String)
-  id: String;
-
   @Field(() => Match)
   match: Match;
 
@@ -15,7 +12,7 @@ export class Score {
   round: Round;
 
   @Field(() => Player)
-  players: Player;
+  player: Player;
 
   @Field(() => Int)
   points: number;

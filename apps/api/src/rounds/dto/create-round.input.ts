@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { RoundStatus } from '@prisma/client/output';
-import { IsEnum, IsPositive, IsString } from '@nestjs/class-validator';
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsString } from '@nestjs/class-validator';
+import { IsInt, IsNotEmpty, Min } from 'class-validator';
 
 @InputType()
 export class CreateRoundInput {
@@ -10,17 +10,9 @@ export class CreateRoundInput {
   status: RoundStatus;
 
   @Field(() => Int, { defaultValue: 0 })
-  @IsPositive()
+  @IsInt()
+  @Min(0)
   number: number;
-
-  @Field(() => Int, { defaultValue: 0 })
-  @IsPositive()
-  score: number;
-
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  playerId: string;
 
   @Field(() => String)
   @IsString()

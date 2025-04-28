@@ -7,18 +7,22 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ScoreService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(createScoreInput: CreateScoreInput) {
+  async create(createScoreInput: CreateScoreInput) {
+    const round = await this.prismaService.round.findUniqueOrThrow({ where: { id: createScoreInput.roundId } });
+    const match = await this.prismaService.match.findUniqueOrThrow({ where: { id: createScoreInput.matchId } });
+    const player = await this.prismaService.player.findUniqueOrThrow({ where: { id: createScoreInput.playerId } });
+    console.log({ createScoreInput });
     return this.prismaService.score.create({
       data: {
         points: createScoreInput.points,
         player: {
-          connect: { id: createScoreInput.playerId.toString() },
+          connect: { id: player.id },
         },
         match: {
-          connect: { id: createScoreInput.matchId.toString() },
+          connect: { id: match.id },
         },
         round: {
-          connect: { id: createScoreInput.roundId.toString() },
+          connect: { id: round.id },
         },
       },
     });

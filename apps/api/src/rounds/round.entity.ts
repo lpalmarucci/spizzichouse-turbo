@@ -1,6 +1,5 @@
 import { Field, GraphQLISODateTime, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { RoundStatus } from '@prisma/client/output';
-import { Player } from '../players/models/player.model';
 import { Match } from '../match/match.entity';
 import { Score } from '../score/entities/score.entity';
 
@@ -22,9 +21,6 @@ export class Round {
 
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
-
-  @Field(() => [Player])
-  players: Player[];
 
   @Field(() => Match)
   match: Match;

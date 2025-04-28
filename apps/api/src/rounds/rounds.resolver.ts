@@ -3,7 +3,6 @@ import { RoundsService } from './rounds.service';
 import { Round } from './round.entity';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
-import { Player } from '../players/models/player.model';
 import { Match } from '../match/match.entity';
 import { PlayersService } from '../players/players.service';
 import { MatchService } from '../match/match.service';
@@ -22,7 +21,7 @@ export class RoundsResolver {
   }
 
   @Query(() => [Round], { name: 'rounds' })
-  findAll(@Args('matchId', { type: () => String }) matchId: string) {
+  findAll(@Args('matchId') matchId: string) {
     return this.roundsService.findAll(matchId);
   }
 
@@ -42,20 +41,6 @@ export class RoundsResolver {
   @Mutation(() => Round)
   removeRound(@Args('id', { type: () => String }) id: string) {
     return this.roundsService.remove(id);
-  }
-
-  @ResolveField('players', () => [Player])
-  async players(@Parent() round: Round) {
-    const { id } = round;
-    return this.playersService.findMany({
-      where: {
-        rounds: {
-          some: {
-            id,
-          },
-        },
-      },
-    });
   }
 
   @ResolveField('match', () => Match)

@@ -8,6 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
@@ -38,6 +39,7 @@ export function CreateRoundDialog({ matchId }: CreateRoundDialogProps) {
   const [level, setLevel] = useState("Principiante");
   const [favoriteRuleSet, setFavoriteRuleSet] = useState("Standard");
   const [isActive, setIsActive] = useState(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,11 +61,14 @@ export function CreateRoundDialog({ matchId }: CreateRoundDialogProps) {
     setFavoriteRuleSet("Standard");
     setIsActive(true);
 
-    onOpenChange(false);
+    setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+      <DialogTrigger asChild>
+        <Button>Create round</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -174,7 +179,7 @@ export function CreateRoundDialog({ matchId }: CreateRoundDialogProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => setOpen(false)}
             >
               Annulla
             </Button>

@@ -18,7 +18,6 @@ model Player {
   level     PlayerLevel  @default(BEGINNER)
   status    PlayerStatus @default(ACTIVE)
   matches   Match[]      @relation("MatchToPlayer")
-  rounds    Round[]
   scores    Score[]
 
   @@map("players")
@@ -45,8 +44,6 @@ model Round {
   createdAt DateTime    @default(now())
   matchId   String
   match     Match       @relation(fields: [matchId], references: [id])
-  playerId  String
-  player    Player      @relation(fields: [playerId], references: [id])
   scores    Score[]
 
   @@map("rounds")

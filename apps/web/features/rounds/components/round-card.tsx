@@ -1,6 +1,6 @@
 "use client";
 
-import { Round, RoundStatus } from "@workspace/api/qgl-types";
+import { RoundStatus } from "@workspace/api/qgl-types";
 import { getStatusColor } from "@/features/rounds/rounds.utils";
 import {
   Card,
@@ -24,18 +24,21 @@ import { Button } from "@workspace/ui/components/button";
 import { RotateCcw, Table, Trash2 } from "lucide-react";
 import {
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-import { Label } from "@workspace/ui/components/label";
+import { OfflineRound } from "@/features/rounds/round.context";
 
 interface RoundCardProps {
-  round: Round;
+  round: OfflineRound;
 }
 
 export default function RoundCard({ round }: RoundCardProps) {
-  function deleteRound(id: string) {}
+  function deleteRound(round: OfflineRound) {
+    console.log(round);
+  }
 
   return (
     <Card key={round.id} className="overflow-hidden">
@@ -75,7 +78,7 @@ export default function RoundCard({ round }: RoundCardProps) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => deleteRound(round.id)}>
+                <AlertDialogAction onClick={() => deleteRound(round)}>
                   Remove
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -94,80 +97,80 @@ export default function RoundCard({ round }: RoundCardProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/*{round.map((scoreEntry) => {*/}
-              {/*  const player = getPlayerById(scoreEntry.playerId, players);*/}
-              {/*  if (!player) return null;*/}
+              {round.scores.map((scoreEntry) => {
+                const player = getPlayerById(scoreEntry.playerId, players);
+                if (!player) return null;
 
-              {/*  return (*/}
-              {/*    <TableRow key={scoreEntry.playerId}>*/}
-              {/*      <TableCell className="font-medium">*/}
-              {/*        <div className="flex items-center gap-2">*/}
-              {/*          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary">*/}
-              {/*            {player.name.charAt(0).toUpperCase()}*/}
-              {/*          </div>*/}
-              {/*          <div>*/}
-              {/*            <div>{player.name}</div>*/}
-              {/*            {player.house && (*/}
-              {/*              <div className="text-xs text-muted-foreground">*/}
-              {/*                {player.house}*/}
-              {/*              </div>*/}
-              {/*            )}*/}
-              {/*          </div>*/}
-              {/*        </div>*/}
-              {/*      </TableCell>*/}
-              {/*      <TableCell>*/}
-              {/*        {round.status === RoundStatus.Completed ? (*/}
-              {/*          <span className="text-lg font-semibold">*/}
-              {/*            {scoreEntry.score}*/}
-              {/*          </span>*/}
-              {/*        ) : (*/}
-              {/*          <div className="flex items-center gap-2">*/}
-              {/*            <Button*/}
-              {/*              variant="outline"*/}
-              {/*              size="icon"*/}
-              {/*              className="h-8 w-8"*/}
-              {/*              onClick={() => {*/}
-              {/*                // updateRoundScore(*/}
-              {/*                //   round.id,*/}
-              {/*                //   scoreEntry.playerId,*/}
-              {/*                //   Math.max(0, scoreEntry.score - 1),*/}
-              {/*                // );*/}
-              {/*              }}*/}
-              {/*            >*/}
-              {/*              <ChevronDown className="h-4 w-4" />*/}
-              {/*            </Button>*/}
-              {/*            <Input*/}
-              {/*              type="number"*/}
-              {/*              value={scoreEntry.score}*/}
-              {/*              onChange={(e) => {*/}
-              {/*                // updateRoundScore(*/}
-              {/*                //   round.id,*/}
-              {/*                //   scoreEntry.playerId,*/}
-              {/*                //   Number.parseInt(e.target.value) || 0,*/}
-              {/*                // )*/}
-              {/*              }}*/}
-              {/*              className="w-20 text-center"*/}
-              {/*            />*/}
-              {/*            <Button*/}
-              {/*              variant="outline"*/}
-              {/*              size="icon"*/}
-              {/*              className="h-8 w-8"*/}
-              {/*              onClick={() => {*/}
-              {/*                // updateRoundScore(*/}
-              {/*                //   round.id,*/}
-              {/*                //   scoreEntry.playerId,*/}
-              {/*                //   scoreEntry.score + 1,*/}
-              {/*                // );*/}
-              {/*              }}*/}
-              {/*            >*/}
-              {/*              <ChevronUp className="h-4 w-4" />*/}
-              {/*            </Button>*/}
-              {/*          </div>*/}
-              {/*        )}*/}
-              {/*      </TableCell>*/}
-              {/*    </TableRow>*/}
-              {/*  );*/}
-              {/*})}*/}
+                return (
+                  <TableRow key={scoreEntry.playerId}>
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary">
+                          {player.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div>{player.name}</div>
+                          {player.house && (
+                            <div className="text-xs text-muted-foreground">
+                              {player.house}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {round.status === RoundStatus.Completed ? (
+                        <span className="text-lg font-semibold">
+                          {scoreEntry.score}
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => {
+                              // updateRoundScore(
+                              //   round.id,
+                              //   scoreEntry.playerId,
+                              //   Math.max(0, scoreEntry.score - 1),
+                              // );
+                            }}
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                          <Input
+                            type="number"
+                            value={scoreEntry.score}
+                            onChange={(e) => {
+                              // updateRoundScore(
+                              //   round.id,
+                              //   scoreEntry.playerId,
+                              //   Number.parseInt(e.target.value) || 0,
+                              // )
+                            }}
+                            className="w-20 text-center"
+                          />
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => {
+                              // updateRoundScore(
+                              //   round.id,
+                              //   scoreEntry.playerId,
+                              //   scoreEntry.score + 1,
+                              // );
+                            }}
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -176,7 +179,6 @@ export default function RoundCard({ round }: RoundCardProps) {
       <CardFooter>
         <div className="w-full space-y-2">
           <div className="flex justify-between">
-            <Label htmlFor={`notes-${round.id}`}>Round Notes</Label>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button size="sm" variant="outline" className="h-8">
