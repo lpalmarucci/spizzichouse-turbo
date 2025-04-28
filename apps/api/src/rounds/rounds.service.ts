@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '@prisma/client/output';
+import RoundFindManyArgs = Prisma.RoundFindManyArgs;
 
 @Injectable()
 export class RoundsService {
@@ -54,6 +56,10 @@ export class RoundsService {
       },
       orderBy: { number: 'asc' },
     });
+  }
+
+  findMany(options: RoundFindManyArgs) {
+    return this.prismaService.round.findMany(options);
   }
 
   async findOne(id: string) {

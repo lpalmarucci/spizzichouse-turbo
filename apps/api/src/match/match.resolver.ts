@@ -5,12 +5,15 @@ import { CreateMatch } from './models/create-match.model';
 import { PlayersService } from '../players/players.service';
 import { Player } from '../players/models/player.model';
 import { UpdateMatch } from './models/update-match.model';
+import { Round } from '../rounds/round.entity';
+import { RoundsService } from '../rounds/rounds.service';
 
 @Resolver(() => Match)
 export class MatchResolver {
   constructor(
     private readonly matchService: MatchService,
     private readonly playersService: PlayersService,
+    private readonly roundService: RoundsService,
   ) {}
 
   @Query(() => [Match], { name: 'matches' })
@@ -47,6 +50,18 @@ export class MatchResolver {
           some: {
             id,
           },
+        },
+      },
+    });
+  }
+
+  @ResolveField('rounds', () => [Round])
+  async rounds(@Parent() match: Match) {
+    const { id } = match;
+    return this.roundService.findMany({
+      where: {
+        match: {
+          id,
         },
       },
     });
