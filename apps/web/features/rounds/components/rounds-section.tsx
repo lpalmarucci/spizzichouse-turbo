@@ -36,7 +36,7 @@ interface RoundsSectionProps {
 }
 
 function Section({ matchId }: RoundsSectionProps) {
-  const { data, isFetching, error } = useGetRounds(matchId);
+  const { isFetching, error } = useGetRounds(matchId);
   const { data: matchData, isFetching: isFetchingMatch } = useGetMatch(matchId);
   const { rounds, setRounds, players } = use<RoundContextType>(RoundContext);
 
@@ -107,7 +107,7 @@ function Section({ matchId }: RoundsSectionProps) {
               </div>
             </div>
 
-            <RoundsList matchId={matchId} />
+            <RoundsList />
           </TabsContent>
           <TabsContent value="leaderboard" className="pt-4">
             <Leaderboard />
