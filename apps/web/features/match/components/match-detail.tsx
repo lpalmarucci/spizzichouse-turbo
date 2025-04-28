@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, CalendarX2, Trophy, Users } from "lucide-react";
+import { Calendar, CalendarX2, Edit, Trophy, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ import {
 import { Detail, DetailHeader } from "@/components/detail";
 import { MatchStatus } from "@workspace/api/qgl-types";
 import { useGetMatch } from "@/features/match/match.hook";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { ScreenLoader } from "@/components/screen-loader";
 import { Button } from "@workspace/ui/components/button";
@@ -54,6 +54,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
   const [isEndMatchDialogOpen, setIsEndMatchDialogOpen] =
     useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+  const pathname = usePathname();
 
   function handleEndMatch() {
     startTransition(async () => {
@@ -94,13 +95,14 @@ export default function MatchDetail({ id }: MatchDetailProps) {
   return (
     <>
       <Detail>
-        <DetailHeader
-          headingText={match.title}
-          editHref={`/matches/${id}/edit`}
-          showEditButton={true}
-          editButtonText="Edit match"
-          backLocationHref="/matches"
-        />
+        <DetailHeader headingText={match.title} backLocationHref="/matches">
+          <Button asChild>
+            <Link href={`${pathname}/edit`}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit match
+            </Link>
+          </Button>
+        </DetailHeader>
         <div className="grid gap-6">
           <div className="flex flex-col md:flex-row gap-6">
             <Card className="flex-1">
@@ -151,20 +153,26 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                 <TabsTrigger value="results">Results</TabsTrigger>
               </TabsList>
               <div className="flex gap-2 items-center">
-                <Button variant="outline" asChild>
-                  <Link href={`/matches/${id}/rounds`}>
-                    <Trophy />
-                    Manage rounds
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="bg-amber-500/10 border-amber-500 text-amber-500 hover:text-amber-400 hover:bg-amber-500/20"
-                  onClick={() => setIsEndMatchDialogOpen(true)}
-                >
-                  <CalendarX2 />
-                  Termina partita
-                </Button>
+                {[MatchStatus.Upcoming, MatchStatus.InProgress].includes(
+                  match.status,
+                ) && (
+                  <>
+                    <Button variant="outline" asChild>
+                      <Link href={`/matches/${id}/rounds`}>
+                        <Trophy />
+                        Manage rounds
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="bg-amber-500/10 border-amber-500 text-amber-500 hover:text-amber-400 hover:bg-amber-500/20"
+                      onClick={() => setIsEndMatchDialogOpen(true)}
+                    >
+                      <CalendarX2 />
+                      Termina partita
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
             <TabsContent value="players">
