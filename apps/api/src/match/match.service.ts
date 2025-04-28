@@ -78,10 +78,12 @@ export class MatchService {
       },
       data: {
         ...updateMatchDto,
-        players: {
-          disconnect: playersToDisconnect,
-          connect: playersToConnect,
-        },
+        ...(playersToConnect.length > 0
+          ? {
+              disconnect: playersToDisconnect,
+              connect: playersToConnect,
+            }
+          : null),
       },
     });
   }
