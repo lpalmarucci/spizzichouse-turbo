@@ -99,12 +99,14 @@ export default function MatchDetail({ id }: MatchDetailProps) {
     <>
       <Detail>
         <DetailHeader headingText={match.title} backLocationHref="/matches">
-          <Button asChild>
-            <Link href={`${pathname}/edit`}>
-              <Edit className="mr-2 h-4 w-4" />
-              Edit match
-            </Link>
-          </Button>
+          {match.status !== MatchStatus.Completed && (
+            <Button asChild>
+              <Link href={pathname + "/edit"}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit match
+              </Link>
+            </Button>
+          )}
         </DetailHeader>
         <div className="grid gap-6">
           <div className="flex flex-col md:flex-row gap-6">
