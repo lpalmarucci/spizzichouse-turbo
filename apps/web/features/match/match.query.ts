@@ -32,6 +32,17 @@ export const GET_MATCH_BY_ID = gql`
         id
         full_name
       }
+      rounds {
+        id
+        number
+        scores {
+          player {
+            id
+            full_name
+          }
+          points
+        }
+      }
     }
   }
 `;

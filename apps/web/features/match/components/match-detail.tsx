@@ -26,6 +26,9 @@ import Link from "next/link";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { useState, useTransition } from "react";
 import { updateMatchAction } from "@/features/match/match.actions";
+import { MatchDetailFinalResults } from "@/features/match/components/match-detail-final-results";
+import { RoundsByRoundsScore } from "@/features/match/components/rounds-by-rounds-score";
+import { MatchFinalStats } from "@/features/match/components/match-final-stats";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -96,12 +99,14 @@ export default function MatchDetail({ id }: MatchDetailProps) {
     <>
       <Detail>
         <DetailHeader headingText={match.title} backLocationHref="/matches">
-          <Button asChild>
-            <Link href={`${pathname}/edit`}>
-              <Edit className="mr-2 h-4 w-4" />
-              Edit match
-            </Link>
-          </Button>
+          {match.status !== MatchStatus.Completed && (
+            <Button asChild>
+              <Link href={pathname + "/edit"}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit match
+              </Link>
+            </Button>
+          )}
         </DetailHeader>
         <div className="grid gap-6">
           <div className="flex flex-col md:flex-row gap-6">
@@ -202,28 +207,36 @@ export default function MatchDetail({ id }: MatchDetailProps) {
               </Card>
             </TabsContent>
             <TabsContent value="results">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Match Results</CardTitle>
-                  <CardDescription>
-                    {match.status === MatchStatus.Completed
-                      ? "Final standings and scores"
-                      : "Results will be available once the match is completed"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {match.status === MatchStatus.Completed ? (
-                    <div className="space-y-4">
-                      {/* Results would go here */}
-                      <p>Results data would be displayed here.</p>
+              {match.status === MatchStatus.Completed ? (
+                <div className="space-y-6">
+                  <MatchDetailFinalResults match={match} />
+                  <RoundsByRoundsScore rounds={match.rounds} />
+                  <MatchFinalStats rounds={match.rounds} />
+                </div>
+              ) : (
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <div>
+                      <CardTitle>Match Results</CardTitle>
+                      <CardDescription>
+                        "Results will be available once the match is completed
+                      </CardDescription>
                     </div>
-                  ) : (
-                    <div className="p-4 text-center text-muted-foreground">
-                      Match has not been completed yet.
+                  </CardHeader>
+                  <CardContent>
+                    <div className="p-8 text-center border rounded-lg">
+                      <div className="flex flex-col items-center gap-3">
+                        <Trophy className="h-12 w-12 text-muted-foreground" />
+                        <h3 className="text-lg font-medium">No Results Yet</h3>
+                        <p className="text-muted-foreground max-w-md">
+                          This match has not been completed yet. Use the Manage
+                          Rounds feature to track scores and complete rounds.
+                        </p>
+                      </div>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </div>
