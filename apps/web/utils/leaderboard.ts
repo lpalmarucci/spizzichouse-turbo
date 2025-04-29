@@ -5,7 +5,7 @@ type ScoreResult = {
   player: Player;
 };
 
-export function orderResultsByScore(rounds: Round[]): ScoreResult[] {
+export function orderRoundsByScore(rounds: Round[]): ScoreResult[] {
   const leaderboardMap = new Map<string, ScoreResult>();
 
   for (let round of rounds) {

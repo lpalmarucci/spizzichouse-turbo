@@ -28,6 +28,7 @@ import { useState, useTransition } from "react";
 import { updateMatchAction } from "@/features/match/match.actions";
 import { MatchDetailFinalResults } from "@/features/match/components/match-detail-final-results";
 import { RoundsByRoundsScore } from "@/features/match/components/rounds-by-rounds-score";
+import { MatchFinalStats } from "@/features/match/components/match-final-stats";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -206,65 +207,9 @@ export default function MatchDetail({ id }: MatchDetailProps) {
             <TabsContent value="results">
               {match.status === MatchStatus.Completed ? (
                 <div className="space-y-6">
-                  {/* Podio dei vincitori */}
                   <MatchDetailFinalResults match={match} />
-
                   <RoundsByRoundsScore rounds={match.rounds} />
-
-                  {/*/!* Statistiche del match *!/*/}
-                  {/*<Card>*/}
-                  {/*  <CardHeader className="pb-2">*/}
-                  {/*    <CardTitle>Match Statistics</CardTitle>*/}
-                  {/*  </CardHeader>*/}
-                  {/*  <CardContent>*/}
-                  {/*    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">*/}
-                  {/*      <div className="bg-slate-50 p-4 rounded-lg">*/}
-                  {/*        <div className="text-sm text-muted-foreground">*/}
-                  {/*          Total Rounds*/}
-                  {/*        </div>*/}
-                  {/*        <div className="text-2xl font-bold">*/}
-                  {/*          {match.rounds.length}*/}
-                  {/*        </div>*/}
-                  {/*      </div>*/}
-                  {/*      <div className="bg-slate-50 p-4 rounded-lg">*/}
-                  {/*        <div className="text-sm text-muted-foreground">*/}
-                  {/*          Highest Score*/}
-                  {/*        </div>*/}
-                  {/*        <div className="text-2xl font-bold">*/}
-                  {/*          {highestScore} pts*/}
-                  {/*        </div>*/}
-                  {/*      </div>*/}
-                  {/*      <div className="bg-slate-50 p-4 rounded-lg">*/}
-                  {/*        <div className="text-sm text-muted-foreground">*/}
-                  {/*          Average Score*/}
-                  {/*        </div>*/}
-                  {/*        <div className="text-2xl font-bold">*/}
-                  {/*          {Math.round(*/}
-                  {/*            Object.values(totalScores).reduce(*/}
-                  {/*              (a, b) => a + b,*/}
-                  {/*              0,*/}
-                  {/*            ) / match.players.length,*/}
-                  {/*          )}{" "}*/}
-                  {/*          pts*/}
-                  {/*        </div>*/}
-                  {/*      </div>*/}
-                  {/*    </div>*/}
-                  {/*  </CardContent>*/}
-                  {/*  <CardFooter className="text-sm text-muted-foreground">*/}
-                  {/*    <div className="flex items-center gap-2">*/}
-                  {/*      <Clock className="h-4 w-4" />*/}
-                  {/*      <span>*/}
-                  {/*        Match duration:{" "}*/}
-                  {/*        {new Date(*/}
-                  {/*          new Date(match.endDate).getTime() -*/}
-                  {/*            new Date(match.date).getTime(),*/}
-                  {/*        )*/}
-                  {/*          .toISOString()*/}
-                  {/*          .substr(11, 5)}*/}
-                  {/*      </span>*/}
-                  {/*    </div>*/}
-                  {/*  </CardFooter>*/}
-                  {/*</Card>*/}
+                  <MatchFinalStats rounds={match.rounds} />
                 </div>
               ) : (
                 <Card>

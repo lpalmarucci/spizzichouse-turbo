@@ -9,7 +9,7 @@ import {
 import { Trophy } from "lucide-react";
 import { Match } from "@workspace/api/qgl-types";
 import { useMemo } from "react";
-import { orderResultsByScore } from "@/utils/leaderboard";
+import { orderRoundsByScore } from "@/utils/leaderboard";
 import { getRankingInfo } from "@/features/match/match.utils";
 import { Progress } from "@workspace/ui/components/progress";
 
@@ -26,10 +26,7 @@ type RankedPlayer = {
 export function MatchDetailFinalResults({
   match,
 }: MatchDetailFinalResultsProps) {
-  const finalResults = useMemo(
-    () => orderResultsByScore(match.rounds),
-    [match],
-  );
+  const finalResults = useMemo(() => orderRoundsByScore(match.rounds), [match]);
 
   const highestScore = useMemo(() => {
     let max = -1;
