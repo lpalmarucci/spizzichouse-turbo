@@ -129,7 +129,7 @@ export function MatchCard({
               <Clock className="mr-2 h-4 w-4 opacity-70" />
               <span>
                 {match.duration
-                  ? `${match.duration % 60}m`
+                  ? `${match.duration}m`
                   : "Durata non disponibile"}
               </span>
             </div>
