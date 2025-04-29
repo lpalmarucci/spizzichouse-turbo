@@ -20,7 +20,7 @@ import { format } from "date-fns";
 
 const chartConfig = {
   total: {
-    label: "Total",
+    label: "Players",
     color: "#2563eb",
   },
 } satisfies ChartConfig;
