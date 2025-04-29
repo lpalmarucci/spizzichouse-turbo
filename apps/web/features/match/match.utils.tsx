@@ -20,21 +20,25 @@ export const getRankingInfo = (position: number) => {
       return {
         icon: <Trophy className="h-4 w-4" />,
         color: "bg-yellow-500",
+        textColor: "text-yellow-500",
       };
     case 2:
       return {
         icon: <Medal className="h-4 w-4" />,
         color: "bg-slate-400",
+        textColor: "text-slate-500",
       };
     case 3:
       return {
         icon: <Medal className="h-4 w-4" />,
         color: "bg-amber-600",
+        textColor: "text-amber-500",
       };
     default:
       return {
         icon: <span className="text-sm font-medium">{position}</span>,
         color: "bg-slate-200",
+        textColor: "text-slate-500",
       };
   }
 };

@@ -27,6 +27,7 @@ import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { useState, useTransition } from "react";
 import { updateMatchAction } from "@/features/match/match.actions";
 import { MatchDetailFinalResults } from "@/features/match/components/match-detail-final-results";
+import { RoundsByRoundsScore } from "@/features/match/components/rounds-by-rounds-score";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -208,101 +209,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                   {/* Podio dei vincitori */}
                   <MatchDetailFinalResults match={match} />
 
-                  {/*/!* Dettaglio punteggi per round *!/*/}
-                  {/*<Card>*/}
-                  {/*  <CardHeader className="pb-2">*/}
-                  {/*    <CardTitle className="flex items-center gap-2">*/}
-                  {/*      <BarChart3 className="h-5 w-5 text-blue-500" />*/}
-                  {/*      Round-by-Round Scores*/}
-                  {/*    </CardTitle>*/}
-                  {/*    <CardDescription>*/}
-                  {/*      Detailed scores for each round*/}
-                  {/*    </CardDescription>*/}
-                  {/*  </CardHeader>*/}
-                  {/*  <CardContent>*/}
-                  {/*    <div className="overflow-x-auto">*/}
-                  {/*      <table className="w-full border-collapse">*/}
-                  {/*        <thead>*/}
-                  {/*          <tr className="bg-slate-50">*/}
-                  {/*            <th className="text-left p-3 border-b">Player</th>*/}
-                  {/*            {match.rounds.map((round) => (*/}
-                  {/*              <th*/}
-                  {/*                key={round.id}*/}
-                  {/*                className="text-center p-3 border-b"*/}
-                  {/*              >*/}
-                  {/*                Round {round.number}*/}
-                  {/*              </th>*/}
-                  {/*            ))}*/}
-                  {/*            <th className="text-center p-3 border-b font-bold">*/}
-                  {/*              Total*/}
-                  {/*            </th>*/}
-                  {/*          </tr>*/}
-                  {/*        </thead>*/}
-                  {/*        <tbody>*/}
-                  {/*          {rankedPlayers.map((player, index) => {*/}
-                  {/*            const position = index + 1;*/}
-                  {/*            const { color, textColor } =*/}
-                  {/*              getRankingInfo(position);*/}
-
-                  {/*            return (*/}
-                  {/*              <tr*/}
-                  {/*                key={player.id}*/}
-                  {/*                className="hover:bg-slate-50"*/}
-                  {/*              >*/}
-                  {/*                <td className="p-3 border-b">*/}
-                  {/*                  <div className="flex items-center gap-2">*/}
-                  {/*                    <div*/}
-                  {/*                      className={`w-2 h-2 rounded-full ${color}`}*/}
-                  {/*                    ></div>*/}
-                  {/*                    <span*/}
-                  {/*                      className={`font-medium ${position <= 3 ? textColor : ""}`}*/}
-                  {/*                    >*/}
-                  {/*                      {player.name}*/}
-                  {/*                    </span>*/}
-                  {/*                  </div>*/}
-                  {/*                </td>*/}
-                  {/*                {match.rounds.map((round) => {*/}
-                  {/*                  const scoreEntry = round.scores.find(*/}
-                  {/*                    (s) => s.playerId === player.id,*/}
-                  {/*                  );*/}
-                  {/*                  const score = scoreEntry*/}
-                  {/*                    ? scoreEntry.score*/}
-                  {/*                    : 0;*/}
-
-                  {/*                  // Find highest score in this round*/}
-                  {/*                  const highestInRound = Math.max(*/}
-                  {/*                    ...round.scores.map((s) => s.score),*/}
-                  {/*                  );*/}
-                  {/*                  const isHighest = score === highestInRound;*/}
-
-                  {/*                  return (*/}
-                  {/*                    <td*/}
-                  {/*                      key={`${player.id}-${round.id}`}*/}
-                  {/*                      className="text-center p-3 border-b"*/}
-                  {/*                    >*/}
-                  {/*                      <span*/}
-                  {/*                        className={*/}
-                  {/*                          isHighest*/}
-                  {/*                            ? "font-bold text-green-600"*/}
-                  {/*                            : ""*/}
-                  {/*                        }*/}
-                  {/*                      >*/}
-                  {/*                        {score}*/}
-                  {/*                      </span>*/}
-                  {/*                    </td>*/}
-                  {/*                  );*/}
-                  {/*                })}*/}
-                  {/*                <td className="text-center p-3 border-b font-bold">*/}
-                  {/*                  {totalScores[player.id] || 0}*/}
-                  {/*                </td>*/}
-                  {/*              </tr>*/}
-                  {/*            );*/}
-                  {/*          })}*/}
-                  {/*        </tbody>*/}
-                  {/*      </table>*/}
-                  {/*    </div>*/}
-                  {/*  </CardContent>*/}
-                  {/*</Card>*/}
+                  <RoundsByRoundsScore rounds={match.rounds} />
 
                   {/*/!* Statistiche del match *!/*/}
                   {/*<Card>*/}
