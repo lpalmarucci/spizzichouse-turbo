@@ -178,6 +178,12 @@ export type Player = {
   status: PlayerStatus;
 };
 
+export type PlayerHistory = {
+  __typename?: 'PlayerHistory';
+  month: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
 export enum PlayerLevel {
   Beginner = 'BEGINNER',
   Expert = 'EXPERT',
@@ -195,6 +201,7 @@ export type Query = {
   matches: Array<Match>;
   matches_history: Array<MatchHistory>;
   player: Player;
+  player_history: Array<PlayerHistory>;
   players: Array<Player>;
   round: Round;
   rounds: Array<Round>;
@@ -365,6 +372,7 @@ export type ResolversTypes = {
   MatchStatus: MatchStatus;
   Mutation: ResolverTypeWrapper<{}>;
   Player: ResolverTypeWrapper<Player>;
+  PlayerHistory: ResolverTypeWrapper<PlayerHistory>;
   PlayerLevel: PlayerLevel;
   PlayerStatus: PlayerStatus;
   Query: ResolverTypeWrapper<{}>;
@@ -393,6 +401,7 @@ export type ResolversParentTypes = {
   MatchHistory: MatchHistory;
   Mutation: {};
   Player: Player;
+  PlayerHistory: PlayerHistory;
   Query: {};
   Round: Round;
   Score: Score;
@@ -458,11 +467,18 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PlayerHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerHistory'] = ResolversParentTypes['PlayerHistory']> = {
+  month?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   match?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryMatchArgs, 'id'>>;
   matches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType>;
   matches_history?: Resolver<Array<ResolversTypes['MatchHistory']>, ParentType, ContextType>;
   player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
+  player_history?: Resolver<Array<ResolversTypes['PlayerHistory']>, ParentType, ContextType>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType, Partial<QueryPlayersArgs>>;
   round?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<QueryRoundArgs, 'id'>>;
   rounds?: Resolver<Array<ResolversTypes['Round']>, ParentType, ContextType, RequireFields<QueryRoundsArgs, 'matchId'>>;
@@ -495,6 +511,7 @@ export type Resolvers<ContextType = any> = {
   MatchHistory?: MatchHistoryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
+  PlayerHistory?: PlayerHistoryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Round?: RoundResolvers<ContextType>;
   Score?: ScoreResolvers<ContextType>;

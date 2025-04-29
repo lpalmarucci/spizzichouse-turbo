@@ -11,7 +11,12 @@ import {
   MATCH_QUERY_KEY,
 } from "@/features/match/match.query";
 import { gqlRequest } from "@/utils/query";
-import { GET_PLAYERS, PLAYER_QUERY_KEY } from "@/features/player/player.query";
+import {
+  GET_PLAYERS,
+  GET_PLAYERS_HISTORY,
+  PLAYER_QUERY_KEY,
+  PLAYERS_HISTORY_QUERY_KEY,
+} from "@/features/player/player.query";
 import { PlayerStatus } from "@workspace/api/qgl-types";
 
 export default async function DashboardPage() {
@@ -30,6 +35,11 @@ export default async function DashboardPage() {
   await queryClient.prefetchQuery({
     queryKey: [MATCH_HISTORY_QUERY_KEY],
     queryFn: () => gqlRequest(GET_MATCHES_HISTORY),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [PLAYERS_HISTORY_QUERY_KEY],
+    queryFn: () => gqlRequest(GET_PLAYERS_HISTORY),
   });
 
   return (

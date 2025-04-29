@@ -18,6 +18,7 @@ import {
   ChartTooltipContent,
 } from "@workspace/ui/components/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { format } from "date-fns";
 
 const chartConfig = {
   total: {
@@ -26,26 +27,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const date = new Date();
+
 export function MatchHistoryChart() {
   const { data, isFetching } = useGetMatchesHistory();
 
   if (isFetching) return <Skeleton />;
 
+  const formattedData = data?.matches_history.map((item) => ({
+    ...item,
+    label: format(
+      new Date(date.getFullYear(), item.month - 1, date.getDay()),
+      "MMM",
+    ),
+  }));
+
   return (
-    <Card className="w-full flex">
+    <Card>
       <CardHeader>
         <CardTitle>Match History</CardTitle>
         <CardDescription>Number of matches over time</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[200px] w-full">
-          <BarChart accessibilityLayer data={data?.matches_history}>
+        <ChartContainer config={chartConfig}>
+          <BarChart accessibilityLayer data={formattedData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="label"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              tickMargin={8}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />

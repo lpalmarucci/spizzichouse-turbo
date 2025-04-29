@@ -7,6 +7,7 @@ import { PlayerStatus, Round } from "@workspace/api/qgl-types";
 import { Layers, Trophy, Users } from "lucide-react";
 import { useMemo } from "react";
 import { MatchHistoryChart } from "@/features/dashboard/components/match-history-chart";
+import { PlayersHistory } from "@/features/dashboard/components/players-history";
 
 export function AnalyticsSection() {
   const {
@@ -54,8 +55,9 @@ export function AnalyticsSection() {
           loading={isFetchingPlayers}
         />
       </div>
-      <div className="flex w-full gap-2 items-center">
+      <div className="w-full grid grid-cols-2 gap-2">
         <MatchHistoryChart />
+        <PlayersHistory />
       </div>
     </div>
   );
