@@ -80,8 +80,10 @@ export class MatchService {
         ...updateMatchDto,
         ...(playersToConnect.length > 0
           ? {
-              disconnect: playersToDisconnect,
-              connect: playersToConnect,
+              players: {
+                disconnect: playersToDisconnect,
+                connect: playersToConnect,
+              },
             }
           : null),
       },
