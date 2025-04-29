@@ -12,8 +12,6 @@ import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   type ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@workspace/ui/components/chart";
@@ -59,7 +57,6 @@ export function MatchHistoryChart() {
               tickMargin={8}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="total" fill="var(--color-total)" radius={4} />
           </BarChart>
         </ChartContainer>
