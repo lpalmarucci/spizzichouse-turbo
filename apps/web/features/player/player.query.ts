@@ -3,8 +3,8 @@ import { gql } from "graphql-request";
 export const PLAYER_QUERY_KEY = "players";
 
 export const GET_PLAYERS = gql`
-  query getPlayers {
-    players {
+  query getPlayers($status: String) {
+    players(status: $status) {
       bio
       createdAt
       email

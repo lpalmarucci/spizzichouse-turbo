@@ -58,6 +58,11 @@ type Match {
   title: String!
 }
 
+type MatchHistory {
+  month: Int!
+  total: Int!
+}
+
 enum MatchStatus {
   COMPLETED
   IN_PROGRESS
@@ -105,8 +110,9 @@ enum PlayerStatus {
 type Query {
   match(id: String!): Match!
   matches: [Match!]!
+  matches_history: [MatchHistory!]!
   player(id: String!): Player!
-  players: [Player!]!
+  players(status: String): [Player!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!

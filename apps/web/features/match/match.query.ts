@@ -1,6 +1,7 @@
 import { gql } from "graphql-request";
 
 export const MATCH_QUERY_KEY = "match";
+export const MATCH_HISTORY_QUERY_KEY = "match_history";
 
 export const GET_MATCHES = gql`
   query getMatches {
@@ -14,6 +15,9 @@ export const GET_MATCHES = gql`
       players {
         id
         full_name
+      }
+      rounds {
+        id
       }
     }
   }
@@ -43,6 +47,15 @@ export const GET_MATCH_BY_ID = gql`
           points
         }
       }
+    }
+  }
+`;
+
+export const GET_MATCHES_HISTORY = gql`
+  query matches_history {
+    matches_history {
+      month
+      total
     }
   }
 `;

@@ -7,6 +7,7 @@ import { Player } from '../players/models/player.model';
 import { UpdateMatch } from './models/update-match.model';
 import { Round } from '../rounds/round.entity';
 import { RoundsService } from '../rounds/rounds.service';
+import { MatchHistory } from './models/match-history.model';
 
 @Resolver(() => Match)
 export class MatchResolver {
@@ -24,6 +25,11 @@ export class MatchResolver {
   @Query(() => Match, { name: 'match' })
   async getMatchById(@Args('id') id: string) {
     return this.matchService.findOne(id);
+  }
+
+  @Query(() => [MatchHistory], { name: 'matches_history' })
+  async getMatchesHistory() {
+    return this.matchService.getMatchesHistory();
   }
 
   @Mutation(() => Match, { name: 'createMatch' })

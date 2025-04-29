@@ -15,10 +15,6 @@ export class PlayersService {
     });
   }
 
-  async findAll() {
-    return this._prismaService.player.findMany();
-  }
-
   async findOne(id: string) {
     const player = await this._prismaService.player.findUnique({ where: { id } });
     if (!player) throw new NotFoundException(`Player with id ${id} not found`);
