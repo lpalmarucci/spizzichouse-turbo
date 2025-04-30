@@ -13,7 +13,6 @@ export class ScoreService {
     const round = await this.prismaService.round.findUniqueOrThrow({ where: { id: createScoreInput.roundId } });
     const match = await this.prismaService.match.findUniqueOrThrow({ where: { id: createScoreInput.matchId } });
     const player = await this.prismaService.player.findUniqueOrThrow({ where: { id: createScoreInput.playerId } });
-    console.log({ createScoreInput });
     return this.prismaService.score.create({
       data: {
         points: createScoreInput.points,

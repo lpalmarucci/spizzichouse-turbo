@@ -58,6 +58,15 @@ type Match {
   title: String!
 }
 
+type MatchHistory {
+  month: Int!
+  total: Int!
+}
+
+input MatchOrderBy {
+  date: SortOrder
+}
+
 enum MatchStatus {
   COMPLETED
   IN_PROGRESS
@@ -91,6 +100,11 @@ type Player {
   status: PlayerStatus!
 }
 
+type PlayerHistory {
+  month: Int!
+  total: Int!
+}
+
 enum PlayerLevel {
   BEGINNER
   EXPERT
@@ -104,9 +118,11 @@ enum PlayerStatus {
 
 type Query {
   match(id: String!): Match!
-  matches: [Match!]!
+  matches(orderBy: MatchOrderBy, take: Int): [Match!]!
+  matches_history: [MatchHistory!]!
   player(id: String!): Player!
-  players: [Player!]!
+  players(status: String): [Player!]!
+  players_history: [PlayerHistory!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!
@@ -132,6 +148,11 @@ type Score {
   player: Player!
   points: Int!
   round: Round!
+}
+
+enum SortOrder {
+  asc
+  desc
 }
 
 input UpdateMatch {

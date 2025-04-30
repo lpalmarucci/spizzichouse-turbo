@@ -4,6 +4,8 @@ import { Match, Player, Prisma } from '@prisma/client/output';
 import { PlayersService } from '../players/players.service';
 import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
+import { MatchHistory } from './models/match-history.model';
+import { MatchOrderBy } from './models/order-by-match.model';
 import MatchFindManyArgs = Prisma.MatchFindManyArgs;
 import MatchFindFirstArgs = Prisma.MatchFindFirstArgs;
 
@@ -43,8 +45,28 @@ export class MatchService {
     });
   }
 
-  findAll() {
-    return this._prismaService.match.findMany();
+  getMatchesHistory(): Promise<MatchHistory[]> {
+    return this._prismaService.$queryRaw`
+      WITH months AS (
+        SELECT generate_series(1, 12) AS month
+      ),
+      match_counts AS (
+        SELECT date_part('month', m.date)::int AS month, COUNT(*)::int AS total
+        FROM matches m
+        GROUP BY date_part('month', m.date)
+      )
+      SELECT m.month, COALESCE(mc.total, 0) AS total
+      FROM months m
+      LEFT JOIN match_counts mc ON m.month = mc.month
+      ORDER BY m.month;
+    `;
+  }
+
+  findAll({ take, orderBy }: { take?: number; orderBy?: MatchOrderBy }) {
+    return this._prismaService.match.findMany({
+      orderBy: orderBy ?? undefined,
+      take,
+    });
   }
 
   async findOne(id: string) {
@@ -80,8 +102,10 @@ export class MatchService {
         ...updateMatchDto,
         ...(playersToConnect.length > 0
           ? {
-              disconnect: playersToDisconnect,
-              connect: playersToConnect,
+              players: {
+                disconnect: playersToDisconnect,
+                connect: playersToConnect,
+              },
             }
           : null),
       },

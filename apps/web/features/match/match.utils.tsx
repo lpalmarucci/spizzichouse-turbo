@@ -14,6 +14,19 @@ export const getStatusColor = (status: string) => {
   }
 };
 
+export const getStatusText = (status: MatchStatus) => {
+  switch (status) {
+    case MatchStatus.Upcoming:
+      return "Programmata";
+    case MatchStatus.InProgress:
+      return "In corso";
+    case MatchStatus.Completed:
+      return "Completato";
+    default:
+      return status;
+  }
+};
+
 export const getRankingInfo = (position: number) => {
   switch (position) {
     case 1:

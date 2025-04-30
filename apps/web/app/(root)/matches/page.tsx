@@ -11,7 +11,7 @@ export default async function MatchesPage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [MATCH_QUERY_KEY],
+    queryKey: [MATCH_QUERY_KEY, {}],
     queryFn: () => gqlRequest(GET_MATCHES),
   });
 

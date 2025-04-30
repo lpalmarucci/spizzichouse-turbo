@@ -99,7 +99,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
     <>
       <Detail>
         <DetailHeader headingText={match.title} backLocationHref="/matches">
-          {match.status !== MatchStatus.Completed && (
+          {match.status == MatchStatus.Upcoming && (
             <Button asChild>
               <Link href={pathname + "/edit"}>
                 <Edit className="mr-2 h-4 w-4" />
@@ -118,7 +118,6 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                     {match.status.charAt(0).toUpperCase() +
                       match.status.slice(1)}
                   </Badge>
-                  {/*<CardDescription>Rule Set: {match.ruleSet}</CardDescription>*/}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -135,20 +134,6 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                 </div>
               </CardContent>
             </Card>
-
-            {/*<Card className="flex-1">*/}
-            {/*  <CardHeader>*/}
-            {/*    <CardTitle>Rules</CardTitle>*/}
-            {/*    <CardDescription>Custom rules for this match</CardDescription>*/}
-            {/*  </CardHeader>*/}
-            {/*  <CardContent>*/}
-            {/*    <ul className="list-disc list-inside space-y-2">*/}
-            {/*      {match.customRules.map((rule, index) => (*/}
-            {/*        <li key={index}>{rule}</li>*/}
-            {/*      ))}*/}
-            {/*    </ul>*/}
-            {/*  </CardContent>*/}
-            {/*</Card>*/}
           </div>
 
           <Tabs defaultValue="players">
@@ -158,9 +143,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                 <TabsTrigger value="results">Results</TabsTrigger>
               </TabsList>
               <div className="flex gap-2 items-center">
-                {[MatchStatus.Upcoming, MatchStatus.InProgress].includes(
-                  match.status,
-                ) && (
+                {match.status === MatchStatus.InProgress && (
                   <>
                     <Button variant="outline" asChild>
                       <Link href={`/matches/${id}/rounds`}>

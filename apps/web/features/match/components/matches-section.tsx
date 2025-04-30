@@ -96,8 +96,6 @@ export function MatchesSection() {
     return true;
   });
 
-  console.log(filteredMatches);
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">

@@ -36,8 +36,7 @@ interface RoundCardProps {
 export default function RoundCard({ round }: RoundCardProps) {
   const { players, setRounds, matchId } = use<RoundContextType>(RoundContext);
   const { mutateAsync: createRound, isPending } = useCreateRound();
-  const { mutateAsync: deleteRound, isPending: isDeletingRound } =
-    useDeleteRound();
+  const { mutateAsync: deleteRound } = useDeleteRound();
   const queryClient = useQueryClient();
 
   function handleDeleteRound() {
@@ -52,8 +51,7 @@ export default function RoundCard({ round }: RoundCardProps) {
           queryKey: [ROUNDS_QUERY_KEY],
         });
       })
-      .catch((e) => {
-        console.log({ e });
+      .catch(() => {
         toast.error(`Error while trying to delete round #${round.number}`);
       });
   }
@@ -73,7 +71,6 @@ export default function RoundCard({ round }: RoundCardProps) {
   }
 
   function handleCreateRound() {
-    console.log(round.scores);
     createRound({
       matchId,
       number: round.number,
@@ -89,7 +86,7 @@ export default function RoundCard({ round }: RoundCardProps) {
           queryKey: [ROUNDS_QUERY_KEY],
         });
       })
-      .catch((e) => {
+      .catch(() => {
         toast.error(`Error while trying to create round #${round.number}`);
       });
   }

@@ -3,7 +3,7 @@ import { ScoreService } from './score.service';
 import { Score } from './entities/score.entity';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
-import { DeleteManyOutput } from '../shared/dto/delete-many-output.mode';
+import { DeleteManyOutput } from '../shared/models/delete-many-output.model';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Resolver(() => Score)

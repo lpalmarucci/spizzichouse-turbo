@@ -1,10 +1,11 @@
 import { gql } from "graphql-request";
 
 export const PLAYER_QUERY_KEY = "players";
+export const PLAYERS_HISTORY_QUERY_KEY = "players_history";
 
 export const GET_PLAYERS = gql`
-  query getPlayers {
-    players {
+  query getPlayers($status: String) {
+    players(status: $status) {
       bio
       createdAt
       email
@@ -26,6 +27,15 @@ export const GET_PLAYER_BY_ID = gql`
       id
       level
       status
+    }
+  }
+`;
+
+export const GET_PLAYERS_HISTORY = gql`
+  query players_history {
+    players_history {
+      month
+      total
     }
   }
 `;
