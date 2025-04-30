@@ -17,14 +17,26 @@ import {
   PLAYER_QUERY_KEY,
   PLAYERS_HISTORY_QUERY_KEY,
 } from "@/features/player/player.query";
-import { PlayerStatus } from "@workspace/api/qgl-types";
+import { PlayerStatus, SortOrder } from "@workspace/api/qgl-types";
+
+const params = {
+  take: 10,
+  matchOrderBy: {
+    date: SortOrder.Desc,
+  },
+};
 
 export default async function DashboardPage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [MATCH_QUERY_KEY],
-    queryFn: () => gqlRequest(GET_MATCHES),
+    queryKey: [MATCH_QUERY_KEY, {}],
+    queryFn: () => gqlRequest(GET_MATCHES, {}),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [MATCH_QUERY_KEY, params],
+    queryFn: () => gqlRequest(GET_MATCHES, params),
   });
 
   await queryClient.prefetchQuery({

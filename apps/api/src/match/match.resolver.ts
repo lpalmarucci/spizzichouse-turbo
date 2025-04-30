@@ -1,4 +1,4 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { MatchService } from './match.service';
 import { Match } from './match.entity';
 import { CreateMatch } from './models/create-match.model';
@@ -8,6 +8,10 @@ import { UpdateMatch } from './models/update-match.model';
 import { Round } from '../rounds/round.entity';
 import { RoundsService } from '../rounds/rounds.service';
 import { MatchHistory } from './models/match-history.model';
+import { Prisma } from '@prisma/client/output';
+import { MatchOrderBy } from './models/order-by-match.model';
+
+type MatchOrderByWithAggregationInput = Prisma.MatchOrderByWithAggregationInput;
 
 @Resolver(() => Match)
 export class MatchResolver {
@@ -18,8 +22,12 @@ export class MatchResolver {
   ) {}
 
   @Query(() => [Match], { name: 'matches' })
-  async getAllMatches() {
-    return this.matchService.findAll();
+  async getAllMatches(
+    @Args('take', { type: () => Int, nullable: true }) take?: number,
+    @Args('orderBy', { nullable: true })
+    orderBy?: MatchOrderBy,
+  ) {
+    return this.matchService.findAll({ take, orderBy });
   }
 
   @Query(() => Match, { name: 'match' })

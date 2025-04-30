@@ -5,6 +5,7 @@ import { PlayersService } from '../players/players.service';
 import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
 import { MatchHistory } from './models/match-history.model';
+import { MatchOrderBy } from './models/order-by-match.model';
 import MatchFindManyArgs = Prisma.MatchFindManyArgs;
 import MatchFindFirstArgs = Prisma.MatchFindFirstArgs;
 
@@ -61,8 +62,11 @@ export class MatchService {
     `;
   }
 
-  findAll() {
-    return this._prismaService.match.findMany();
+  findAll({ take, orderBy }: { take?: number; orderBy?: MatchOrderBy }) {
+    return this._prismaService.match.findMany({
+      orderBy: orderBy ?? undefined,
+      take,
+    });
   }
 
   async findOne(id: string) {

@@ -63,6 +63,10 @@ type MatchHistory {
   total: Int!
 }
 
+input MatchOrderBy {
+  date: SortOrder
+}
+
 enum MatchStatus {
   COMPLETED
   IN_PROGRESS
@@ -114,7 +118,7 @@ enum PlayerStatus {
 
 type Query {
   match(id: String!): Match!
-  matches: [Match!]!
+  matches(orderBy: MatchOrderBy, take: Int): [Match!]!
   matches_history: [MatchHistory!]!
   player(id: String!): Player!
   players(status: String): [Player!]!
@@ -144,6 +148,11 @@ type Score {
   player: Player!
   points: Int!
   round: Round!
+}
+
+enum SortOrder {
+  asc
+  desc
 }
 
 input UpdateMatch {
