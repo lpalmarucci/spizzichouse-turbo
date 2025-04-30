@@ -23,7 +23,6 @@ export class RoundsService {
     });
 
     for (let score of createRoundInput.scores) {
-      console.log({ score });
       await this.prismaService.score.create({
         data: {
           points: score.points,
@@ -69,8 +68,7 @@ export class RoundsService {
   }
 
   async update(id: string, updateRoundInput: UpdateRoundInput) {
-    const round = await this.findOne(id);
-
+    await this.findOne(id);
     return this.prismaService.round.update({
       where: {
         id,

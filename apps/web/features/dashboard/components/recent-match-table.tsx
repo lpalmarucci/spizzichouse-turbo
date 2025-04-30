@@ -39,8 +39,6 @@ export function RecentMatchTable() {
 
   if (isLoading) return <Skeleton />;
 
-  console.log({ data });
-
   return (
     <Card className="w-full">
       <CardHeader>
