@@ -24,6 +24,7 @@ import {
 } from "@workspace/ui/components/table";
 import UserAvatar from "@/components/user-avatar";
 import { Separator } from "@workspace/ui/components/separator";
+import { calculateLeaderboard } from "@/utils/leaderboard";
 
 type LeaderboardScore = {
   playerId: string;
@@ -32,24 +33,10 @@ type LeaderboardScore = {
 
 export function Leaderboard() {
   const { rounds, players } = use<RoundContextType>(RoundContext);
-  const leaderboardScores = useMemo<LeaderboardScore[]>(() => {
-    const leaderboardMap = new Map<string, number>();
-
-    for (let round of rounds) {
-      for (let score of round.scores) {
-        const prevScore = leaderboardMap.get(score.playerId);
-        if (!prevScore) leaderboardMap.set(score.playerId, score.points);
-        else leaderboardMap.set(score.playerId, prevScore + score.points);
-      }
-    }
-
-    return Array.from(leaderboardMap)
-      .map(([playerId, score]) => ({
-        playerId,
-        score,
-      }))
-      .sort((a, b) => (a.score > b.score ? -1 : 1));
-  }, [rounds]);
+  const leaderboardScores = useMemo<LeaderboardScore[]>(
+    () => calculateLeaderboard(rounds),
+    [rounds],
+  );
 
   return (
     <Card className="overflow-hidden relative bg-gradient-to-r-b from-">

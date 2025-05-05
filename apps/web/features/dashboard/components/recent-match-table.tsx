@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@workspace/ui/components/table";
 import { useGetMatches } from "@/features/match/match.hook";
-import { SortOrder } from "@workspace/api/qgl-types";
+import { MatchStatus, SortOrder } from "@workspace/api/qgl-types";
 import { formatDate } from "date-fns";
 import UserAvatar from "@/components/user-avatar";
 import { getStatusColor, getStatusText } from "@/features/match/match.utils";
@@ -28,6 +28,8 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import Link from "next/link";
+import { calculateLeaderboard } from "@/utils/leaderboard";
+import { OfflineRound } from "@/features/rounds/round.context";
 
 export function RecentMatchTable() {
   const { data, isLoading } = useGetMatches({
@@ -55,39 +57,70 @@ export function RecentMatchTable() {
               <TableCell>Date</TableCell>
               <TableCell>Players</TableCell>
               <TableCell>Status</TableCell>
-              {/*<TableCell>Winner</TableCell>*/}
+              <TableCell>Winner</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.matches.map((match) => (
-              <TableRow key={match.id}>
-                <TableCell>{match.title}</TableCell>
-                <TableCell>{formatDate(match.date, "dd/MM/yyyy")}</TableCell>
-                <TableCell>
-                  <div className="flex items-center -space-x-2.5 overflow-hidden">
-                    {match.players.map((player) => (
-                      <Tooltip key={`${match.id}-${player.id}`}>
-                        <TooltipTrigger>
-                          <UserAvatar name={player.full_name} />
-                        </TooltipTrigger>
-                        <TooltipContent>{player.full_name}</TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge className={getStatusColor(match.status)}>
-                    {getStatusText(match.status)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Button variant="link" asChild>
-                    <Link href={`/matches/${match.id}`}>View</Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {data.matches.map((match) => {
+              let offlineRounds: OfflineRound[] = [];
+              let winner: string | undefined;
+              if (
+                match.status === MatchStatus.Completed &&
+                match.rounds.length > 0
+              ) {
+                offlineRounds = match.rounds.map((r) => ({
+                  id: r.id,
+                  number: r.number,
+                  scores:
+                    r.scores?.map((s) => ({
+                      playerId: s.player.id,
+                      points: s.points,
+                      prevPoints: s.points,
+                    })) ?? [],
+                  status: r.status,
+                })) satisfies OfflineRound[];
+                console.log({ offlineRounds });
+                const leader = calculateLeaderboard(offlineRounds).at(0);
+                if (leader) {
+                  winner = match.players.find(
+                    (p) => p.id === leader.playerId,
+                  )?.full_name;
+                }
+              }
+
+              return (
+                <TableRow key={match.id}>
+                  <TableCell>{match.title}</TableCell>
+                  <TableCell>{formatDate(match.date, "dd/MM/yyyy")}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center -space-x-2.5 overflow-hidden">
+                      {match.players.map((player) => (
+                        <Tooltip key={`${match.id}-${player.id}`}>
+                          <TooltipTrigger>
+                            <UserAvatar name={player.full_name} />
+                          </TooltipTrigger>
+                          <TooltipContent>{player.full_name}</TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {match.status === MatchStatus.Completed ? winner : "-"}
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={getStatusColor(match.status)}>
+                      {getStatusText(match.status)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="link" asChild>
+                      <Link href={`/matches/${match.id}`}>View</Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </CardContent>

@@ -1,4 +1,5 @@
 import { Player, Round } from "@workspace/api/qgl-types";
+import { OfflineRound } from "@/features/rounds/round.context";
 
 type ScoreResult = {
   score: number;
@@ -26,5 +27,24 @@ export function orderRoundsByScore(rounds: Round[]): ScoreResult[] {
 
   return Array.from(leaderboardMap)
     .map(([_, obj]) => obj)
+    .sort((a, b) => (a.score > b.score ? -1 : 1));
+}
+
+export function calculateLeaderboard(rounds: OfflineRound[]) {
+  const leaderboardMap = new Map<string, number>();
+
+  for (let round of rounds) {
+    for (let score of round.scores) {
+      const prevScore = leaderboardMap.get(score.playerId);
+      if (!prevScore) leaderboardMap.set(score.playerId, score.points);
+      else leaderboardMap.set(score.playerId, prevScore + score.points);
+    }
+  }
+
+  return Array.from(leaderboardMap)
+    .map(([playerId, score]) => ({
+      playerId,
+      score,
+    }))
     .sort((a, b) => (a.score > b.score ? -1 : 1));
 }

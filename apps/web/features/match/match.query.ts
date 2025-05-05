@@ -19,6 +19,13 @@ export const GET_MATCHES = gql`
       }
       rounds {
         id
+        scores {
+          points
+          player {
+            id
+            full_name
+          }
+        }
       }
     }
   }

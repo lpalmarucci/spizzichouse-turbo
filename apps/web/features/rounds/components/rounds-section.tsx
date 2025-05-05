@@ -140,7 +140,6 @@ export function RoundsSection(props: RoundsSectionProps) {
       status: r.status,
     }));
     setRounds(newRounds);
-    localStorage;
   }, [roundData]);
 
   if (isFetching || isFetchingMatch) {

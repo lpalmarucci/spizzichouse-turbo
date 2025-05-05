@@ -7,7 +7,6 @@ import { UpdateMatch } from './models/update-match.model';
 import { MatchHistory } from './models/match-history.model';
 import { MatchOrderBy } from './models/order-by-match.model';
 import MatchFindManyArgs = Prisma.MatchFindManyArgs;
-import MatchFindFirstArgs = Prisma.MatchFindFirstArgs;
 
 @Injectable()
 export class MatchService {
@@ -80,14 +79,10 @@ export class MatchService {
   async findOne(id: string) {
     const match = await this._prismaService.match.findUnique({
       where: { id },
-      include: { players: true, rounds: true },
+      include: { players: true, rounds: { include: { scores: { include: { player: true } } } } },
     });
     if (!match) throw new NotFoundException(`Match with id ${id} not found`);
     return match;
-  }
-
-  findFirst(options: MatchFindFirstArgs) {
-    return this._prismaService.match.findFirst(options);
   }
 
   findMany(options: MatchFindManyArgs): Promise<Match[]> {
@@ -119,6 +114,9 @@ export class MatchService {
               },
             }
           : null),
+      },
+      include: {
+        players: true,
       },
     });
   }

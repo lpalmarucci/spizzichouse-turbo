@@ -55,8 +55,8 @@ export class RoundsService {
       },
       orderBy: { number: 'asc' },
       include: {
-        match: true,
-        scores: true,
+        match: { include: { players: true } },
+        scores: { include: { player: true } },
       },
     });
   }
@@ -66,7 +66,13 @@ export class RoundsService {
   }
 
   async findOne(id: string) {
-    const round = await this.prismaService.round.findFirst({ where: { id } });
+    const round = await this.prismaService.round.findFirst({
+      where: { id },
+      include: {
+        match: { include: { players: true } },
+        scores: { include: { player: true } },
+      },
+    });
     if (!round) throw new NotFoundException(`Round with id ${id} not found`);
     return round;
   }
