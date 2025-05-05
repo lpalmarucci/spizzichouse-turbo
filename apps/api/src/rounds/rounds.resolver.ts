@@ -1,24 +1,12 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RoundsService } from './rounds.service';
 import { Round } from './round.entity';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
-import { Match } from '../match/match.entity';
-import { PlayersService } from '../players/players.service';
-import { MatchService } from '../match/match.service';
-import { Score } from '../score/entities/score.entity';
-import { ScoreService } from '../score/score.service';
-import { PrismaService } from '../prisma/prisma.service';
 
 @Resolver(() => Round)
 export class RoundsResolver {
-  constructor(
-    private readonly roundsService: RoundsService,
-    private readonly playersService: PlayersService,
-    private readonly matchService: MatchService,
-    private readonly scoreService: ScoreService,
-    private readonly prismaService: PrismaService,
-  ) {}
+  constructor(private readonly roundsService: RoundsService) {}
 
   @Mutation(() => Round)
   createRound(@Args('createRoundInput') createRoundInput: CreateRoundInput) {
@@ -46,31 +34,5 @@ export class RoundsResolver {
   @Mutation(() => Round)
   removeRound(@Args('id', { type: () => String }) id: string) {
     return this.roundsService.remove(id);
-  }
-
-  @ResolveField('match', () => Match)
-  async match(@Parent() round: Round) {
-    const { id } = round;
-    return this.prismaService.match.findMany({
-      where: {
-        rounds: {
-          some: {
-            id,
-          },
-        },
-      },
-    });
-  }
-
-  @ResolveField('scores', () => [Score])
-  async scores(@Parent() round: Round) {
-    const { id } = round;
-    return this.scoreService.findMany({
-      where: {
-        round: {
-          id,
-        },
-      },
-    });
   }
 }

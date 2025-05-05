@@ -29,12 +29,14 @@ export class ScoreService {
     });
   }
 
-  findMany(options: ScoreFindManyArgs) {
-    return this.prismaService.score.findMany(options);
-  }
-
-  findAll() {
-    return this.prismaService.score.findMany();
+  findMany(options?: ScoreFindManyArgs) {
+    return this.prismaService.score.findMany({
+      ...options,
+      include: {
+        player: true,
+        ...options?.include,
+      },
+    });
   }
 
   update(matchId: string, roundId: string, playerId: string, updateScoreInput: UpdateScoreInput) {

@@ -1,25 +1,14 @@
-import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MatchService } from './match.service';
 import { Match } from './match.entity';
 import { CreateMatch } from './models/create-match.model';
-import { PlayersService } from '../players/players.service';
-import { Player } from '../players/models/player.model';
 import { UpdateMatch } from './models/update-match.model';
-import { Round } from '../rounds/round.entity';
-import { RoundsService } from '../rounds/rounds.service';
 import { MatchHistory } from './models/match-history.model';
-import { Prisma } from '@prisma/client/output';
 import { MatchOrderBy } from './models/order-by-match.model';
-
-type MatchOrderByWithAggregationInput = Prisma.MatchOrderByWithAggregationInput;
 
 @Resolver(() => Match)
 export class MatchResolver {
-  constructor(
-    private readonly matchService: MatchService,
-    private readonly playersService: PlayersService,
-    private readonly roundService: RoundsService,
-  ) {}
+  constructor(private readonly matchService: MatchService) {}
 
   @Query(() => [Match], { name: 'matches' })
   async getAllMatches(
@@ -53,31 +42,5 @@ export class MatchResolver {
   @Mutation(() => Match, { name: 'deleteMatch' })
   async deleteMatch(@Args('id') id: string) {
     return this.matchService.remove(id);
-  }
-
-  @ResolveField('players', () => [Player])
-  async players(@Parent() match: Match) {
-    const { id } = match;
-    return this.playersService.findMany({
-      where: {
-        matches: {
-          some: {
-            id,
-          },
-        },
-      },
-    });
-  }
-
-  @ResolveField('rounds', () => [Round])
-  async rounds(@Parent() match: Match) {
-    const { id } = match;
-    return this.roundService.findMany({
-      where: {
-        match: {
-          id,
-        },
-      },
-    });
   }
 }

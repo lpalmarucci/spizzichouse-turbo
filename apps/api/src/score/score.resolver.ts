@@ -1,4 +1,4 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ScoreService } from './score.service';
 import { Score } from './entities/score.entity';
 import { CreateScoreInput } from './dto/create-score.input';
@@ -20,7 +20,7 @@ export class ScoreResolver {
 
   @Query(() => [Score], { name: 'scores' })
   findAll() {
-    return this.scoreService.findAll();
+    return this.scoreService.findMany();
   }
 
   @Mutation(() => Score)
@@ -36,11 +36,5 @@ export class ScoreResolver {
   @Mutation(() => DeleteManyOutput, { name: 'removeScoreFromRound' })
   removeScoreFromRound(@Args('matchId') matchId: string, @Args('roundId') roundId: string) {
     return this.scoreService.removeScoreFromRound(matchId, roundId);
-  }
-
-  @ResolveField('player')
-  async player(@Parent() score: CreateScoreInput) {
-    const { playerId } = score;
-    return this.prismaService.player.findUnique({ where: { id: playerId } });
   }
 }

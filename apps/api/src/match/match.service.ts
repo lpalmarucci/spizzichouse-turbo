@@ -66,11 +66,22 @@ export class MatchService {
     return this._prismaService.match.findMany({
       orderBy: orderBy ?? undefined,
       take,
+      include: {
+        players: true,
+        rounds: {
+          include: {
+            scores: { include: { player: true } },
+          },
+        },
+      },
     });
   }
 
   async findOne(id: string) {
-    const match = await this._prismaService.match.findUnique({ where: { id }, include: { players: true } });
+    const match = await this._prismaService.match.findUnique({
+      where: { id },
+      include: { players: true, rounds: true },
+    });
     if (!match) throw new NotFoundException(`Match with id ${id} not found`);
     return match;
   }

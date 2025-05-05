@@ -54,6 +54,10 @@ export class RoundsService {
         matchId,
       },
       orderBy: { number: 'asc' },
+      include: {
+        match: true,
+        scores: true,
+      },
     });
   }
 
