@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { Medal, Trophy } from "lucide-react";
-import React, { use, useMemo } from "react";
+import React, { use, useMemo, useState } from "react";
 import {
   RoundContext,
   RoundContextType,
@@ -24,7 +24,11 @@ import {
 } from "@workspace/ui/components/table";
 import UserAvatar from "@/components/user-avatar";
 import { Separator } from "@workspace/ui/components/separator";
-import { calculateLeaderboard } from "@/utils/leaderboard";
+import { calculateLeaderboard, LeaderboardMode } from "@/utils/leaderboard";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@workspace/ui/components/toggle-group";
 
 type LeaderboardScore = {
   playerId: string;
@@ -33,9 +37,11 @@ type LeaderboardScore = {
 
 export function Leaderboard() {
   const { rounds, players } = use<RoundContextType>(RoundContext);
+  const [leaderboardMode, setLeaderboardMode] =
+    useState<LeaderboardMode>("points");
   const leaderboardScores = useMemo<LeaderboardScore[]>(
-    () => calculateLeaderboard(rounds),
-    [rounds],
+    () => calculateLeaderboard(rounds, leaderboardMode),
+    [rounds, leaderboardMode],
   );
 
   return (
@@ -43,11 +49,38 @@ export function Leaderboard() {
       <div className="h-1 w-full absolute top-0 bg-gradient-to-r from-orange-500 to-orange-700" />
       <CardHeader>
         <CardTitle>
-          <div className="w-full flex items-center gap-2">
-            <Trophy className="text-orange-600" />
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Leaderboard
-            </h1>
+          <div className="w-full flex items-center justify-between">
+            <div className="flex gap-2 items-center">
+              <Trophy className="text-orange-600" />
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Leaderboard
+              </h1>
+            </div>
+            <ToggleGroup
+              type="single"
+              value={leaderboardMode}
+              onValueChange={(value) =>
+                value && setLeaderboardMode(value as LeaderboardMode)
+              }
+              className="bg-background border"
+            >
+              <ToggleGroupItem
+                value="points"
+                aria-label="Sort by total points"
+                className="px-3 data-[state=on]:bg-gray-200/20 rounded-l-md"
+              >
+                <Trophy className="h-4 w-4 mr-2" />
+                Total Points
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="rounds"
+                aria-label="Sort by rounds won"
+                className="px-3 data-[state=on]:bg-gray-200/20 rounded-r-md"
+              >
+                <Medal className="h-4 w-4 mr-2" />
+                Rounds Won
+              </ToggleGroupItem>
+            </ToggleGroup>
           </div>
         </CardTitle>
         <CardDescription>
@@ -68,7 +101,7 @@ export function Leaderboard() {
               const player = players.find((p) => p.id === playerId);
               if (!player) return;
               return (
-                <TableRow key={`${score}`}>
+                <TableRow key={playerId}>
                   <TableCell>
                     <div className="flex items-center">
                       {index === 0 ? (

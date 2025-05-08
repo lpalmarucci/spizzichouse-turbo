@@ -1,7 +1,6 @@
 import { gql } from "graphql-request";
 
 export const MATCH_QUERY_KEY = "match";
-export const MATCH_ORDERED_QUERY_KEY = "match_ordered";
 export const MATCH_HISTORY_QUERY_KEY = "match_history";
 
 export const GET_MATCHES = gql`
