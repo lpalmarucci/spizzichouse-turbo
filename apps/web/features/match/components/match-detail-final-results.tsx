@@ -6,27 +6,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
-import { Trophy } from "lucide-react";
+import { Medal, Trophy } from "lucide-react";
 import { Match } from "@workspace/api/qgl-types";
-import { useMemo } from "react";
-import { orderRoundsByScore } from "@/utils/leaderboard";
+import React, { useMemo, useState } from "react";
+import { calculateLeaderboard, LeaderboardMode } from "@/utils/leaderboard";
 import { getRankingInfo } from "@/features/match/match.utils";
 import { Progress } from "@workspace/ui/components/progress";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@workspace/ui/components/toggle-group";
 
 interface MatchDetailFinalResultsProps {
   match: Match;
 }
 
-type RankedPlayer = {
-  id: string;
-  full_name: string;
-  score: number;
-};
-
 export function MatchDetailFinalResults({
   match,
 }: MatchDetailFinalResultsProps) {
-  const finalResults = useMemo(() => orderRoundsByScore(match.rounds), [match]);
+  const [leaderboardMode, setLeaderboardMode] =
+    useState<LeaderboardMode>("points");
+  const finalResults = useMemo(
+    () => calculateLeaderboard(match.rounds, leaderboardMode),
+    [match, leaderboardMode],
+  );
 
   const highestScore = useMemo(() => {
     let max = -1;
@@ -39,9 +42,36 @@ export function MatchDetailFinalResults({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-yellow-500" />
-          Final Results
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-yellow-500" />
+            Final Results
+          </div>
+          <ToggleGroup
+            type="single"
+            value={leaderboardMode}
+            onValueChange={(value) =>
+              value && setLeaderboardMode(value as LeaderboardMode)
+            }
+            className="bg-background border"
+          >
+            <ToggleGroupItem
+              value="points"
+              aria-label="Sort by total points"
+              className="px-3 data-[state=on]:bg-gray-200/20 rounded-l-md"
+            >
+              <Trophy className="h-4 w-4 mr-2" />
+              Total Points
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="rounds"
+              aria-label="Sort by rounds won"
+              className="px-3 data-[state=on]:bg-gray-200/20 rounded-r-md"
+            >
+              <Medal className="h-4 w-4 mr-2" />
+              Rounds Won
+            </ToggleGroupItem>
+          </ToggleGroup>
         </CardTitle>
       </CardHeader>
       <CardContent className="">
@@ -63,7 +93,9 @@ export function MatchDetailFinalResults({
                   </div>
                 </div>
                 <div className="text-3xl font-bold text-yellow-700">
-                  {finalResults[0]?.score} pts
+                  {leaderboardMode === "points"
+                    ? `${finalResults[0]?.score} points`
+                    : `${finalResults[0]?.score} rounds`}
                 </div>
               </div>
             </div>
@@ -95,7 +127,11 @@ export function MatchDetailFinalResults({
                       </div>
                       <div className="flex items-center gap-2">
                         <Progress value={percentage} className="h-2" />
-                        <span className="text-sm font-medium">{score} pts</span>
+                        <span className="text-sm font-medium text-nowrap">
+                          {leaderboardMode === "points"
+                            ? `${score} points`
+                            : `${score} rounds`}
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -38,6 +38,7 @@ import {
   type MatchSchemaType,
 } from "@/features/match/match.schema";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface CreateMatchDialogProps {
   open: boolean;
@@ -50,12 +51,13 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
     resolver: zodResolver(matchSchema),
     defaultValues: MATCH_FORM_INITIAL_VALUES,
   });
+  const router = useRouter();
 
   const [_, startTransition] = useTransition();
 
   async function onFormAction(formData: FormData) {
     startTransition(async () => {
-      const { error } = await createMatchAction(form.getValues());
+      const { error, data } = await createMatchAction(form.getValues());
 
       if (error) {
         toast.error(error.message);
@@ -65,6 +67,8 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
       toast.info("Match created successfully");
       form.reset();
       onOpenChange(false);
+      console.log({ data });
+      router.push(`/matches/${data?.createMatch.id}`);
     });
   }
 
@@ -80,9 +84,7 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
     >
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            Create New Match isValid:{Boolean(form.formState.isValid)}
-          </DialogTitle>
+          <DialogTitle>Create New Match</DialogTitle>
           <DialogDescription>
             Set up a new card game match with custom rules and players.
           </DialogDescription>

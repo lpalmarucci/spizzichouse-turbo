@@ -6,16 +6,16 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { cache } from "react";
-import { orderRoundsByScore } from "@/utils/leaderboard";
+import { calculateLeaderboard } from "@/utils/leaderboard";
 
 interface MatchFinalStatsProps {
   rounds: Round[];
 }
 
-const orderRoundsByScoreCache = cache(orderRoundsByScore);
+const calculateLeaderboardCache = cache(calculateLeaderboard);
 
 export function MatchFinalStats({ rounds }: MatchFinalStatsProps) {
-  const finalResults = orderRoundsByScoreCache(rounds);
+  const finalResults = calculateLeaderboardCache(rounds);
   const highestScore = Math.max(...finalResults.map((r) => r.score));
   const averageScore =
     finalResults.reduce((sum, res) => res.score + sum, 0) / rounds.length;

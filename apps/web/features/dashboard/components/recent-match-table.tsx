@@ -28,8 +28,8 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import Link from "next/link";
-import { calculateLeaderboard } from "@/utils/leaderboard";
 import { OfflineRound } from "@/features/rounds/round.context";
+import { calculateLeaderboard } from "@/utils/leaderboard";
 
 export function RecentMatchTable() {
   const { data, isLoading } = useGetMatches({
@@ -69,22 +69,10 @@ export function RecentMatchTable() {
                 match.status === MatchStatus.Completed &&
                 match.rounds.length > 0
               ) {
-                offlineRounds = match.rounds.map((r) => ({
-                  id: r.id,
-                  number: r.number,
-                  scores:
-                    r.scores?.map((s) => ({
-                      playerId: s.player.id,
-                      points: s.points,
-                      prevPoints: s.points,
-                    })) ?? [],
-                  status: r.status,
-                })) satisfies OfflineRound[];
-                console.log({ offlineRounds });
-                const leader = calculateLeaderboard(offlineRounds).at(0);
+                const leader = calculateLeaderboard(match.rounds).at(0);
                 if (leader) {
                   winner = match.players.find(
-                    (p) => p.id === leader.playerId,
+                    (p) => p.id === leader.player.id,
                   )?.full_name;
                 }
               }
