@@ -6,19 +6,19 @@ import {
   DELETE_MATCH,
   UPDATE_MATCH,
 } from "@/features/match/match.query";
-import { CreateMatch, UpdateMatch } from "@workspace/api/qgl-types";
+import { CreateMatch, Match, UpdateMatch } from "@workspace/api/qgl-types";
 import { gqlRequest } from "@/utils/query";
 
 export async function createMatchAction(createMatch: CreateMatch) {
   try {
-    await gqlRequest(CREATE_MATCH, {
+    const data = await gqlRequest<{ createMatch: Match }>(CREATE_MATCH, {
       match: createMatch,
     });
     revalidatePath("/matches");
 
-    return { error: null };
+    return { error: null, data };
   } catch (err: any) {
-    return { error: err.message };
+    return { error: err.message, data: null };
   }
 }
 

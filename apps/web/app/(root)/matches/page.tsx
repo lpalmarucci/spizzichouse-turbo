@@ -6,6 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { gqlRequest } from "@/utils/query";
+import { GET_PLAYERS, PLAYER_QUERY_KEY } from "@/features/player/player.query";
 
 export default async function MatchesPage() {
   const queryClient = new QueryClient();
@@ -13,6 +14,11 @@ export default async function MatchesPage() {
   await queryClient.prefetchQuery({
     queryKey: [MATCH_QUERY_KEY, {}],
     queryFn: () => gqlRequest(GET_MATCHES),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [PLAYER_QUERY_KEY],
+    queryFn: () => gqlRequest(GET_PLAYERS),
   });
 
   return (
