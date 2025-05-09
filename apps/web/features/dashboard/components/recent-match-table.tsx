@@ -28,8 +28,7 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import Link from "next/link";
-import { OfflineRound } from "@/features/rounds/round.context";
-import { calculateLeaderboard } from "@/utils/leaderboard";
+import { orderRoundsByScore } from "@/utils/leaderboard";
 
 export function RecentMatchTable() {
   const { data, isLoading } = useGetMatches({
@@ -63,13 +62,12 @@ export function RecentMatchTable() {
           </TableHeader>
           <TableBody>
             {data.matches.map((match) => {
-              let offlineRounds: OfflineRound[] = [];
               let winner: string | undefined;
               if (
                 match.status === MatchStatus.Completed &&
                 match.rounds.length > 0
               ) {
-                const leader = calculateLeaderboard(match.rounds).at(0);
+                const leader = orderRoundsByScore(match.rounds).at(0);
                 if (leader) {
                   winner = match.players.find(
                     (p) => p.id === leader.player.id,

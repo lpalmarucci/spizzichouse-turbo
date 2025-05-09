@@ -10,7 +10,7 @@ import {
 } from "@workspace/ui/components/card";
 import { BarChart3 } from "lucide-react";
 import { useMemo } from "react";
-import { calculateLeaderboard } from "@/utils/leaderboard";
+import { orderRoundsByScore } from "@/utils/leaderboard";
 import { getRankingInfo } from "@/features/match/match.utils";
 import {
   Table,
@@ -25,7 +25,7 @@ interface RoundsByRoundsScoreProps {
 }
 
 export function RoundsByRoundsScore({ rounds }: RoundsByRoundsScoreProps) {
-  const finalResults = useMemo(() => calculateLeaderboard(rounds), [rounds]);
+  const finalResults = useMemo(() => orderRoundsByScore(rounds), [rounds]);
   return (
     <Card>
       <CardHeader className="pb-2">
