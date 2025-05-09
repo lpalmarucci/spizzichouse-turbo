@@ -9,7 +9,7 @@ import {
 import { Medal, Trophy } from "lucide-react";
 import { Match } from "@workspace/api/qgl-types";
 import React, { useMemo, useState } from "react";
-import { calculateLeaderboard, LeaderboardMode } from "@/utils/leaderboard";
+import { LeaderboardMode, orderRoundsByScore } from "@/utils/leaderboard";
 import { getRankingInfo } from "@/features/match/match.utils";
 import { Progress } from "@workspace/ui/components/progress";
 import {
@@ -27,7 +27,7 @@ export function MatchDetailFinalResults({
   const [leaderboardMode, setLeaderboardMode] =
     useState<LeaderboardMode>("points");
   const finalResults = useMemo(
-    () => calculateLeaderboard(match.rounds, leaderboardMode),
+    () => orderRoundsByScore(match.rounds, leaderboardMode),
     [match, leaderboardMode],
   );
 

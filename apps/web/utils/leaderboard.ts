@@ -7,12 +7,7 @@ type ScoreResult = {
 
 export type LeaderboardMode = "points" | "rounds";
 
-/**
- * Order rounds for
- * @param rounds
- * @param mode
- */
-export function calculateLeaderboard(
+export function orderRoundsByScore(
   rounds: Round[],
   mode: LeaderboardMode = "points",
 ): ScoreResult[] {
@@ -27,18 +22,18 @@ export function calculateLeaderboard(
           const prevRoundCount = leaderboardMap.get(score.player.id);
           if (!prevRoundCount)
             leaderboardMap.set(score.player.id, {
+              score: 1,
               player: score.player,
-              score: 0,
             });
           else
             leaderboardMap.set(score.player.id, {
-              ...prevRoundCount,
-              score: +prevRoundCount.score + 1,
+              score: prevRoundCount.score + 1,
+              player: score.player,
             });
         } else if (!leaderboardMap.has(score.player.id)) {
           leaderboardMap.set(score.player.id, {
-            player: score.player,
             score: 0,
+            player: score.player,
           });
         }
       } else {
