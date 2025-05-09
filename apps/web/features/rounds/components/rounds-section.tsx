@@ -16,13 +16,11 @@ import { RoundsList } from "@/features/rounds/components/rounds-list";
 import { Button } from "@workspace/ui/components/button";
 import { Plus } from "lucide-react";
 import {
-  OfflineRound,
-  OfflineScore,
   RoundContext,
   RoundContextType,
 } from "@/features/rounds/round.context";
 import { use, useEffect, useMemo, useState } from "react";
-import { RoundStatus } from "@workspace/api/qgl-types";
+import { Match, Round, RoundStatus, Score } from "@workspace/api/qgl-types";
 import {
   Tooltip,
   TooltipContent,
@@ -51,20 +49,27 @@ function Section({ matchId }: RoundsSectionProps) {
   }
 
   function addRound() {
-    const newScores: OfflineScore[] = players.map((p) => ({
-      playerId: p.id,
-      points: 0,
-      prevPoints: 0,
-    }));
+    const newScores: Score[] = players.map(
+      (p) =>
+        ({
+          player: p,
+          match: matchData?.match as Match,
+          points: 0,
+        }) as Score,
+    );
     setRounds((r) => {
       const newRoundNumber = (r.slice().pop()?.number ?? 0) + 1;
       return [
         ...r,
         {
+          id: "",
           number: newRoundNumber,
-          scores: newScores,
           status: RoundStatus.InProgress,
-        },
+          match: matchData?.match,
+          score: 0,
+          scores: newScores,
+          createdAt: new Date(),
+        } as Round,
       ];
     });
   }
@@ -119,7 +124,7 @@ function Section({ matchId }: RoundsSectionProps) {
 }
 
 export function RoundsSection(props: RoundsSectionProps) {
-  const [rounds, setRounds] = useState<OfflineRound[]>([]);
+  const [rounds, setRounds] = useState<Round[]>([]);
   const { data: roundData, isFetching, error } = useGetRounds(props.matchId);
   const {
     data: matchData,
@@ -129,17 +134,7 @@ export function RoundsSection(props: RoundsSectionProps) {
 
   useEffect(() => {
     if (!roundData) return;
-    const newRounds = roundData?.rounds.map((r) => ({
-      id: r.id,
-      number: r.number,
-      scores: r.scores.map((s) => ({
-        playerId: s.player.id,
-        points: s.points,
-        prevPoints: s.points,
-      })),
-      status: r.status,
-    }));
-    setRounds(newRounds);
+    setRounds(roundData.rounds);
   }, [roundData]);
 
   if (isFetching || isFetchingMatch) {

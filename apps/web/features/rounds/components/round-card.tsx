@@ -1,6 +1,6 @@
 "use client";
 
-import { RoundStatus } from "@workspace/api/qgl-types";
+import { Round, RoundStatus } from "@workspace/api/qgl-types";
 import { getStatusColor } from "@/features/rounds/rounds.utils";
 import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
@@ -15,7 +15,6 @@ import {
   TableRow,
 } from "@workspace/ui/components/table";
 import {
-  OfflineRound,
   RoundContext,
   RoundContextType,
 } from "@/features/rounds/round.context";
@@ -30,7 +29,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ROUNDS_QUERY_KEY } from "@/features/rounds/rounds.query";
 
 interface RoundCardProps {
-  round: OfflineRound;
+  round: Round;
 }
 
 export default function RoundCard({ round }: RoundCardProps) {
@@ -62,7 +61,7 @@ export default function RoundCard({ round }: RoundCardProps) {
       const round = newRounds.find((r) => r.number === number);
       if (!round) return prev;
 
-      const scoreIdx = round.scores.findIndex((s) => s.playerId === playerId);
+      const scoreIdx = round.scores.findIndex((s) => s.player.id === playerId);
       if (scoreIdx === -1) return prev;
 
       round.scores[scoreIdx]!.points = score;
@@ -76,7 +75,7 @@ export default function RoundCard({ round }: RoundCardProps) {
       number: round.number,
       status: RoundStatus.Completed,
       scores: round.scores.map((r) => ({
-        playerId: r.playerId,
+        playerId: r.player.id,
         points: r.points,
       })),
     })
@@ -178,19 +177,15 @@ export default function RoundCard({ round }: RoundCardProps) {
             </TableHeader>
             <TableBody>
               {round.scores.map((scoreEntry) => {
-                const player = players.find(
-                  (p) => p.id === scoreEntry.playerId,
-                );
-                if (!player) return null;
                 return (
-                  <TableRow key={`${round.number}-${player.id}`}>
+                  <TableRow key={`${round.number}-${scoreEntry.player.id}`}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary">
-                          {getInitials(player.full_name)}
+                          {getInitials(scoreEntry.player.full_name)}
                         </div>
                         <div>
-                          <div>{player.full_name}</div>
+                          <div>{scoreEntry.player.full_name}</div>
                           {/*{player.house && (*/}
                           {/*  <div className="text-xs text-muted-foreground">*/}
                           {/*    {player.house}*/}
@@ -213,7 +208,7 @@ export default function RoundCard({ round }: RoundCardProps) {
                             onClick={() => {
                               updateRoundScore(
                                 round.number,
-                                scoreEntry.playerId,
+                                scoreEntry.player.id,
                                 Math.max(0, scoreEntry.points - 1),
                               );
                             }}
@@ -226,7 +221,7 @@ export default function RoundCard({ round }: RoundCardProps) {
                             onChange={(e) => {
                               updateRoundScore(
                                 round.number,
-                                scoreEntry.playerId,
+                                scoreEntry.player.id,
                                 Number.parseInt(e.target.value) || 0,
                               );
                             }}
@@ -239,7 +234,7 @@ export default function RoundCard({ round }: RoundCardProps) {
                             onClick={() => {
                               updateRoundScore(
                                 round.number,
-                                scoreEntry.playerId,
+                                scoreEntry.player.id,
                                 scoreEntry.points + 1,
                               );
                             }}

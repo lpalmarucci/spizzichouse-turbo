@@ -24,7 +24,7 @@ import {
 } from "@workspace/ui/components/table";
 import UserAvatar from "@/components/user-avatar";
 import { Separator } from "@workspace/ui/components/separator";
-import { calculateLeaderboard, LeaderboardMode } from "@/utils/leaderboard";
+import { LeaderboardMode, orderRoundsByScore } from "@/utils/leaderboard";
 import {
   ToggleGroup,
   ToggleGroupItem,
@@ -39,8 +39,8 @@ export function Leaderboard() {
   const { rounds, players } = use<RoundContextType>(RoundContext);
   const [leaderboardMode, setLeaderboardMode] =
     useState<LeaderboardMode>("points");
-  const leaderboardScores = useMemo<LeaderboardScore[]>(
-    () => calculateLeaderboard(rounds, leaderboardMode),
+  const leaderboardScores = useMemo(
+    () => orderRoundsByScore(rounds, leaderboardMode),
     [rounds, leaderboardMode],
   );
 
@@ -97,11 +97,9 @@ export function Leaderboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {leaderboardScores.map(({ playerId, score }, index) => {
-              const player = players.find((p) => p.id === playerId);
-              if (!player) return;
+            {leaderboardScores.map(({ player, score }, index) => {
               return (
-                <TableRow key={playerId}>
+                <TableRow key={player.id}>
                   <TableCell>
                     <div className="flex items-center">
                       {index === 0 ? (
