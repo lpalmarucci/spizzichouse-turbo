@@ -6,6 +6,7 @@ import { UpdatePlayer } from './models/update-player.model';
 import { PlayerStatus } from '../@graphql/types';
 import { Prisma } from '@prisma/client/output';
 import { PlayerHistory } from './models/player-history.model';
+import { PlayerStats } from './models/player-stats.model';
 import PlayerFindManyArgs = Prisma.PlayerFindManyArgs;
 
 @Resolver('Player')
@@ -28,6 +29,11 @@ export class PlayerResolver {
   @Query(() => Player, { name: 'player' })
   async findById(@Args('id', { type: () => String }) id: string) {
     return this.playersService.findOne(id);
+  }
+
+  @Query(() => [PlayerStats], { name: 'players_stats' })
+  async playersWithStats() {
+    return this.playersService.getPlayersStats();
   }
 
   @Query(() => [PlayerHistory], { name: 'players_history' })

@@ -4,6 +4,7 @@ import { Player, Prisma } from '@prisma/client/output';
 import { CreatePlayer } from './models/create-player.model';
 import { UpdatePlayer } from './models/update-player.model';
 import { PlayerHistory } from './models/player-history.model';
+import { PlayerStats } from './models/player-stats.model';
 import PlayerFindManyArgs = Prisma.PlayerFindManyArgs;
 
 @Injectable()
@@ -36,6 +37,53 @@ export class PlayersService {
       FROM months m
       LEFT JOIN player_counts pc ON m.month = pc.month
       ORDER BY m.month;
+    `;
+  }
+
+  getPlayersStats(): Promise<PlayerStats[]> {
+    return this._prismaService.$queryRaw<PlayerStats[]>`
+      WITH total_scores AS (
+        SELECT
+          s."matchId",
+          s."playerId",
+          SUM(s.points) AS total_points
+        FROM scores s
+        GROUP BY "matchId", "playerId"
+      ),
+      max_scores AS (
+        SELECT
+          "matchId",
+          MAX(total_points) AS max_points
+        FROM total_scores
+        GROUP BY "matchId"
+      ),
+      winners AS (
+        SELECT
+          ts."playerId",
+          ts."matchId"
+        FROM total_scores ts
+        JOIN max_scores ms
+          ON ts."matchId" = ms."matchId"
+         AND ts.total_points = ms.max_points
+      ),
+      total_matches AS (
+        SELECT
+          mp."B" AS player_id,
+          COUNT(mp."A") AS total_matches
+        FROM "_MatchToPlayer" mp
+        GROUP BY mp."B"
+      )
+      SELECT
+        p.*,
+        COUNT(w."matchId")::Int AS wins,
+        COALESCE(mp.total_matches, 0)::Int as total_matches,
+        COUNT(w."matchId")::decimal / mp.total_matches * 100 as win_rate
+      FROM players p
+      LEFT JOIN winners w
+        ON p.id = w."playerId"
+      LEFT JOIN total_matches mp
+        ON p.id = mp.player_id
+      GROUP BY p.id, p.full_name, mp.total_matches
     `;
   }
 

@@ -111,6 +111,19 @@ enum PlayerLevel {
   INTERMEDIATE
 }
 
+type PlayerStats {
+  bio: String
+  createdAt: DateTime!
+  email: String!
+  full_name: String!
+  id: String!
+  level: PlayerLevel!
+  status: PlayerStatus!
+  total_matches: Int!
+  win_rate: Float!
+  wins: Int!
+}
+
 enum PlayerStatus {
   ACTIVE
   INACTIVE
@@ -123,6 +136,7 @@ type Query {
   player(id: String!): Player!
   players(status: String): [Player!]!
   players_history: [PlayerHistory!]!
+  players_stats: [PlayerStats!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!

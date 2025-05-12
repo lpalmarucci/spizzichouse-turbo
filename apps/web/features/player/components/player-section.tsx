@@ -17,9 +17,13 @@ import {
 } from "@workspace/ui/components/tabs";
 import { PlayerCard } from "@/features/player/components/player-card";
 import { useMemo, useState } from "react";
-import { Player, PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
+import {
+  PlayerLevel,
+  PlayerStats,
+  PlayerStatus,
+} from "@workspace/api/qgl-types";
 import { PlayersNotFound } from "@/features/player/components/players-not-found";
-import { useGetPlayers } from "@/features/player/player.hook";
+import { useGetPlayersStats } from "@/features/player/player.hook";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { ScreenLoader } from "@/components/screen-loader";
@@ -30,13 +34,13 @@ export function PlayerSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | undefined>();
   const [statusFilter, setStatusFilter] = useState<PlayerStatus | undefined>();
-  const [sortField, setSortField] = useState<keyof Player>("id");
+  const [sortField, setSortField] = useState<keyof PlayerStats>("id");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const { data, isFetching, error } = useGetPlayers();
+  const { data, isFetching, error } = useGetPlayersStats();
 
   const filteredPlayers = useMemo(() => {
-    if (!data || !data?.players) return [];
-    return data.players.filter((player) => {
+    if (!data || !data?.players_stats) return [];
+    return data.players_stats.filter((player) => {
       if (
         searchQuery &&
         !player.full_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -52,9 +56,9 @@ export function PlayerSection() {
     });
   }, [data, searchQuery, statusFilter]);
 
-  const sortedPlayers = useMemo<Player[]>(() => {
+  const sortedPlayers = useMemo<PlayerStats[]>(() => {
     if (!filteredPlayers) return [];
-    return filteredPlayers.sort((a: Player, b: Player) => {
+    return filteredPlayers.sort((a: PlayerStats, b: PlayerStats) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
 
