@@ -44,6 +44,7 @@ export const GET_PLAYERS_STATS = gql`
       status
       level
       win_rate
+      createdAt
     }
   }
 `;
