@@ -99,7 +99,7 @@ export function PlayerCard({ player }: { player: PlayerStats }) {
           <div className="w-full">
             <div className="flex justify-between text-xs mb-1">
               <span>Win Rate</span>
-              <span>Win Rate: {player.win_rate.toFixed(0)}%</span>
+              <span>{player.win_rate.toFixed(0)}%</span>
             </div>
             <Progress value={player.win_rate} className="h-2" />
           </div>
