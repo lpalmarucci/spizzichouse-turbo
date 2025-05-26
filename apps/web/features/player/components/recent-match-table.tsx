@@ -17,19 +17,25 @@ import {
 import { useGetRecentMatchesByPlayer } from "@/features/match/match.hook";
 import { formatDate } from "date-fns";
 import { Badge } from "@workspace/ui/components/badge";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import { useGetPlayerById } from "@/features/player/player.hook";
+import { ScreenLoader } from "@/components/screen-loader";
 
-export function RecentMatchTable({ id }: { id: string }) {
+interface RecentMatchTableProps {
+  id: string;
+}
+
+export function RecentMatchTable({ id }: RecentMatchTableProps) {
   const { data, isLoading } = useGetRecentMatchesByPlayer(id);
+  const { data: playerData, isLoading: isLoadingPlayer } = useGetPlayerById(id);
 
-  if (isLoading) return <Skeleton />;
+  if (isLoading || isLoadingPlayer) return <ScreenLoader />;
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Partite Recenti</CardTitle>
         <CardDescription>
-          Ultime partite giocate da Luca Palmucci
+          Ultime partite giocate da {playerData?.player.full_name}
         </CardDescription>
       </CardHeader>
       <CardContent>
