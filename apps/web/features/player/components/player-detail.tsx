@@ -40,7 +40,9 @@ export function PlayerDetail({ id }: { id: string }) {
         <Tabs defaultValue="recent_matches">
           <TabsList>
             <TabsTrigger value="recent_matches">Partite recenti</TabsTrigger>
-            <TabsTrigger value="opponents">Avversari</TabsTrigger>
+            <TabsTrigger value="opponents" disabled>
+              Avversari
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="recent_matches">
             <RecentMatchTable id={id} />
