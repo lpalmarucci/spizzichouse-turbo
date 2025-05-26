@@ -8,7 +8,7 @@ import { Layers, Trophy, Users } from "lucide-react";
 import { useMemo } from "react";
 import { MatchHistoryChart } from "@/features/dashboard/components/match-history-chart";
 import { PlayersHistory } from "@/features/dashboard/components/players-history";
-import { RecentMatchTable } from "@/features/dashboard/components/recent-match-table";
+import { RecentPlayersMatchesTable } from "@/features/dashboard/components/recent-players-matches-table";
 
 export function AnalyticsSection() {
   const {
@@ -60,7 +60,7 @@ export function AnalyticsSection() {
         <MatchHistoryChart />
         <PlayersHistory />
       </div>
-      <RecentMatchTable />
+      <RecentPlayersMatchesTable />
     </div>
   );
 }
