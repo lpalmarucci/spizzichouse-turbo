@@ -40,7 +40,8 @@ export class PlayersService {
     `;
   }
 
-  getPlayersStats(): Promise<PlayerStats[]> {
+  async getPlayersStats(playerId?: string): Promise<PlayerStats[]> {
+    const whereCondition = playerId ? Prisma.sql`WHERE p.id = ${playerId}` : Prisma.empty;
     return this._prismaService.$queryRaw<PlayerStats[]>`
       WITH total_scores AS (
         SELECT
@@ -83,6 +84,7 @@ export class PlayersService {
         ON p.id = w."playerId"
       LEFT JOIN total_matches mp
         ON p.id = mp.player_id
+      ${whereCondition}
       GROUP BY p.id, p.full_name, mp.total_matches
     `;
   }

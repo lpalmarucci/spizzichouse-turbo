@@ -134,6 +134,7 @@ type Query {
   matches(orderBy: MatchOrderBy, take: Int): [Match!]!
   matches_history: [MatchHistory!]!
   player(id: String!): Player!
+  player_stats(id: String!): PlayerStats!
   players(status: String): [Player!]!
   players_history: [PlayerHistory!]!
   players_stats: [PlayerStats!]!

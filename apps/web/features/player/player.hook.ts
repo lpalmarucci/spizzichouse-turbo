@@ -1,5 +1,6 @@
 import {
   GET_PLAYER_BY_ID,
+  GET_PLAYER_STATS,
   GET_PLAYERS,
   GET_PLAYERS_HISTORY,
   GET_PLAYERS_STATS,
@@ -28,6 +29,12 @@ export const useGetPlayersStats = () =>
     queryKey: [PLAYERS_STATS_QUERY_KEY],
     queryFn: () => gqlRequest(GET_PLAYERS_STATS),
     initialData: { players_stats: [] },
+  });
+
+export const useGetPlayerStats = (id: string) =>
+  useQuery<{ player_stats: PlayerStats }>({
+    queryKey: [PLAYERS_STATS_QUERY_KEY, id],
+    queryFn: () => gqlRequest(GET_PLAYER_STATS),
   });
 
 export const useGetPlayersHistory = () =>

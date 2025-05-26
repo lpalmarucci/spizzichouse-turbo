@@ -11,7 +11,10 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Calendar, House, Mail, Trophy } from "lucide-react";
 import { getInitials, getLevelColor } from "@/features/player/utils";
 import { Separator } from "@workspace/ui/components/separator";
-import { useGetPlayerById } from "@/features/player/player.hook";
+import {
+  useGetPlayerById,
+  useGetPlayerStats,
+} from "@/features/player/player.hook";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { ScreenLoader } from "@/components/screen-loader";
@@ -22,6 +25,8 @@ interface PlayerDetailCardProps {
 
 export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   const { data, isLoading, error } = useGetPlayerById(id);
+  const { data: playerStats } = useGetPlayerStats(id);
+  console.log({ playerStats });
 
   if (error) {
     toast.error(error.message);

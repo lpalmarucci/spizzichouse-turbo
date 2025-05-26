@@ -49,6 +49,22 @@ export const GET_PLAYERS_STATS = gql`
   }
 `;
 
+export const GET_PLAYER_STATS = gql`
+  query player_stats($id: String!) {
+    player_stats(id: $id) {
+      wins
+      total_matches
+      bio
+      email
+      id
+      status
+      level
+      win_rate
+      createdAt
+    }
+  }
+`;
+
 export const GET_PLAYERS_HISTORY = gql`
   query players_history {
     players_history {

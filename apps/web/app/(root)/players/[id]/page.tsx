@@ -1,6 +1,8 @@
 import {
   GET_PLAYER_BY_ID,
+  GET_PLAYER_STATS,
   PLAYER_QUERY_KEY,
+  PLAYERS_STATS_QUERY_KEY,
 } from "@/features/player/player.query";
 import {
   dehydrate,
@@ -23,6 +25,11 @@ export default async function PlayerDetailPage({
   await queryClient.prefetchQuery({
     queryKey: [PLAYER_QUERY_KEY, id],
     queryFn: () => gqlRequest(GET_PLAYER_BY_ID, { id }),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [PLAYERS_STATS_QUERY_KEY, id],
+    queryFn: () => gqlRequest(GET_PLAYER_STATS, { id }),
   });
 
   return (
