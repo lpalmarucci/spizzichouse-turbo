@@ -7,6 +7,7 @@ import { Edit } from "lucide-react";
 import { PlayerDetailCard } from "@/features/player/components/player-detail-card";
 import React from "react";
 import { usePathname } from "next/navigation";
+import PlayerStats from "@/features/player/components/player-stats";
 
 export function PlayerDetail({ id }: { id: string }) {
   const pathname = usePathname();
@@ -24,8 +25,9 @@ export function PlayerDetail({ id }: { id: string }) {
           </Link>
         </Button>
       </DetailHeader>
-      <div className="grid lg:grid-cols-2">
+      <div className="grid lg:grid-cols-2 gap-4">
         <PlayerDetailCard id={id} />
+        <PlayerStats id={id} />
       </div>
     </Detail>
   );

@@ -26,7 +26,6 @@ interface PlayerDetailCardProps {
 export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   const { data, isLoading, error } = useGetPlayerById(id);
   const { data: playerStats } = useGetPlayerStats(id);
-  console.log({ playerStats });
 
   if (error) {
     toast.error(error.message);
@@ -64,8 +63,9 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
               <Badge className={getLevelColor(player.level)}>
                 {player.level}
               </Badge>
-              <Badge variant="outline" className="gap-1">
-                <Trophy className="h-3 w-3 text-primary" />0 vittorie
+              <Badge variant="outline" className="gap-1 font-semibold">
+                <Trophy className="h-3 w-3 text-indigo-500" />
+                {playerStats?.player_stats?.wins} vittorie
               </Badge>
             </div>
           </div>
