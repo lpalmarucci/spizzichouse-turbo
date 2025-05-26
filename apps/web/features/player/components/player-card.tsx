@@ -32,9 +32,9 @@ import {
   getStatusColor,
   getStatusText,
 } from "@/features/player/utils";
-import { Player } from "@workspace/api/qgl-types";
+import { PlayerStats } from "@workspace/api/qgl-types";
 
-export function PlayerCard({ player }: { player: Player }) {
+export function PlayerCard({ player }: { player: PlayerStats }) {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -87,24 +87,21 @@ export function PlayerCard({ player }: { player: Player }) {
             <div className="flex items-center gap-1 text-sm">
               <Trophy className="h-4 w-4 text-primary" />
               <span>
-                {/*Vittorie: {player.wins}/{player.match}*/}
-                Vittorie: 0
+                Vittorie: {player.wins}/{player.total_matches}
               </span>
             </div>
             <div className="flex items-center gap-1 text-sm">
               <Star className="h-4 w-4 text-amber-500" />
-              {/*<span>Win Rate: {player.winRate.toFixed(1)}%</span>*/}
-              <span>Win Rate: 0%</span>
+              <span>Win Rate: {player.win_rate.toFixed(0)}%</span>
             </div>
           </div>
 
           <div className="w-full">
             <div className="flex justify-between text-xs mb-1">
               <span>Win Rate</span>
-              <span>50%</span>
-              {/*<span>{player.winRate.toFixed(1)}%</span>*/}
+              <span>{player.win_rate.toFixed(0)}%</span>
             </div>
-            <Progress value={50} className="h-2" />
+            <Progress value={player.win_rate} className="h-2" />
           </div>
 
           <div className="flex items-center justify-between text-sm">

@@ -6,6 +6,8 @@ import { UpdatePlayer } from './models/update-player.model';
 import { PlayerStatus } from '../@graphql/types';
 import { Prisma } from '@prisma/client/output';
 import { PlayerHistory } from './models/player-history.model';
+import { PlayerStats } from './models/player-stats.model';
+import { NotFoundException } from '@nestjs/common';
 import PlayerFindManyArgs = Prisma.PlayerFindManyArgs;
 
 @Resolver('Player')
@@ -28,6 +30,20 @@ export class PlayerResolver {
   @Query(() => Player, { name: 'player' })
   async findById(@Args('id', { type: () => String }) id: string) {
     return this.playersService.findOne(id);
+  }
+
+  @Query(() => [PlayerStats], { name: 'players_stats' })
+  async playersWithStats() {
+    return this.playersService.getPlayersStats();
+  }
+
+  @Query(() => PlayerStats, { name: 'player_stats' })
+  async player_stats(@Args('id', { type: () => String }) id: string) {
+    const results = await this.playersService.getPlayersStats(id);
+    if (results.length === 0) {
+      return new NotFoundException('Player not found');
+    }
+    return results[0];
   }
 
   @Query(() => [PlayerHistory], { name: 'players_history' })

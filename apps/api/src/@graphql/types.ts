@@ -80,6 +80,19 @@ export type MatchOrderBy = {
   date?: InputMaybe<SortOrder>;
 };
 
+export type MatchPlayerStanding = {
+  __typename?: 'MatchPlayerStanding';
+  date?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  players?: Maybe<Array<Player>>;
+  position: Scalars['Int']['output'];
+  rounds?: Maybe<Array<Round>>;
+  status?: Maybe<MatchStatus>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 export enum MatchStatus {
   Completed = 'COMPLETED',
   InProgress = 'IN_PROGRESS',
@@ -194,6 +207,20 @@ export enum PlayerLevel {
   Intermediate = 'INTERMEDIATE'
 }
 
+export type PlayerStats = {
+  __typename?: 'PlayerStats';
+  bio?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  full_name: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  level: PlayerLevel;
+  status: PlayerStatus;
+  total_matches: Scalars['Int']['output'];
+  win_rate: Scalars['Float']['output'];
+  wins: Scalars['Int']['output'];
+};
+
 export enum PlayerStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE'
@@ -205,8 +232,11 @@ export type Query = {
   matches: Array<Match>;
   matches_history: Array<MatchHistory>;
   player: Player;
+  player_stats: PlayerStats;
   players: Array<Player>;
   players_history: Array<PlayerHistory>;
+  players_stats: Array<PlayerStats>;
+  recent_matches: Array<MatchPlayerStanding>;
   round: Round;
   rounds: Array<Round>;
   scores: Array<Score>;
@@ -229,8 +259,18 @@ export type QueryPlayerArgs = {
 };
 
 
+export type QueryPlayer_StatsArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryPlayersArgs = {
   status?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryRecent_MatchesArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -381,15 +421,18 @@ export type ResolversTypes = {
   CreateScoreInput: CreateScoreInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DeleteManyOutput: ResolverTypeWrapper<DeleteManyOutput>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Match: ResolverTypeWrapper<Match>;
   MatchHistory: ResolverTypeWrapper<MatchHistory>;
   MatchOrderBy: MatchOrderBy;
+  MatchPlayerStanding: ResolverTypeWrapper<MatchPlayerStanding>;
   MatchStatus: MatchStatus;
   Mutation: ResolverTypeWrapper<{}>;
   Player: ResolverTypeWrapper<Player>;
   PlayerHistory: ResolverTypeWrapper<PlayerHistory>;
   PlayerLevel: PlayerLevel;
+  PlayerStats: ResolverTypeWrapper<PlayerStats>;
   PlayerStatus: PlayerStatus;
   Query: ResolverTypeWrapper<{}>;
   Round: ResolverTypeWrapper<Round>;
@@ -413,13 +456,16 @@ export type ResolversParentTypes = {
   CreateScoreInput: CreateScoreInput;
   DateTime: Scalars['DateTime']['output'];
   DeleteManyOutput: DeleteManyOutput;
+  Float: Scalars['Float']['output'];
   Int: Scalars['Int']['output'];
   Match: Match;
   MatchHistory: MatchHistory;
   MatchOrderBy: MatchOrderBy;
+  MatchPlayerStanding: MatchPlayerStanding;
   Mutation: {};
   Player: Player;
   PlayerHistory: PlayerHistory;
+  PlayerStats: PlayerStats;
   Query: {};
   Round: Round;
   Score: Score;
@@ -457,6 +503,19 @@ export type MatchHistoryResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MatchPlayerStandingResolvers<ContextType = any, ParentType extends ResolversParentTypes['MatchPlayerStanding'] = ResolversParentTypes['MatchPlayerStanding']> = {
+  date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  duration?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  players?: Resolver<Maybe<Array<ResolversTypes['Player']>>, ParentType, ContextType>;
+  position?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rounds?: Resolver<Maybe<Array<ResolversTypes['Round']>>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['MatchStatus']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addScore?: Resolver<ResolversTypes['Score'], ParentType, ContextType, RequireFields<MutationAddScoreArgs, 'createScoreInput'>>;
   createMatch?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<MutationCreateMatchArgs, 'match'>>;
@@ -491,13 +550,30 @@ export type PlayerHistoryResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PlayerStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerStats'] = ResolversParentTypes['PlayerStats']> = {
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  full_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  level?: Resolver<ResolversTypes['PlayerLevel'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PlayerStatus'], ParentType, ContextType>;
+  total_matches?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  win_rate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  wins?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   match?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryMatchArgs, 'id'>>;
   matches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType, Partial<QueryMatchesArgs>>;
   matches_history?: Resolver<Array<ResolversTypes['MatchHistory']>, ParentType, ContextType>;
   player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
+  player_stats?: Resolver<ResolversTypes['PlayerStats'], ParentType, ContextType, RequireFields<QueryPlayer_StatsArgs, 'id'>>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType, Partial<QueryPlayersArgs>>;
   players_history?: Resolver<Array<ResolversTypes['PlayerHistory']>, ParentType, ContextType>;
+  players_stats?: Resolver<Array<ResolversTypes['PlayerStats']>, ParentType, ContextType>;
+  recent_matches?: Resolver<Array<ResolversTypes['MatchPlayerStanding']>, ParentType, ContextType, RequireFields<QueryRecent_MatchesArgs, 'id'>>;
   round?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<QueryRoundArgs, 'id'>>;
   rounds?: Resolver<Array<ResolversTypes['Round']>, ParentType, ContextType, RequireFields<QueryRoundsArgs, 'matchId'>>;
   scores?: Resolver<Array<ResolversTypes['Score']>, ParentType, ContextType>;
@@ -527,9 +603,11 @@ export type Resolvers<ContextType = any> = {
   DeleteManyOutput?: DeleteManyOutputResolvers<ContextType>;
   Match?: MatchResolvers<ContextType>;
   MatchHistory?: MatchHistoryResolvers<ContextType>;
+  MatchPlayerStanding?: MatchPlayerStandingResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
   PlayerHistory?: PlayerHistoryResolvers<ContextType>;
+  PlayerStats?: PlayerStatsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Round?: RoundResolvers<ContextType>;
   Score?: ScoreResolvers<ContextType>;

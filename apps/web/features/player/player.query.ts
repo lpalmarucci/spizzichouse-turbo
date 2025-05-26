@@ -2,6 +2,7 @@ import { gql } from "graphql-request";
 
 export const PLAYER_QUERY_KEY = "players";
 export const PLAYERS_HISTORY_QUERY_KEY = "players_history";
+export const PLAYERS_STATS_QUERY_KEY = "players_stats";
 
 export const GET_PLAYERS = gql`
   query getPlayers($status: String) {
@@ -27,6 +28,39 @@ export const GET_PLAYER_BY_ID = gql`
       id
       level
       status
+    }
+  }
+`;
+
+export const GET_PLAYERS_STATS = gql`
+  query getPlayersStats {
+    players_stats {
+      wins
+      total_matches
+      full_name
+      bio
+      email
+      id
+      status
+      level
+      win_rate
+      createdAt
+    }
+  }
+`;
+
+export const GET_PLAYER_STATS = gql`
+  query player_stats($id: String!) {
+    player_stats(id: $id) {
+      wins
+      total_matches
+      bio
+      email
+      id
+      status
+      level
+      win_rate
+      createdAt
     }
   }
 `;

@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match, Player, Prisma } from '@prisma/client/output';
+import { Match, MatchStatus, Player, Prisma } from '@prisma/client/output';
 import { PlayersService } from '../players/players.service';
 import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
 import { MatchHistory } from './models/match-history.model';
 import { MatchOrderBy } from './models/order-by-match.model';
+import { plainToClass } from 'class-transformer';
+import { MatchPlayerStanding } from './models/match-player-standing';
 import MatchFindManyArgs = Prisma.MatchFindManyArgs;
 
 @Injectable()
@@ -124,5 +126,45 @@ export class MatchService {
   async remove(id: string) {
     await this.findOne(id);
     return this._prismaService.match.delete({ where: { id } });
+  }
+
+  async getRecentMatchesByPlayer(playerId: string) {
+    const matches = await this._prismaService.match.findMany({
+      where: {
+        players: {
+          some: {
+            id: playerId,
+          },
+        },
+        status: MatchStatus.COMPLETED,
+      },
+      include: {
+        scores: {
+          include: {
+            player: true,
+          },
+        },
+      },
+      orderBy: {
+        date: 'desc',
+      },
+    });
+
+    return matches.map((m) => {
+      const roundsByPlayers = m.scores.reduce(
+        (acc, score) => {
+          acc[score.playerId] = (acc[score.playerId] || 0) + score.points;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      const sortedPlayerIds = Object.entries(roundsByPlayers)
+        .sort((a, b) => b[1] - a[1])
+        .map(([playerId]) => playerId);
+
+      const rankingPosition = sortedPlayerIds.indexOf(playerId) + 1;
+      return plainToClass(MatchPlayerStanding, { ...m, position: rankingPosition });
+    });
   }
 }

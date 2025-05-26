@@ -67,7 +67,6 @@ function CreateMatchDialog({ open, onOpenChange }: CreateMatchDialogProps) {
       toast.info("Match created successfully");
       form.reset();
       onOpenChange(false);
-      console.log({ data });
       router.push(`/matches/${data?.createMatch.id}`);
     });
   }

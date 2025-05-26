@@ -11,7 +11,10 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Calendar, House, Mail, Trophy } from "lucide-react";
 import { getInitials, getLevelColor } from "@/features/player/utils";
 import { Separator } from "@workspace/ui/components/separator";
-import { useGetPlayerById } from "@/features/player/player.hook";
+import {
+  useGetPlayerById,
+  useGetPlayerStats,
+} from "@/features/player/player.hook";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { ScreenLoader } from "@/components/screen-loader";
@@ -22,6 +25,7 @@ interface PlayerDetailCardProps {
 
 export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   const { data, isLoading, error } = useGetPlayerById(id);
+  const { data: playerStats } = useGetPlayerStats(id);
 
   if (error) {
     toast.error(error.message);
@@ -59,8 +63,9 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
               <Badge className={getLevelColor(player.level)}>
                 {player.level}
               </Badge>
-              <Badge variant="outline" className="gap-1">
-                <Trophy className="h-3 w-3 text-primary" />0 vittorie
+              <Badge variant="outline" className="gap-1 font-semibold">
+                <Trophy className="h-3 w-3 text-indigo-500" />
+                {playerStats?.player_stats?.wins} vittorie
               </Badge>
             </div>
           </div>

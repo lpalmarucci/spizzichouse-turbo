@@ -30,7 +30,7 @@ import { Skeleton } from "@workspace/ui/components/skeleton";
 import Link from "next/link";
 import { orderRoundsByScore } from "@/utils/leaderboard";
 
-export function RecentMatchTable() {
+export function RecentPlayersMatchesTable() {
   const { data, isLoading } = useGetMatches({
     take: 10,
     matchOrderBy: {
