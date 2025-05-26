@@ -67,6 +67,18 @@ input MatchOrderBy {
   date: SortOrder
 }
 
+type MatchPlayerStanding {
+  date: DateTime
+  description: String
+  duration: Int
+  id: String
+  players: [Player!]
+  position: Int!
+  rounds: [Round!]
+  status: MatchStatus
+  title: String
+}
+
 enum MatchStatus {
   COMPLETED
   IN_PROGRESS
@@ -138,6 +150,7 @@ type Query {
   players(status: String): [Player!]!
   players_history: [PlayerHistory!]!
   players_stats: [PlayerStats!]!
+  recent_matches(id: String!): [MatchPlayerStanding!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!

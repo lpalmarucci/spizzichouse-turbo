@@ -12,6 +12,11 @@ import {
 import { gqlRequest } from "@/utils/query";
 import React from "react";
 import { PlayerDetail } from "@/features/player/components/player-detail";
+import {
+  GET_RECENT_MATCHES_BY_PLAYER,
+  MATCH_QUERY_KEY,
+  RECENT_MATCH_BY_PLAYER,
+} from "@/features/match/match.query";
 
 export default async function PlayerDetailPage({
   params,
@@ -30,6 +35,11 @@ export default async function PlayerDetailPage({
   await queryClient.prefetchQuery({
     queryKey: [PLAYERS_STATS_QUERY_KEY, id],
     queryFn: () => gqlRequest(GET_PLAYER_STATS, { id }),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [MATCH_QUERY_KEY, RECENT_MATCH_BY_PLAYER, id],
+    queryFn: () => gqlRequest(GET_RECENT_MATCHES_BY_PLAYER, { id }),
   });
 
   return (

@@ -5,6 +5,7 @@ import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
 import { MatchHistory } from './models/match-history.model';
 import { MatchOrderBy } from './models/order-by-match.model';
+import { MatchPlayerStanding } from './models/match-player-standing';
 
 @Resolver(() => Match)
 export class MatchResolver {
@@ -42,5 +43,10 @@ export class MatchResolver {
   @Mutation(() => Match, { name: 'deleteMatch' })
   async deleteMatch(@Args('id') id: string) {
     return this.matchService.remove(id);
+  }
+
+  @Query(() => [MatchPlayerStanding], { name: 'recent_matches' })
+  async getRecentMatchesByPlayers(@Args('id', { type: () => String }) id: string) {
+    return this.matchService.getRecentMatchesByPlayer(id);
   }
 }

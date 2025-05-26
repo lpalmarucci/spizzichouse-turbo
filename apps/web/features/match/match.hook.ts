@@ -4,6 +4,7 @@ import {
   Match,
   MatchHistory,
   MatchOrderBy,
+  MatchPlayerStanding,
   UpdateMatch,
 } from "@workspace/api/qgl-types";
 import {
@@ -12,8 +13,10 @@ import {
   GET_MATCH_BY_ID,
   GET_MATCHES,
   GET_MATCHES_HISTORY,
+  GET_RECENT_MATCHES_BY_PLAYER,
   MATCH_HISTORY_QUERY_KEY,
   MATCH_QUERY_KEY,
+  RECENT_MATCH_BY_PLAYER,
   UPDATE_MATCH,
 } from "@/features/match/match.query";
 import { gqlRequest } from "@/utils/query";
@@ -56,4 +59,10 @@ export const useDeleteMatch = (id: string) =>
   useMutation({
     mutationKey: [MATCH_QUERY_KEY],
     mutationFn: () => gqlRequest(DELETE_MATCH, { id }),
+  });
+
+export const useGetRecentMatchesByPlayer = (playerId: string) =>
+  useQuery<{ recent_matches: MatchPlayerStanding[] }>({
+    queryKey: [MATCH_QUERY_KEY, RECENT_MATCH_BY_PLAYER, playerId],
+    queryFn: () => gqlRequest(GET_RECENT_MATCHES_BY_PLAYER, { playerId }),
   });

@@ -2,6 +2,7 @@ import { gql } from "graphql-request";
 
 export const MATCH_QUERY_KEY = "match";
 export const MATCH_HISTORY_QUERY_KEY = "match_history";
+export const RECENT_MATCH_BY_PLAYER = "recent";
 
 export const GET_MATCHES = gql`
   query getMatches($matchOrderBy: MatchOrderBy, $take: Int) {
@@ -106,6 +107,16 @@ export const DELETE_MATCH = gql`
         id
         full_name
       }
+    }
+  }
+`;
+
+export const GET_RECENT_MATCHES_BY_PLAYER = gql`
+  query ($playerId: String!) {
+    recent_matches(id: $playerId) {
+      title
+      date
+      position
     }
   }
 `;
