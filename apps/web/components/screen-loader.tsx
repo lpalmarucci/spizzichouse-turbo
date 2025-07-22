@@ -1,7 +1,5 @@
-"use client";
-
-import { Loader2 } from "lucide-react";
-import type React from "react";
+import { Loader2 } from 'lucide-react';
+import type React from 'react';
 
 export function ScreenLoader() {
   return (

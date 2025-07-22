@@ -1,16 +1,10 @@
-"use client";
+'use client';
 
-import React, { PropsWithChildren } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@workspace/ui/components/dialog";
-import { DialogBody } from "next/dist/client/components/react-dev-overlay/ui/components/dialog";
-import { SubmitButton } from "@/components/submit-button";
-import { Button } from "@workspace/ui/components/button";
+import React, { PropsWithChildren } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@workspace/ui/components/dialog';
+import { DialogBody } from 'next/dist/client/components/react-dev-overlay/ui/components/dialog';
+import { SubmitButton } from '@/components/submit-button';
+import { Button } from '@workspace/ui/components/button';
 
 type ConfirmationDialogProps = {
   open: boolean;
@@ -21,10 +15,10 @@ type ConfirmationDialogProps = {
   isPending?: boolean;
 } & PropsWithChildren;
 
-export function ConfirmationDialog({
+function ConfirmationDialog({
   open,
   onOpenChange,
-  title = "Sei sicuro di voler procedere?",
+  title = 'Sei sicuro di voler procedere?',
   subtitle = "L'azione è irreversibile",
   onConfirm,
   isPending,
@@ -53,3 +47,5 @@ export function ConfirmationDialog({
     </Dialog>
   );
 }
+
+export default ConfirmationDialog;
