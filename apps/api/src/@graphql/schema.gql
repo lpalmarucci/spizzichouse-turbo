@@ -54,6 +54,11 @@ type Match {
   title: String!
 }
 
+type MatchHistory {
+  month: Int!
+  total: Int!
+}
+
 input MatchOrderBy {
   date: SortOrder
 }
@@ -107,7 +112,7 @@ type Query {
   player(id: String!): Player!
   players: [Player!]!
   playersHistory: [Player!]!
-  recentMatchesHistory: [Match!]!
+  recentMatchesHistory: [MatchHistory!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!

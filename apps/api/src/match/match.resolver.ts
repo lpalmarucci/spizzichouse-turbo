@@ -9,6 +9,7 @@ import { Match } from './match.entity';
 import { UpdateMatch } from './models/update-match.model';
 import { CreateMatch } from './models/create-match.model';
 import { MatchOrderBy } from './models/order-by-match.model';
+import { MatchHistory } from './models/match-history.model';
 
 @Resolver(() => CreateMatchDto)
 export class MatchResolver {
@@ -29,7 +30,7 @@ export class MatchResolver {
     return plainToInstance(MatchResponseDto, match);
   }
 
-  @Query(() => [Match], { name: 'recentMatchesHistory' })
+  @Query(() => [MatchHistory], { name: 'recentMatchesHistory' })
   async recentMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
     return this.matchService.getMatchesHistory();
   }
