@@ -2,13 +2,13 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { Inject } from '@nestjs/common';
 import { type IMatchService } from './match.service.interface';
 import { CreateMatchDto } from './dto/create-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
 import { MatchResponseDto } from './dto/match-response.dto';
 import { MatchHistoryResponseDto } from './dto/match-history-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { Match } from './match.entity';
 import { UpdateMatch } from './models/update-match.model';
 import { CreateMatch } from './models/create-match.model';
+import { MatchOrderBy } from './models/order-by-match.model';
 
 @Resolver(() => CreateMatchDto)
 export class MatchResolver {
@@ -17,10 +17,10 @@ export class MatchResolver {
   @Query(() => [Match], { name: 'matches' })
   async getAllMatches(
     @Args('take', { type: () => Int, nullable: true }) take?: number,
-    @Args('orderBy', { type: () => String, nullable: true }) orderBy?: any,
+    @Args('orderBy', { type: () => MatchOrderBy, nullable: true }) orderBy?: MatchOrderBy,
   ): Promise<MatchResponseDto[]> {
     const matches = await this.matchService.findMany({ take, orderBy });
-    return matches.map((m) => plainToInstance(MatchResponseDto, m));
+    return plainToInstance(MatchResponseDto, matches);
   }
 
   @Query(() => Match, { name: 'match' })

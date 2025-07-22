@@ -1,6 +1,5 @@
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
-import { MatchHistory } from './models/match-history.model';
 import { Prisma } from '@prisma/client/output';
 import { MatchResponseDto } from './dto/match-response.dto';
 import { MatchHistoryResponseDto } from './dto/match-history-response.dto';

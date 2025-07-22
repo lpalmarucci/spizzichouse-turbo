@@ -31,8 +31,10 @@ export class PlayersResolver {
 
   @Query(() => [Player])
   async players(): Promise<PlayerResponseDto[]> {
-    const players = await this.playersService.findMany({});
-    return players.map((player) => plainToInstance(PlayerResponseDto, player));
+    const players = await this.playersService.findMany({
+      include: { matches: { include: { rounds: { include: { scores: true } } } } },
+    });
+    return plainToInstance(PlayerResponseDto, players);
   }
 
   @Query(() => Player)

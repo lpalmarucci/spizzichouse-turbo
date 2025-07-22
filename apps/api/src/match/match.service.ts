@@ -14,15 +14,7 @@ export class MatchService implements IMatchService {
   constructor(private readonly matchRepository: MatchRepository) {}
 
   async create(dto: CreateMatchDto): Promise<MatchResponseDto> {
-    const match = await this.matchRepository.create({
-      title: dto.title,
-      description: dto.description,
-      status: dto.status,
-      date: dto.date,
-      duration: dto.duration,
-      playerIds: dto.playerIds,
-    });
-    return plainToInstance(MatchResponseDto, match);
+    return plainToInstance(MatchResponseDto, dto);
   }
 
   async findOne(id: string): Promise<MatchResponseDto> {
@@ -31,7 +23,10 @@ export class MatchService implements IMatchService {
   }
 
   async findMany(args: Prisma.MatchFindManyArgs): Promise<MatchResponseDto[]> {
-    const matches = await this.matchRepository.findMany(args);
+    const matches = await this.matchRepository.findMany({
+      ...args,
+      include: { players: true, rounds: { include: { scores: { include: { player: true } } } } },
+    });
     return matches.map((match) => plainToInstance(MatchResponseDto, match));
   }
 
