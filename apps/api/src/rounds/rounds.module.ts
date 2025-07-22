@@ -2,11 +2,17 @@ import { Module } from '@nestjs/common';
 import { RoundsService } from './rounds.service';
 import { RoundsResolver } from './rounds.resolver';
 import { PrismaService } from '../prisma/prisma.service';
-import { PlayersService } from '../players/players.service';
-import { MatchService } from '../match/match.service';
-import { ScoreService } from '../score/score.service';
+import { RoundsRepository } from './rounds.repository';
 
 @Module({
-  providers: [RoundsResolver, RoundsService, PrismaService, PlayersService, MatchService, ScoreService],
+  providers: [
+    RoundsResolver,
+    PrismaService,
+    RoundsRepository,
+    {
+      provide: 'IRoundsService',
+      useClass: RoundsService,
+    },
+  ],
 })
 export class RoundsModule {}

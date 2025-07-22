@@ -1,52 +1,54 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { MatchService } from './match.service';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common';
+import { type IMatchService } from './match.service.interface';
+import { CreateMatchDto } from './dto/create-match.dto';
+import { UpdateMatchDto } from './dto/update-match.dto';
+import { MatchResponseDto } from './dto/match-response.dto';
+import { MatchHistoryResponseDto } from './dto/match-history-response.dto';
+import { plainToInstance } from 'class-transformer';
 import { Match } from './match.entity';
-import { CreateMatch } from './models/create-match.model';
 import { UpdateMatch } from './models/update-match.model';
-import { MatchHistory } from './models/match-history.model';
-import { MatchOrderBy } from './models/order-by-match.model';
-import { MatchPlayerStanding } from './models/match-player-standing';
+import { CreateMatch } from './models/create-match.model';
 
-@Resolver(() => Match)
+@Resolver(() => CreateMatchDto)
 export class MatchResolver {
-  constructor(private readonly matchService: MatchService) {}
+  constructor(@Inject('IMatchService') private readonly matchService: IMatchService) {}
 
   @Query(() => [Match], { name: 'matches' })
   async getAllMatches(
     @Args('take', { type: () => Int, nullable: true }) take?: number,
-    @Args('orderBy', { nullable: true })
-    orderBy?: MatchOrderBy,
-  ) {
-    return this.matchService.findAll({ take, orderBy });
+    @Args('orderBy', { type: () => String, nullable: true }) orderBy?: any,
+  ): Promise<MatchResponseDto[]> {
+    const matches = await this.matchService.findMany({ take, orderBy });
+    return matches.map((m) => plainToInstance(MatchResponseDto, m));
   }
 
   @Query(() => Match, { name: 'match' })
-  async getMatchById(@Args('id') id: string) {
-    return this.matchService.findOne(id);
+  async getMatchById(@Args('id') id: string): Promise<MatchResponseDto> {
+    const match = await this.matchService.findOne(id);
+    return plainToInstance(MatchResponseDto, match);
   }
 
-  @Query(() => [MatchHistory], { name: 'matches_history' })
-  async getMatchesHistory() {
+  @Query(() => [Match], { name: 'recentMatchesHistory' })
+  async recentMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
     return this.matchService.getMatchesHistory();
   }
 
   @Mutation(() => Match, { name: 'createMatch' })
-  async createMatch(@Args('match') match: CreateMatch) {
-    return this.matchService.create(match);
+  async createMatch(@Args('data') data: CreateMatch): Promise<MatchResponseDto> {
+    const match = await this.matchService.create(data);
+    return plainToInstance(MatchResponseDto, match);
   }
 
   @Mutation(() => Match, { name: 'updateMatch' })
-  async updateMatch(@Args('id') id: string, @Args('match') match: UpdateMatch) {
-    return this.matchService.update(id, match);
+  async updateMatch(@Args('id') id: string, @Args('data') data: UpdateMatch): Promise<MatchResponseDto> {
+    const match = await this.matchService.update(id, data);
+    return plainToInstance(MatchResponseDto, match);
   }
 
   @Mutation(() => Match, { name: 'deleteMatch' })
-  async deleteMatch(@Args('id') id: string) {
-    return this.matchService.remove(id);
-  }
-
-  @Query(() => [MatchPlayerStanding], { name: 'recent_matches' })
-  async getRecentMatchesByPlayers(@Args('id', { type: () => String }) id: string) {
-    return this.matchService.getRecentMatchesByPlayer(id);
+  async deleteMatch(@Args('id') id: string): Promise<MatchResponseDto> {
+    const match = await this.matchService.remove(id);
+    return plainToInstance(MatchResponseDto, match);
   }
 }

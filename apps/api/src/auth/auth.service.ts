@@ -1,25 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { type User } from '@supabase/supabase-js';
-import { PrismaService } from '../prisma/prisma.service';
-import { PlayerLevel, PlayerStatus } from '@prisma/client/output';
+import { IAuthService } from './auth.service.interface';
+import { PlayersRepository } from '../players/players.repository';
+import { CreatePlayerFromSupabaseDto } from './dto/create-player-from-supabase.dto';
 
 @Injectable()
-export class AuthService {
-  constructor(private prismaService: PrismaService) {}
+export class AuthService implements IAuthService {
+  constructor(private readonly playersRepository: PlayersRepository) {}
 
-  async createUserIfNotExists(user: User) {
-    const player = await this.prismaService.player.findUnique({ where: { id: user.id } });
+  async createUserIfNotExists(dto: CreatePlayerFromSupabaseDto) {
+    const player = await this.playersRepository.findOne(dto.id).catch(() => null);
     if (!player) {
-      return this.prismaService.player.create({
-        data: {
-          id: user.id,
-          level: PlayerLevel.BEGINNER,
-          status: PlayerStatus.ACTIVE,
-          email: user.email ?? '',
-          full_name: user.user_metadata.full_name,
-          bio: 'A sample of player bio where the character',
-        },
-      });
+      return this.playersRepository.create(dto);
     }
+    return player;
   }
 }

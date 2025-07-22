@@ -1,97 +1,43 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { IRoundsService } from './rounds.service.interface';
+import { RoundsRepository } from './rounds.repository';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
-import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client/output';
-import RoundFindManyArgs = Prisma.RoundFindManyArgs;
+import { plainToInstance } from 'class-transformer';
+import { RoundResponseDto } from './dto/round-response.dto';
 
 @Injectable()
-export class RoundsService {
-  constructor(private readonly prismaService: PrismaService) {}
+export class RoundsService implements IRoundsService {
+  constructor(private readonly roundsRepository: RoundsRepository) {}
 
-  async create(createRoundInput: CreateRoundInput) {
-    const round = await this.prismaService.round.create({
-      data: {
-        status: createRoundInput.status,
-        number: createRoundInput.number,
-        match: {
-          connect: {
-            id: createRoundInput.matchId.toString(),
-          },
-        },
-      },
-    });
-
-    for (let score of createRoundInput.scores) {
-      await this.prismaService.score.create({
-        data: {
-          points: score.points,
-          player: {
-            connect: {
-              id: score.playerId,
-            },
-          },
-          match: {
-            connect: {
-              id: createRoundInput.matchId.toString(),
-            },
-          },
-          round: {
-            connect: {
-              id: round.id,
-            },
-          },
-        },
-      });
-    }
-
-    return round;
+  async create(dto: CreateRoundInput): Promise<RoundResponseDto> {
+    const round = await this.roundsRepository.create(dto);
+    return plainToInstance(RoundResponseDto, round);
   }
 
-  findAll(matchId: string) {
-    return this.prismaService.round.findMany({
-      where: {
-        matchId,
-      },
-      orderBy: { number: 'asc' },
-      include: {
-        match: { include: { players: true } },
-        scores: { include: { player: true } },
-      },
-    });
+  async findOne(id: string): Promise<RoundResponseDto> {
+    const round = await this.roundsRepository.findOne(id);
+    return plainToInstance(RoundResponseDto, round);
   }
 
-  findMany(options: RoundFindManyArgs) {
-    return this.prismaService.round.findMany(options);
+  async findAll(matchId: string): Promise<RoundResponseDto[]> {
+    const rounds = await this.roundsRepository.findAll(matchId);
+    return rounds.map((r) => plainToInstance(RoundResponseDto, r));
   }
 
-  async findOne(id: string) {
-    const round = await this.prismaService.round.findFirst({
-      where: { id },
-      include: {
-        match: { include: { players: true } },
-        scores: { include: { player: true } },
-      },
-    });
-    if (!round) throw new NotFoundException(`Round with id ${id} not found`);
-    return round;
+  async findMany(args: Prisma.RoundFindManyArgs): Promise<RoundResponseDto[]> {
+    const rounds = await this.roundsRepository.findMany(args);
+    return rounds.map((r) => plainToInstance(RoundResponseDto, r));
   }
 
-  async update(id: string, updateRoundInput: UpdateRoundInput) {
-    await this.findOne(id);
-    return this.prismaService.round.update({
-      where: {
-        id,
-      },
-      data: {
-        number: updateRoundInput.number,
-        status: updateRoundInput.status,
-      },
-    });
+  async update(id: string, dto: UpdateRoundInput): Promise<RoundResponseDto> {
+    const round = await this.roundsRepository.update(id, dto);
+    return plainToInstance(RoundResponseDto, round);
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
-    return this.prismaService.round.delete({ where: { id } });
+  async remove(id: string): Promise<RoundResponseDto> {
+    const round = await this.roundsRepository.remove(id);
+    return plainToInstance(RoundResponseDto, round);
   }
 }

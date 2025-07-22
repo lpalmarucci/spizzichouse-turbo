@@ -43,10 +43,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type DeleteManyOutput {
-  count: Int!
-}
-
 type Match {
   date: DateTime!
   description: String
@@ -58,27 +54,6 @@ type Match {
   title: String!
 }
 
-type MatchHistory {
-  month: Int!
-  total: Int!
-}
-
-input MatchOrderBy {
-  date: SortOrder
-}
-
-type MatchPlayerStanding {
-  date: DateTime
-  description: String
-  duration: Int
-  id: String
-  players: [Player!]
-  position: Int!
-  rounds: [Round!]
-  status: MatchStatus
-  title: String
-}
-
 enum MatchStatus {
   COMPLETED
   IN_PROGRESS
@@ -87,15 +62,14 @@ enum MatchStatus {
 
 type Mutation {
   addScore(createScoreInput: CreateScoreInput!): Score!
-  createMatch(match: CreateMatch!): Match!
-  createPlayer(player: CreatePlayer!): Player!
+  createMatch(data: CreateMatch!): Match!
+  createPlayer(data: CreatePlayer!): Player!
   createRound(createRoundInput: CreateRoundInput!): Round!
   deleteMatch(id: String!): Match!
-  deletePlayer(id: String!): Player!
   removeRound(id: String!): Round!
-  removeScoreFromRound(matchId: String!, roundId: String!): DeleteManyOutput!
-  updateMatch(id: String!, match: UpdateMatch!): Match!
-  updatePlayer(id: String!, player: UpdatePlayer!): Player!
+  removeScoreFromRound(matchId: String!, roundId: String!): Boolean!
+  updateMatch(data: UpdateMatch!, id: String!): Match!
+  updatePlayer(data: UpdatePlayer!, id: String!): Player!
   updateRound(id: String!, updateRoundInput: UpdateRoundInput!): Round!
   updateScore(matchId: String!, playerId: String!, roundId: String!, updateScoreInput: UpdateScoreInput!): Score!
 }
@@ -112,28 +86,10 @@ type Player {
   status: PlayerStatus!
 }
 
-type PlayerHistory {
-  month: Int!
-  total: Int!
-}
-
 enum PlayerLevel {
   BEGINNER
   EXPERT
   INTERMEDIATE
-}
-
-type PlayerStats {
-  bio: String
-  createdAt: DateTime!
-  email: String!
-  full_name: String!
-  id: String!
-  level: PlayerLevel!
-  status: PlayerStatus!
-  total_matches: Int!
-  win_rate: Float!
-  wins: Int!
 }
 
 enum PlayerStatus {
@@ -143,14 +99,11 @@ enum PlayerStatus {
 
 type Query {
   match(id: String!): Match!
-  matches(orderBy: MatchOrderBy, take: Int): [Match!]!
-  matches_history: [MatchHistory!]!
+  matches(orderBy: String, take: Int): [Match!]!
   player(id: String!): Player!
-  player_stats(id: String!): PlayerStats!
-  players(status: String): [Player!]!
-  players_history: [PlayerHistory!]!
-  players_stats: [PlayerStats!]!
-  recent_matches(id: String!): [MatchPlayerStanding!]!
+  players: [Player!]!
+  playersHistory: [Player!]!
+  recentMatchesHistory: [Match!]!
   round(id: String!): Round!
   rounds(matchId: String!): [Round!]!
   scores: [Score!]!
@@ -176,11 +129,6 @@ type Score {
   player: Player!
   points: Int!
   round: Round!
-}
-
-enum SortOrder {
-  asc
-  desc
 }
 
 input UpdateMatch {

@@ -1,38 +1,46 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { RoundsService } from './rounds.service';
-import { Round } from './round.entity';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common';
+import { type IRoundsService } from './rounds.service.interface';
 import { CreateRoundInput } from './dto/create-round.input';
 import { UpdateRoundInput } from './dto/update-round.input';
+import { plainToInstance } from 'class-transformer';
+import { RoundResponseDto } from './dto/round-response.dto';
+import { Round } from './round.entity';
 
 @Resolver(() => Round)
 export class RoundsResolver {
-  constructor(private readonly roundsService: RoundsService) {}
+  constructor(@Inject('IRoundsService') private readonly roundsService: IRoundsService) {}
 
   @Mutation(() => Round)
-  createRound(@Args('createRoundInput') createRoundInput: CreateRoundInput) {
-    return this.roundsService.create(createRoundInput);
+  async createRound(@Args('createRoundInput') createRoundInput: CreateRoundInput): Promise<RoundResponseDto> {
+    const round = await this.roundsService.create(createRoundInput);
+    return plainToInstance(RoundResponseDto, round);
   }
 
   @Query(() => [Round], { name: 'rounds' })
-  findAll(@Args('matchId') matchId: string) {
-    return this.roundsService.findAll(matchId);
+  async findAll(@Args('matchId') matchId: string): Promise<RoundResponseDto[]> {
+    const rounds = await this.roundsService.findAll(matchId);
+    return rounds.map((r) => plainToInstance(RoundResponseDto, r));
   }
 
   @Query(() => Round, { name: 'round' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.roundsService.findOne(id);
+  async findOne(@Args('id', { type: () => String }) id: string): Promise<RoundResponseDto> {
+    const round = await this.roundsService.findOne(id);
+    return plainToInstance(RoundResponseDto, round);
   }
 
   @Mutation(() => Round)
-  updateRound(
+  async updateRound(
     @Args('id', { type: () => String }) id: string,
     @Args('updateRoundInput') updateRoundInput: UpdateRoundInput,
-  ) {
-    return this.roundsService.update(id, updateRoundInput);
+  ): Promise<RoundResponseDto> {
+    const round = await this.roundsService.update(id, updateRoundInput);
+    return plainToInstance(RoundResponseDto, round);
   }
 
   @Mutation(() => Round)
-  removeRound(@Args('id', { type: () => String }) id: string) {
-    return this.roundsService.remove(id);
+  async removeRound(@Args('id', { type: () => String }) id: string): Promise<RoundResponseDto> {
+    const round = await this.roundsService.remove(id);
+    return plainToInstance(RoundResponseDto, round);
   }
 }

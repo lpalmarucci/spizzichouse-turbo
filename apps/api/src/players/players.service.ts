@@ -1,109 +1,57 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Player, Prisma } from '@prisma/client/output';
-import { CreatePlayer } from './models/create-player.model';
-import { UpdatePlayer } from './models/update-player.model';
+import { Injectable } from '@nestjs/common';
+import { IPlayersService } from './players.service.interface';
+import { PlayersRepository } from './players.repository';
+import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PlayerHistory } from './models/player-history.model';
 import { PlayerStats } from './models/player-stats.model';
-import PlayerFindManyArgs = Prisma.PlayerFindManyArgs;
+import { plainToInstance } from 'class-transformer';
+import { Prisma } from '@prisma/client/output';
+import { PlayerResponseDto } from './dto/player-response.dto';
+import { PlayerHistoryResponseDto } from './dto/player-history-response.dto';
 
 @Injectable()
-export class PlayersService {
-  constructor(private _prismaService: PrismaService) {}
+export class PlayersService implements IPlayersService {
+  constructor(private readonly playersRepository: PlayersRepository) {}
 
-  create(createPlayerDto: CreatePlayer): Promise<Player> {
-    return this._prismaService.player.create({
-      data: createPlayerDto,
+  async create(dto: CreatePlayerDto): Promise<PlayerResponseDto> {
+    const player = await this.playersRepository.create({
+      full_name: dto.full_name,
+      email: dto.email,
+      bio: dto.bio,
+      level: dto.level,
+      status: dto.status,
     });
+    return plainToInstance(PlayerResponseDto, player);
   }
 
-  async findOne(id: string) {
-    const player = await this._prismaService.player.findUnique({ where: { id } });
-    if (!player) throw new NotFoundException(`Player with id ${id} not found`);
-    return player;
+  async findOne(id: string): Promise<PlayerResponseDto> {
+    const player = await this.playersRepository.findOne(id);
+    return plainToInstance(PlayerResponseDto, player);
   }
 
-  getPlayersHistory(): Promise<PlayerHistory[]> {
-    return this._prismaService.$queryRaw`
-      WITH months AS (
-          SELECT generate_series(1, 12) AS month
-      ),
-      player_counts AS (
-          SELECT date_part('month', p."createdAt")::int AS month, COUNT(*)::int AS total
-          FROM players p
-          GROUP BY date_part('month', p."createdAt")
-      )
-      SELECT m.month, COALESCE(pc.total, 0) AS total
-      FROM months m
-      LEFT JOIN player_counts pc ON m.month = pc.month
-      ORDER BY m.month;
-    `;
+  async findMany(args: Prisma.PlayerFindManyArgs): Promise<PlayerResponseDto[]> {
+    const players = await this.playersRepository.findMany(args);
+    return players.map((player) => plainToInstance(PlayerResponseDto, player));
   }
 
-  async getPlayersStats(playerId?: string): Promise<PlayerStats[]> {
-    const whereCondition = playerId ? Prisma.sql`WHERE p.id = ${playerId}` : Prisma.empty;
-    return this._prismaService.$queryRaw<PlayerStats[]>`
-      WITH total_scores AS (
-        SELECT
-          s."matchId",
-          s."playerId",
-          SUM(s.points) AS total_points
-        FROM scores s
-        GROUP BY "matchId", "playerId"
-      ),
-      max_scores AS (
-        SELECT
-          "matchId",
-          MAX(total_points) AS max_points
-        FROM total_scores
-        GROUP BY "matchId"
-      ),
-      winners AS (
-        SELECT
-          ts."playerId",
-          ts."matchId"
-        FROM total_scores ts
-        JOIN max_scores ms
-          ON ts."matchId" = ms."matchId"
-         AND ts.total_points = ms.max_points
-      ),
-      total_matches AS (
-        SELECT
-          mp."B" AS player_id,
-          COUNT(mp."A") AS total_matches
-        FROM "_MatchToPlayer" mp
-        GROUP BY mp."B"
-      )
-      SELECT
-        p.*,
-        COUNT(w."matchId")::Int AS wins,
-        COALESCE(mp.total_matches, 0)::Int as total_matches,
-        COUNT(w."matchId")::decimal / mp.total_matches * 100 as win_rate
-      FROM players p
-      LEFT JOIN winners w
-        ON p.id = w."playerId"
-      LEFT JOIN total_matches mp
-        ON p.id = mp.player_id
-      ${whereCondition}
-      GROUP BY p.id, p.full_name, mp.total_matches
-    `;
-  }
-
-  findMany(options: PlayerFindManyArgs): Promise<Player[]> {
-    return this._prismaService.player.findMany(options);
-  }
-
-  update(id: string, updatePlayerDto: UpdatePlayer) {
-    return this._prismaService.player.update({
-      where: {
-        id,
-      },
-      data: updatePlayerDto,
+  async update(id: string, dto: UpdatePlayerDto): Promise<PlayerResponseDto> {
+    const player = await this.playersRepository.update(id, {
+      ...dto,
     });
+    return plainToInstance(PlayerResponseDto, player);
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
-    return this._prismaService.player.delete({ where: { id } });
+  async remove(id: string): Promise<PlayerResponseDto> {
+    const player = await this.playersRepository.remove(id);
+    return plainToInstance(PlayerResponseDto, player);
+  }
+
+  async getPlayersHistory(): Promise<PlayerHistoryResponseDto[]> {
+    return this.playersRepository.getPlayersHistory();
+  }
+
+  getPlayersStats(playerId?: string): Promise<PlayerStats[]> {
+    return this.playersRepository.getPlayersStats(playerId);
   }
 }

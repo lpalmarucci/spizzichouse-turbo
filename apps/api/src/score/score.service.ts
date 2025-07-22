@@ -1,65 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { IScoreService } from './score.service.interface';
+import { ScoreRepository } from './score.repository';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
-import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client/output';
-import ScoreFindManyArgs = Prisma.ScoreFindManyArgs;
+import { plainToInstance } from 'class-transformer';
+import { ScoreResponseDto } from './dto/score-response.dto';
 
 @Injectable()
-export class ScoreService {
-  constructor(private readonly prismaService: PrismaService) {}
+export class ScoreService implements IScoreService {
+  constructor(private readonly scoreRepository: ScoreRepository) {}
 
-  async create(createScoreInput: CreateScoreInput) {
-    const round = await this.prismaService.round.findUniqueOrThrow({ where: { id: createScoreInput.roundId } });
-    const match = await this.prismaService.match.findUniqueOrThrow({ where: { id: createScoreInput.matchId } });
-    const player = await this.prismaService.player.findUniqueOrThrow({ where: { id: createScoreInput.playerId } });
-    return this.prismaService.score.create({
-      data: {
-        points: createScoreInput.points,
-        player: {
-          connect: { id: player.id },
-        },
-        match: {
-          connect: { id: match.id },
-        },
-        round: {
-          connect: { id: round.id },
-        },
-      },
-    });
+  async create(dto: CreateScoreInput): Promise<ScoreResponseDto> {
+    const score = await this.scoreRepository.create(dto);
+    return plainToInstance(ScoreResponseDto, score);
   }
 
-  findMany(options?: ScoreFindManyArgs) {
-    return this.prismaService.score.findMany({
-      ...options,
-      include: {
-        player: true,
-        ...options?.include,
-      },
-    });
+  async findMany(args?: Prisma.ScoreFindManyArgs): Promise<ScoreResponseDto[]> {
+    const scores = await this.scoreRepository.findMany(args);
+    return scores.map((s) => plainToInstance(ScoreResponseDto, s));
   }
 
-  update(matchId: string, roundId: string, playerId: string, updateScoreInput: UpdateScoreInput) {
-    return this.prismaService.score.update({
-      where: {
-        playerId_matchId_roundId: {
-          roundId,
-          matchId,
-          playerId,
-        },
-      },
-      data: {
-        points: updateScoreInput.points,
-      },
-    });
+  async update(matchId: string, roundId: string, playerId: string, dto: UpdateScoreInput): Promise<ScoreResponseDto> {
+    const score = await this.scoreRepository.update(matchId, roundId, playerId, dto);
+    return plainToInstance(ScoreResponseDto, score);
   }
 
-  removeScoreFromRound(matchId: string, roundId: string) {
-    return this.prismaService.score.deleteMany({
-      where: {
-        matchId,
-        roundId,
-      },
-    });
+  async removeScoreFromRound(matchId: string, roundId: string): Promise<any> {
+    return this.scoreRepository.removeScoreFromRound(matchId, roundId);
   }
 }

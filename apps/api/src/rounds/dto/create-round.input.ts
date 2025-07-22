@@ -22,7 +22,7 @@ export class CreateRoundInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
-  matchId: String;
+  matchId: string;
 
   @Field(() => [CreateScore])
   @IsArray()

@@ -7,9 +7,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SupabaseStrategy } from './strategy/supabase-strategy';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { PlayersModule } from 'src/players/players.module';
 
 @Module({
   imports: [
+    PlayersModule,
     PassportModule,
     ConfigModule,
     JwtModule.registerAsync({
@@ -26,7 +28,10 @@ import { AuthService } from './auth.service';
     }),
   ],
   providers: [
-    AuthService,
+    {
+      provide: 'IAuthService',
+      useClass: AuthService,
+    },
     PrismaService,
     SupabaseStrategy,
     // {

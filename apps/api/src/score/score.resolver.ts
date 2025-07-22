@@ -1,40 +1,42 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ScoreService } from './score.service';
-import { Score } from './entities/score.entity';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common';
+import { type IScoreService } from './score.service.interface';
 import { CreateScoreInput } from './dto/create-score.input';
 import { UpdateScoreInput } from './dto/update-score.input';
-import { DeleteManyOutput } from '../shared/models/delete-many-output.model';
-import { PrismaService } from '../prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
+import { ScoreResponseDto } from './dto/score-response.dto';
+import { Score } from './entities/score.entity';
 
 @Resolver(() => Score)
 export class ScoreResolver {
-  constructor(
-    private readonly scoreService: ScoreService,
-    private readonly prismaService: PrismaService,
-  ) {}
+  constructor(@Inject('IScoreService') private readonly scoreService: IScoreService) {}
 
   @Mutation(() => Score, { name: 'addScore' })
-  async createScore(@Args('createScoreInput') createScoreInput: CreateScoreInput) {
-    return this.scoreService.create(createScoreInput);
+  async createScore(@Args('createScoreInput') createScoreInput: CreateScoreInput): Promise<ScoreResponseDto> {
+    const score = await this.scoreService.create(createScoreInput);
+    return plainToInstance(ScoreResponseDto, score);
   }
 
   @Query(() => [Score], { name: 'scores' })
-  findAll() {
-    return this.scoreService.findMany();
+  async findAll(): Promise<ScoreResponseDto[]> {
+    const scores = await this.scoreService.findMany();
+    return scores.map((s) => plainToInstance(ScoreResponseDto, s));
   }
 
   @Mutation(() => Score)
-  updateScore(
+  async updateScore(
     @Args('matchId') matchId: string,
     @Args('roundId') roundId: string,
     @Args('playerId') playerId: string,
     @Args('updateScoreInput') updateScoreInput: UpdateScoreInput,
-  ) {
-    return this.scoreService.update(matchId, roundId, playerId, updateScoreInput);
+  ): Promise<ScoreResponseDto> {
+    const score = await this.scoreService.update(matchId, roundId, playerId, updateScoreInput);
+    return plainToInstance(ScoreResponseDto, score);
   }
 
-  @Mutation(() => DeleteManyOutput, { name: 'removeScoreFromRound' })
-  removeScoreFromRound(@Args('matchId') matchId: string, @Args('roundId') roundId: string) {
-    return this.scoreService.removeScoreFromRound(matchId, roundId);
+  @Mutation(() => Boolean, { name: 'removeScoreFromRound' })
+  async removeScoreFromRound(@Args('matchId') matchId: string, @Args('roundId') roundId: string): Promise<boolean> {
+    const result = await this.scoreService.removeScoreFromRound(matchId, roundId);
+    return result.count > 0;
   }
 }

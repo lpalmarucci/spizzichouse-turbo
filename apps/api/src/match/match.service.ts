@@ -1,170 +1,51 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Match, MatchStatus, Player, Prisma } from '@prisma/client/output';
-import { PlayersService } from '../players/players.service';
-import { CreateMatch } from './models/create-match.model';
-import { UpdateMatch } from './models/update-match.model';
+import { Injectable } from '@nestjs/common';
+import { IMatchService } from './match.service.interface';
+import { CreateMatchDto } from './dto/create-match.dto';
+import { UpdateMatchDto } from './dto/update-match.dto';
 import { MatchHistory } from './models/match-history.model';
-import { MatchOrderBy } from './models/order-by-match.model';
-import { plainToClass } from 'class-transformer';
-import { MatchPlayerStanding } from './models/match-player-standing';
-import MatchFindManyArgs = Prisma.MatchFindManyArgs;
+import { Prisma } from '@prisma/client/output';
+import { plainToInstance } from 'class-transformer';
+import { MatchRepository } from './match.repository';
+import { MatchResponseDto } from './dto/match-response.dto';
+import { MatchHistoryResponseDto } from './dto/match-history-response.dto';
 
 @Injectable()
-export class MatchService {
-  constructor(
-    private _prismaService: PrismaService,
-    private playerService: PlayersService,
-  ) {}
+export class MatchService implements IMatchService {
+  constructor(private readonly matchRepository: MatchRepository) {}
 
-  async create(createMatchDto: CreateMatch): Promise<Match> {
-    let users: Player[] = [];
-    if (createMatchDto.playerIds && createMatchDto.playerIds.length > 0) {
-      users = await this.playerService.findMany({
-        where: {
-          id: {
-            in: createMatchDto.playerIds,
-          },
-        },
-      });
-      delete createMatchDto?.playerIds;
-    }
-    const userIds = users.map((user) => ({
-      id: user.id,
-    }));
-
-    return this._prismaService.match.create({
-      data: {
-        ...createMatchDto,
-        players: {
-          connect: userIds,
-        },
-      },
-      include: {
-        players: true,
-      },
+  async create(dto: CreateMatchDto): Promise<MatchResponseDto> {
+    const match = await this.matchRepository.create({
+      title: dto.title,
+      description: dto.description,
+      status: dto.status,
+      date: dto.date,
+      duration: dto.duration,
+      playerIds: dto.playerIds,
     });
+    return plainToInstance(MatchResponseDto, match);
   }
 
-  getMatchesHistory(): Promise<MatchHistory[]> {
-    return this._prismaService.$queryRaw`
-      WITH months AS (
-        SELECT generate_series(1, 12) AS month
-      ),
-      match_counts AS (
-        SELECT date_part('month', m.date)::int AS month, COUNT(*)::int AS total
-        FROM matches m
-        GROUP BY date_part('month', m.date)
-      )
-      SELECT m.month, COALESCE(mc.total, 0) AS total
-      FROM months m
-      LEFT JOIN match_counts mc ON m.month = mc.month
-      ORDER BY m.month;
-    `;
+  async findOne(id: string): Promise<MatchResponseDto> {
+    const match = await this.matchRepository.findOne(id);
+    return plainToInstance(MatchResponseDto, match);
   }
 
-  findAll({ take, orderBy }: { take?: number; orderBy?: MatchOrderBy }) {
-    return this._prismaService.match.findMany({
-      orderBy: orderBy ?? undefined,
-      take,
-      include: {
-        players: true,
-        rounds: {
-          include: {
-            scores: { include: { player: true } },
-          },
-        },
-      },
-    });
+  async findMany(args: Prisma.MatchFindManyArgs): Promise<MatchResponseDto[]> {
+    const matches = await this.matchRepository.findMany(args);
+    return matches.map((match) => plainToInstance(MatchResponseDto, match));
   }
 
-  async findOne(id: string) {
-    const match = await this._prismaService.match.findUnique({
-      where: { id },
-      include: { players: true, rounds: { include: { scores: { include: { player: true } } } } },
-    });
-    if (!match) throw new NotFoundException(`Match with id ${id} not found`);
-    return match;
+  async update(id: string, dto: UpdateMatchDto): Promise<MatchResponseDto> {
+    const match = await this.matchRepository.update(id, { ...dto });
+    return plainToInstance(MatchResponseDto, match);
   }
 
-  findMany(options: MatchFindManyArgs): Promise<Match[]> {
-    return this._prismaService.match.findMany(options);
+  async remove(id: string): Promise<MatchResponseDto> {
+    const match = await this.matchRepository.remove(id);
+    return plainToInstance(MatchResponseDto, match);
   }
 
-  async update(id: string, updateMatchDto: UpdateMatch) {
-    const match = await this.findOne(id);
-
-    const currentPlayerIds = match.players.map((player) => player.id);
-    const newPlayerIds = updateMatchDto.playerIds ?? [];
-
-    const playersToDisconnect = currentPlayerIds.filter((id) => !newPlayerIds.includes(id)).map((id) => ({ id }));
-    const playersToConnect = newPlayerIds.filter((id) => !currentPlayerIds.includes(id)).map((id) => ({ id }));
-
-    delete updateMatchDto.playerIds;
-    //Updating the record
-    return this._prismaService.match.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateMatchDto,
-        ...(playersToConnect.length > 0
-          ? {
-              players: {
-                disconnect: playersToDisconnect,
-                connect: playersToConnect,
-              },
-            }
-          : null),
-      },
-      include: {
-        players: true,
-      },
-    });
-  }
-
-  async remove(id: string) {
-    await this.findOne(id);
-    return this._prismaService.match.delete({ where: { id } });
-  }
-
-  async getRecentMatchesByPlayer(playerId: string) {
-    const matches = await this._prismaService.match.findMany({
-      where: {
-        players: {
-          some: {
-            id: playerId,
-          },
-        },
-        status: MatchStatus.COMPLETED,
-      },
-      include: {
-        scores: {
-          include: {
-            player: true,
-          },
-        },
-      },
-      orderBy: {
-        date: 'desc',
-      },
-    });
-
-    return matches.map((m) => {
-      const roundsByPlayers = m.scores.reduce(
-        (acc, score) => {
-          acc[score.playerId] = (acc[score.playerId] || 0) + score.points;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
-
-      const sortedPlayerIds = Object.entries(roundsByPlayers)
-        .sort((a, b) => b[1] - a[1])
-        .map(([playerId]) => playerId);
-
-      const rankingPosition = sortedPlayerIds.indexOf(playerId) + 1;
-      return plainToClass(MatchPlayerStanding, { ...m, position: rankingPosition });
-    });
+  async getMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
+    return this.matchRepository.getMatchesHistory();
   }
 }

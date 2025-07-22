@@ -1,14 +1,25 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Body } from '@nestjs/common';
 import { User } from '../decorators/user.decorator';
 import { type User as AuthUser } from '@supabase/supabase-js';
-import { AuthService } from './auth.service';
+import { type IAuthService } from './auth.service.interface';
+import { CreatePlayerFromSupabaseDto } from './dto/create-player-from-supabase.dto';
+import { Inject } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(@Inject('IAuthService') private authService: IAuthService) {}
 
   @Get('/user/exists')
   checkUserExists(@User() user: AuthUser) {
-    return this.authService.createUserIfNotExists(user);
+    // Mappa l'oggetto user di Supabase nel DTO
+    const dto: CreatePlayerFromSupabaseDto = {
+      id: user.id,
+      email: user.email ?? '',
+      full_name: user.user_metadata.full_name,
+      bio: 'A sample of player bio where the character',
+      level: undefined,
+      status: undefined,
+    };
+    return this.authService.createUserIfNotExists(dto);
   }
 }
