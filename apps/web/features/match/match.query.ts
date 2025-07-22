@@ -61,7 +61,7 @@ export const GET_MATCH_BY_ID = gql`
 
 export const GET_MATCHES_HISTORY = gql`
   query matches_history {
-    matches_history {
+    recentMatchesHistory {
       month
       total
     }

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { CreateMatch, Match, MatchOrderBy, UpdateMatch } from '@workspace/api/qgl-types';
+import { CreateMatch, Match, MatchHistory, MatchOrderBy, UpdateMatch } from '@workspace/api/qgl-types';
 import {
   CREATE_MATCH,
   DELETE_MATCH,
@@ -32,7 +32,7 @@ export const useGetMatch = (id: string) =>
   });
 
 export const useGetMatchesHistory = () =>
-  useQuery<{ matches_history: MatchHistory[] }>({
+  useSuspenseQuery<{ recentMatchesHistory: MatchHistory[] }>({
     queryKey: [MATCH_HISTORY_QUERY_KEY],
     queryFn: () => gqlRequest(GET_MATCHES_HISTORY),
   });

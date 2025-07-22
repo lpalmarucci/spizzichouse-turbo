@@ -1,51 +1,40 @@
-"use client";
+'use client';
 
-import { Calendar, CalendarX2, Edit, Trophy, Users } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { Badge } from "@workspace/ui/components/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@workspace/ui/components/tabs";
-import { Detail, DetailHeader } from "@/components/detail";
-import { MatchStatus } from "@workspace/api/qgl-types";
-import { useGetMatch } from "@/features/match/match.hook";
-import { redirect, usePathname } from "next/navigation";
-import { toast } from "sonner";
-import { ScreenLoader } from "@/components/screen-loader";
-import { Button } from "@workspace/ui/components/button";
-import Link from "next/link";
-import { ConfirmationDialog } from "@/components/confirmation-dialog";
-import { useState, useTransition } from "react";
-import { updateMatchAction } from "@/features/match/match.actions";
-import { MatchDetailFinalResults } from "@/features/match/components/match-detail-final-results";
-import { RoundsByRoundsScore } from "@/features/match/components/rounds-by-rounds-score";
-import { MatchFinalStats } from "@/features/match/components/match-final-stats";
+import { Calendar, CalendarX2, Edit, Trophy, Users } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Badge } from '@workspace/ui/components/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
+import { Detail, DetailHeader } from '@/components/detail';
+import { MatchStatus } from '@workspace/api/qgl-types';
+import { useGetMatch } from '@/features/match/match.hook';
+import { redirect, usePathname } from 'next/navigation';
+import { toast } from 'sonner';
+import { ScreenLoader } from '@/components/screen-loader';
+import { Button } from '@workspace/ui/components/button';
+import Link from 'next/link';
+import ConfirmationDialog from '@/components/confirmation-dialog';
+import { useState, useTransition } from 'react';
+import { updateMatchAction } from '@/features/match/match.actions';
+import { MatchDetailFinalResults } from '@/features/match/components/match-detail-final-results';
+import { RoundsByRoundsScore } from '@/features/match/components/rounds-by-rounds-score';
+import { MatchFinalStats } from '@/features/match/components/match-final-stats';
 
 const getStatusColor = (status: string) => {
   switch (status) {
     case MatchStatus.Upcoming:
-      return "bg-blue-500";
+      return 'bg-blue-500';
     case MatchStatus.InProgress:
-      return "bg-green-500";
+      return 'bg-green-500';
     case MatchStatus.Completed:
-      return "bg-gray-500";
+      return 'bg-gray-500';
     default:
-      return "bg-gray-500";
+      return 'bg-gray-500';
   }
 };
 
 const formatDate = (dateString: string | Date) => {
   const date = new Date(dateString);
-  return date.toLocaleString("en-UK", { dateStyle: "short" });
+  return date.toLocaleString('en-UK', { dateStyle: 'short' });
 };
 
 interface MatchDetailProps {
@@ -54,8 +43,7 @@ interface MatchDetailProps {
 
 export default function MatchDetail({ id }: MatchDetailProps) {
   const { data, isLoading, error } = useGetMatch(id);
-  const [isEndMatchDialogOpen, setIsEndMatchDialogOpen] =
-    useState<boolean>(false);
+  const [isEndMatchDialogOpen, setIsEndMatchDialogOpen] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
 
@@ -68,7 +56,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
         toast.error(error);
         return;
       }
-      toast.info("Partita terminata correttamente");
+      toast.info('Partita terminata correttamente');
       setIsEndMatchDialogOpen(false);
     });
   }
@@ -76,7 +64,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
   if (error) {
     toast.error(error.message);
     setTimeout(() => {
-      redirect("/matches");
+      redirect('/matches');
     }, 500);
     return;
   }
@@ -86,9 +74,9 @@ export default function MatchDetail({ id }: MatchDetailProps) {
   }
 
   if (!data) {
-    toast.warning("No match found!");
+    toast.warning('No match found!');
     setTimeout(() => {
-      redirect("/matches");
+      redirect('/matches');
     }, 500);
     return;
   }
@@ -101,7 +89,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
         <DetailHeader headingText={match.title} backLocationHref="/matches">
           {match.status == MatchStatus.Upcoming && (
             <Button asChild>
-              <Link href={pathname + "/edit"}>
+              <Link href={pathname + '/edit'}>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit match
               </Link>
@@ -115,8 +103,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                 <CardTitle>Match Details</CardTitle>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className={getStatusColor(match.status)}>
-                    {match.status.charAt(0).toUpperCase() +
-                      match.status.slice(1)}
+                    {match.status.charAt(0).toUpperCase() + match.status.slice(1)}
                   </Badge>
                 </div>
               </CardHeader>
@@ -201,9 +188,7 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <div>
                       <CardTitle>Match Results</CardTitle>
-                      <CardDescription>
-                        "Results will be available once the match is completed
-                      </CardDescription>
+                      <CardDescription>"Results will be available once the match is completed</CardDescription>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -212,8 +197,8 @@ export default function MatchDetail({ id }: MatchDetailProps) {
                         <Trophy className="h-12 w-12 text-muted-foreground" />
                         <h3 className="text-lg font-medium">No Results Yet</h3>
                         <p className="text-muted-foreground max-w-md">
-                          This match has not been completed yet. Use the Manage
-                          Rounds feature to track scores and complete rounds.
+                          This match has not been completed yet. Use the Manage Rounds feature to track scores and
+                          complete rounds.
                         </p>
                       </div>
                     </div>

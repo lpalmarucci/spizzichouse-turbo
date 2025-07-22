@@ -1,27 +1,16 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { useGetMatchesHistory } from "@/features/match/match.hook";
-import { Skeleton } from "@workspace/ui/components/skeleton";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@workspace/ui/components/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { format } from "date-fns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { useGetMatchesHistory } from '@/features/match/match.hook';
+import { Skeleton } from '@workspace/ui/components/skeleton';
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@workspace/ui/components/chart';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { format } from 'date-fns';
 
 const chartConfig = {
   total: {
-    label: "Matches",
-    color: "#2563eb",
+    label: 'Matches',
+    color: '#2563eb',
   },
 } satisfies ChartConfig;
 
@@ -32,12 +21,9 @@ export function MatchHistoryChart() {
 
   if (isFetching) return <Skeleton />;
 
-  const formattedData = data?.matches_history.map((item) => ({
+  const formattedData = data?.recentMatchesHistory.map((item) => ({
     ...item,
-    label: format(
-      new Date(date.getFullYear(), item.month - 1, date.getDay()),
-      "MMM",
-    ),
+    label: format(new Date(date.getFullYear(), item.month - 1, date.getDay()), 'MMM'),
   }));
 
   return (
@@ -50,12 +36,7 @@ export function MatchHistoryChart() {
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={formattedData}>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="label"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
+            <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey="total" fill="var(--color-total)" radius={4} />
           </BarChart>
