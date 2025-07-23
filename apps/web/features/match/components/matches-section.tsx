@@ -1,21 +1,16 @@
 'use client';
 
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@workspace/ui/components/button';
 import { ScreenLoader } from '@/components/screen-loader';
 import { MatchesFilters } from './matches-filters';
 import MatchesList from './matches-list';
 import MatchesEmptyState from './matches-empty-state';
-
-// const CreateMatchDialog = lazy(() => import('@/features/match/components/create-match-dialog'));
-// const ConfirmationDialog = lazy(() => import('@/components/confirmation-dialog'));
-const CreateMatchDialog = dynamic(() => import('@/features/match/components/create-match-dialog'));
-const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'));
-
+import ConfirmationDialog from '@/components/confirmation-dialog';
+import CreateMatchDialog from './create-match-dialog';
 import { useMatches } from '../hooks/useMatches';
 import ErrorState from '@/components/error-state';
-import dynamic from 'next/dynamic';
 
 export function MatchesSection() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);

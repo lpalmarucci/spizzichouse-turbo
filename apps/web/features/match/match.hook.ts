@@ -28,7 +28,7 @@ export const useGetMatches = (
   } = {},
 ) =>
   useSuspenseQuery<{ matches: Match[] }>({
-    queryKey: [MATCH_QUERY_KEY, params],
+    queryKey: [MATCH_QUERY_KEY, params.take, params.matchOrderBy],
     queryFn: () => gqlRequest(GET_MATCHES, params),
   });
 
@@ -39,7 +39,7 @@ export const useGetMatch = (id: string) =>
   });
 
 export const useGetMatchesHistory = () =>
-  useSuspenseQuery<{ recentMatchesHistory: MatchHistory[] }>({
+  useQuery<{ recentMatchesHistory: MatchHistory[] }>({
     queryKey: [MATCH_HISTORY_QUERY_KEY],
     queryFn: () => gqlRequest(GET_MATCHES_HISTORY),
   });
