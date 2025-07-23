@@ -184,6 +184,12 @@ export type Player = {
   status: PlayerStatus;
 };
 
+export type PlayerHistory = {
+  __typename?: 'PlayerHistory';
+  month: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
 export enum PlayerLevel {
   Beginner = 'BEGINNER',
   Expert = 'EXPERT',
@@ -214,8 +220,9 @@ export type Query = {
   match: Match;
   matches: Array<Match>;
   player: Player;
+  playerWithStats: PlayerStats;
   players: Array<Player>;
-  playersHistory: Array<Player>;
+  playersHistory: Array<PlayerHistory>;
   playersWithStats: Array<PlayerStats>;
   recentMatches: Array<MatchPlayerStanding>;
   recentMatchesHistory: Array<MatchHistory>;
@@ -241,8 +248,8 @@ export type QueryPlayerArgs = {
 };
 
 
-export type QueryPlayersWithStatsArgs = {
-  id?: InputMaybe<Scalars['String']['input']>;
+export type QueryPlayerWithStatsArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -406,6 +413,7 @@ export type ResolversTypes = {
   MatchStatus: MatchStatus;
   Mutation: ResolverTypeWrapper<{}>;
   Player: ResolverTypeWrapper<Player>;
+  PlayerHistory: ResolverTypeWrapper<PlayerHistory>;
   PlayerLevel: PlayerLevel;
   PlayerStats: ResolverTypeWrapper<PlayerStats>;
   PlayerStatus: PlayerStatus;
@@ -438,6 +446,7 @@ export type ResolversParentTypes = {
   MatchPlayerStanding: MatchPlayerStanding;
   Mutation: {};
   Player: Player;
+  PlayerHistory: PlayerHistory;
   PlayerStats: PlayerStats;
   Query: {};
   Round: Round;
@@ -511,6 +520,12 @@ export type PlayerResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PlayerHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerHistory'] = ResolversParentTypes['PlayerHistory']> = {
+  month?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PlayerStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerStats'] = ResolversParentTypes['PlayerStats']> = {
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -529,9 +544,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   match?: Resolver<ResolversTypes['Match'], ParentType, ContextType, RequireFields<QueryMatchArgs, 'id'>>;
   matches?: Resolver<Array<ResolversTypes['Match']>, ParentType, ContextType, Partial<QueryMatchesArgs>>;
   player?: Resolver<ResolversTypes['Player'], ParentType, ContextType, RequireFields<QueryPlayerArgs, 'id'>>;
+  playerWithStats?: Resolver<ResolversTypes['PlayerStats'], ParentType, ContextType, RequireFields<QueryPlayerWithStatsArgs, 'id'>>;
   players?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
-  playersHistory?: Resolver<Array<ResolversTypes['Player']>, ParentType, ContextType>;
-  playersWithStats?: Resolver<Array<ResolversTypes['PlayerStats']>, ParentType, ContextType, Partial<QueryPlayersWithStatsArgs>>;
+  playersHistory?: Resolver<Array<ResolversTypes['PlayerHistory']>, ParentType, ContextType>;
+  playersWithStats?: Resolver<Array<ResolversTypes['PlayerStats']>, ParentType, ContextType>;
   recentMatches?: Resolver<Array<ResolversTypes['MatchPlayerStanding']>, ParentType, ContextType, RequireFields<QueryRecentMatchesArgs, 'playerId'>>;
   recentMatchesHistory?: Resolver<Array<ResolversTypes['MatchHistory']>, ParentType, ContextType>;
   round?: Resolver<ResolversTypes['Round'], ParentType, ContextType, RequireFields<QueryRoundArgs, 'id'>>;
@@ -565,6 +581,7 @@ export type Resolvers<ContextType = any> = {
   MatchPlayerStanding?: MatchPlayerStandingResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Player?: PlayerResolvers<ContextType>;
+  PlayerHistory?: PlayerHistoryResolvers<ContextType>;
   PlayerStats?: PlayerStatsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Round?: RoundResolvers<ContextType>;

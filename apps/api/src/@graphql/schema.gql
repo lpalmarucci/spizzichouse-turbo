@@ -107,6 +107,11 @@ type Player {
   status: PlayerStatus!
 }
 
+type PlayerHistory {
+  month: Int!
+  total: Int!
+}
+
 enum PlayerLevel {
   BEGINNER
   EXPERT
@@ -137,7 +142,7 @@ type Query {
   player(id: String!): Player!
   playerWithStats(id: String!): PlayerStats!
   players: [Player!]!
-  playersHistory: [Player!]!
+  playersHistory: [PlayerHistory!]!
   playersWithStats: [PlayerStats!]!
   recentMatches(playerId: String!): [MatchPlayerStanding!]!
   recentMatchesHistory: [MatchHistory!]!

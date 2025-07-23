@@ -34,8 +34,8 @@ export class PlayersRepository {
     return this.prisma.player.delete({ where: { id } });
   }
 
-  getPlayersHistory(): Promise<PlayerHistoryResponseDto[]> {
-    return this.prisma.$queryRaw`
+  getPlayersHistory() {
+    return this.prisma.$queryRaw<PlayerHistoryResponseDto[]>`
       WITH months AS (
           SELECT generate_series(1, 12) AS month
       ),
