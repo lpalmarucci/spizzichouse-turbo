@@ -17,7 +17,6 @@ export const useGetPlayers = (status?: PlayerStatus) =>
   useSuspenseQuery<{ players: Player[] }>({
     queryKey: [PLAYER_QUERY_KEY],
     queryFn: () => gqlRequest(GET_PLAYERS, { status }),
-    initialData: { players: [] },
   });
 
 export const useGetPlayersStats = () =>

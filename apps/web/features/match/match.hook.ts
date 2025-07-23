@@ -44,38 +44,39 @@ export const useGetMatchesHistory = () =>
     queryFn: () => gqlRequest(GET_MATCHES_HISTORY),
   });
 
-export const useCreateMatch = (match: CreateMatch) =>
+export const useCreateMatch = () =>
   useMutation({
     mutationKey: [MATCH_QUERY_KEY],
-    mutationFn: () => gqlRequest(CREATE_MATCH, { match }),
+    mutationFn: (match: CreateMatch) => gqlRequest(CREATE_MATCH, { match }),
   });
-export const useUpdateMatch = (id: string, match: UpdateMatch) =>
+export const useUpdateMatch = () =>
   useMutation({
     mutationKey: [MATCH_QUERY_KEY],
-    mutationFn: () => gqlRequest(UPDATE_MATCH, { match }),
+    mutationFn: ({ id, match }: { id: string; match: UpdateMatch }) => gqlRequest(UPDATE_MATCH, { match }),
   });
 
 export function useDeleteMatch() {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: [MATCH_QUERY_KEY],
     mutationFn: (id: string) => gqlRequest(DELETE_MATCH, { id }),
     // Optimistic update
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: [MATCH_QUERY_KEY] });
-      const previousMatches = queryClient.getQueryData([MATCH_QUERY_KEY]);
-      queryClient.setQueryData(['matches'], (old: any[]) => old.filter((m) => m.id !== id));
-      return { previousMatches };
-    },
-    // Rollback if error
-    onError: (err, id, context) => {
-      queryClient.setQueryData([MATCH_QUERY_KEY], context?.previousMatches);
-    },
-    // Refetch finale
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [MATCH_QUERY_KEY] });
-    },
+    // onMutate: async (id) => {
+    //   debugger;
+    //   await queryClient.cancelQueries({ queryKey: [MATCH_QUERY_KEY] });
+    //   const previousMatches = queryClient.getQueryData([MATCH_QUERY_KEY]);
+    //   queryClient.setQueryData([MATCH_QUERY_KEY], (old: any[]) => old.filter((m) => m.id !== id));
+    //   return { previousMatches };
+    // },
+    // // Rollback if error
+    // onError: (err, id, context) => {
+    //   queryClient.setQueryData([MATCH_QUERY_KEY], context?.previousMatches);
+    // },
+    // // Refetch finale
+    // onSettled: () => {
+    //   queryClient.invalidateQueries({ queryKey: [MATCH_QUERY_KEY] });
+    // },
   });
 }
 export const useGetRecentMatchesByPlayer = (playerId: string) =>

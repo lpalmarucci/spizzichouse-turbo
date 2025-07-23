@@ -10,17 +10,13 @@ import {
 import { MoreHorizontal, Pencil } from 'lucide-react';
 import Link from 'next/link';
 
-function MatchCardActions({
-  match,
-  onEdit,
-  onEnd,
-  onDelete,
-}: {
+interface MatchCardActionsProps {
   match: Match;
-  onEdit: () => void;
   onEnd: () => void;
   onDelete: () => void;
-}) {
+}
+
+function MatchCardActions({ match, onEnd, onDelete }: MatchCardActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,8 +40,8 @@ function MatchCardActions({
           </>
         )}
         <DropdownMenuItem onClick={onDelete}>
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete
+          <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+          <span className="text-destructive">Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

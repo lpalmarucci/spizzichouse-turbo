@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@workspace/ui/components/button';
 import { ScreenLoader } from '@/components/screen-loader';
@@ -28,10 +28,27 @@ export function MatchesSection() {
     isLoading,
     error,
     handleDeleteMatch,
+    refetchMatches,
+    isDeletingMatch,
   } = useMatches();
 
   if (isLoading) return <ScreenLoader />;
   if (error) return <ErrorState message="Errore nel caricamento delle partite" />;
+
+  const handleOpenChange = (open: boolean, shouldRefresh?: boolean) => {
+    setShowCreateDialog(open);
+    if (shouldRefresh) {
+      refetchMatches();
+    }
+  };
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (matchIdToDelete) {
+      await handleDeleteMatch(matchIdToDelete);
+      setShowDeleteDialog(false);
+      refetchMatches();
+    }
+  }, [matchIdToDelete, handleDeleteMatch, refetchMatches]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,16 +95,14 @@ export function MatchesSection() {
         </div>
       </div>
 
-      {showCreateDialog && <CreateMatchDialog open={showCreateDialog} onOpenChange={setShowCreateDialog} />}
+      {showCreateDialog && <CreateMatchDialog open={showCreateDialog} onOpenChange={handleOpenChange} />}
 
       {showDeleteDialog && (
         <ConfirmationDialog
           open={showDeleteDialog}
           onOpenChange={setShowDeleteDialog}
-          onConfirm={() => {
-            if (matchIdToDelete) handleDeleteMatch(matchIdToDelete);
-            setShowDeleteDialog(false);
-          }}
+          onConfirm={handleConfirmDelete}
+          isPending={isDeletingMatch}
         />
       )}
     </div>

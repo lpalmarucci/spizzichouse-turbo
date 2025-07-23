@@ -5,15 +5,14 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Button } from '@workspace/ui/components/button';
 import { Badge } from '@workspace/ui/components/badge';
-import UserAvatar from '@/components/user-avatar';
-import { Match, MatchStatus, Player } from '@workspace/api/qgl-types';
+import { Match } from '@workspace/api/qgl-types';
 import { getStatusColor, getStatusText } from '@/features/match/match.utils';
-import { useState, useTransition, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import ConfirmationDialog from '@/components/confirmation-dialog';
-import { updateMatchAction } from '@/features/match/match.actions';
 import { toast } from 'sonner';
 import MatchCardActions from './match-card-actions';
 import PlayersAvatars from '@/components/players-avatar';
+import { useMatches } from '../hooks/useMatches';
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -22,21 +21,17 @@ function formatDate(dateString: string) {
 
 export function MatchCard({ match, onDelete }: { match: Match; onDelete: (id: string) => void }) {
   const [isEndMatchDialogOpen, setIsEndMatchDialogOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const { handleEndMatch, isUpdatingMatch } = useMatches();
 
   // Callback per terminare la partita
-  const handleEndMatch = useCallback(() => {
-    startTransition(async () => {
-      const { error } = await updateMatchAction(match.id, {
-        status: MatchStatus.Completed,
-      });
-      if (error) {
-        toast.error(error);
-        return;
-      }
-      toast.info('Partita terminata correttamente');
-      setIsEndMatchDialogOpen(false);
-    });
+  const onEndMatch = useCallback(async () => {
+    try {
+      await handleEndMatch(match.id);
+      toast.info('Match deleted successfully');
+    } catch (error) {
+      toast.error('An error occurred while deleting the match');
+      return;
+    }
   }, [match.id]);
 
   return (
@@ -47,7 +42,6 @@ export function MatchCard({ match, onDelete }: { match: Match; onDelete: (id: st
             <CardTitle className="text-xl">{match.title}</CardTitle>
             <MatchCardActions
               match={match}
-              onEdit={() => {}}
               onEnd={() => setIsEndMatchDialogOpen(true)}
               onDelete={() => onDelete(match.id)}
             />
@@ -85,10 +79,10 @@ export function MatchCard({ match, onDelete }: { match: Match; onDelete: (id: st
       <ConfirmationDialog
         open={isEndMatchDialogOpen}
         onOpenChange={setIsEndMatchDialogOpen}
-        onConfirm={handleEndMatch}
+        onConfirm={onEndMatch}
         title="Sei sicuro di voler terminare la partita?"
         subtitle="Non potrai più modificare i vari punteggi"
-        isPending={isPending}
+        isPending={isUpdatingMatch}
       />
     </>
   );

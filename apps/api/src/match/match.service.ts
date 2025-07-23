@@ -15,7 +15,8 @@ export class MatchService implements IMatchService {
   constructor(private readonly matchRepository: MatchRepository) {}
 
   async create(dto: CreateMatchDto): Promise<MatchResponseDto> {
-    return plainToInstance(MatchResponseDto, dto);
+    const match = await this.matchRepository.create(dto);
+    return plainToInstance(MatchResponseDto, match);
   }
 
   async findOne(id: string): Promise<MatchResponseDto> {

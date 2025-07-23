@@ -12,6 +12,7 @@ import { UpdatePlayer } from './models/update-player.model';
 import { PlayerStats } from './models/player-stats.model';
 import { PlayerStatsResponseDto } from './dto/player-stats-response.dto';
 import { PlayerHistory } from './models/player-history.model';
+import { PlayerStatus } from '@prisma/client/output';
 
 @Resolver(() => Player)
 export class PlayersResolver {
@@ -45,10 +46,8 @@ export class PlayersResolver {
   }
 
   @Query(() => [Player])
-  async players(): Promise<PlayerResponseDto[]> {
-    const players = await this.playersService.findMany({
-      include: { matches: { include: { rounds: { include: { scores: true } } } } },
-    });
+  async players(@Args('status', { nullable: true }) status?: PlayerStatus): Promise<PlayerResponseDto[]> {
+    const players = await this.playersService.findMany(status);
     return plainToInstance(PlayerResponseDto, players);
   }
 

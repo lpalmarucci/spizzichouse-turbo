@@ -5,7 +5,7 @@ export const PLAYERS_HISTORY_QUERY_KEY = 'players_history';
 export const PLAYERS_STATS_QUERY_KEY = 'players_stats';
 
 export const GET_PLAYERS = gql`
-  query getPlayers($status: String) {
+  query players($status: String) {
     players(status: $status) {
       bio
       createdAt

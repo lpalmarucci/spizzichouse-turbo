@@ -6,7 +6,7 @@ import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PlayerHistory } from './models/player-history.model';
 import { PlayerStats } from './models/player-stats.model';
 import { plainToInstance } from 'class-transformer';
-import { Prisma } from '@prisma/client/output';
+import { PlayerStatus, Prisma } from '@prisma/client/output';
 import { PlayerResponseDto } from './dto/player-response.dto';
 import { PlayerHistoryResponseDto } from './dto/player-history-response.dto';
 import { PlayerStatsResponseDto } from './dto/player-stats-response.dto';
@@ -31,9 +31,12 @@ export class PlayersService implements IPlayersService {
     return plainToInstance(PlayerResponseDto, player);
   }
 
-  async findMany(args: Prisma.PlayerFindManyArgs): Promise<PlayerResponseDto[]> {
-    const players = await this.playersRepository.findMany(args);
-    return players.map((player) => plainToInstance(PlayerResponseDto, player));
+  async findMany(status: PlayerStatus): Promise<PlayerResponseDto[]> {
+    const players = await this.playersRepository.findMany({
+      include: { matches: { include: { rounds: { include: { scores: true } } } } },
+      where: { status },
+    });
+    return plainToInstance(PlayerResponseDto, players);
   }
 
   async update(id: string, dto: UpdatePlayerDto): Promise<PlayerResponseDto> {

@@ -18,7 +18,7 @@ interface PlayerDetailCardProps {
 
 export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   const { data, isLoading, error } = useGetPlayerById(id);
-  const { data: playerStats } = useGetPlayerStats(id);
+  const { data: playerStatsData } = useGetPlayerStats(id);
 
   if (error) {
     toast.error(error.message);
@@ -52,7 +52,7 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
           </Avatar>
           <div>
             <CardTitle className="text-2xl">{player.full_name}</CardTitle>
-            <PlayerBadges level={player.level} wins={playerStats?.player_stats?.wins} />
+            <PlayerBadges level={player.level} wins={playerStatsData?.playerWithStats?.wins} />
           </div>
         </div>
       </CardHeader>

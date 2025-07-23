@@ -141,7 +141,7 @@ type Query {
   matches(orderBy: MatchOrderBy, take: Int): [Match!]!
   player(id: String!): Player!
   playerWithStats(id: String!): PlayerStats!
-  players: [Player!]!
+  players(status: String): [Player!]!
   playersHistory: [PlayerHistory!]!
   playersWithStats: [PlayerStats!]!
   recentMatches(playerId: String!): [MatchPlayerStanding!]!

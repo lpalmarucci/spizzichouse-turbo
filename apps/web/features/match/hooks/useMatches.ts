@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
-import { useGetMatches, useDeleteMatch } from '@/features/match/match.hook';
+import { useGetMatches, useDeleteMatch, useUpdateMatch } from '@/features/match/match.hook';
 import { toast } from 'sonner';
+import { MatchStatus } from '@workspace/api/qgl-types';
 
 export function useMatches() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -11,8 +12,10 @@ export function useMatches() {
     data: { matches = [] },
     isLoading,
     error,
+    refetch: refetchMatches,
   } = useGetMatches();
-  const { mutateAsync: deleteMatch } = useDeleteMatch();
+  const { mutateAsync: updateMatch, isPending: isUpdatingMatch } = useUpdateMatch();
+  const { mutateAsync: deleteMatch, isPending: isDeletingMatch } = useDeleteMatch();
 
   // Filtering logic
   const filteredMatches = useMemo(() => {
@@ -40,6 +43,13 @@ export function useMatches() {
       toast.error(error.message);
     }
   }
+  const handleEndMatch = async (id: string) => {
+    try {
+      await updateMatch({ id, match: { status: MatchStatus.Completed } });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
   return {
     searchQuery,
@@ -52,5 +62,9 @@ export function useMatches() {
     isLoading,
     error,
     handleDeleteMatch,
+    refetchMatches,
+    isDeletingMatch,
+    handleEndMatch,
+    isUpdatingMatch,
   };
 }

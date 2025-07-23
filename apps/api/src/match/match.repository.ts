@@ -62,8 +62,8 @@ export class MatchRepository {
   }
 
   async remove(id: string): Promise<PrismaMatch> {
-    await this.findOne(id);
-    return this.prisma.match.delete({ where: { id } });
+    const match = await this.findOne(id);
+    return this.prisma.match.delete({ where: { id: match.id } });
   }
 
   getMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
