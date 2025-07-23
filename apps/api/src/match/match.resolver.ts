@@ -10,6 +10,8 @@ import { UpdateMatch } from './models/update-match.model';
 import { CreateMatch } from './models/create-match.model';
 import { MatchOrderBy } from './models/order-by-match.model';
 import { MatchHistory } from './models/match-history.model';
+import { MatchPlayerStanding } from './models/match-player-standing';
+import { MatchStandingResponseDto } from './dto/match-standing-response.dto';
 
 @Resolver(() => CreateMatchDto)
 export class MatchResolver {
@@ -32,7 +34,8 @@ export class MatchResolver {
 
   @Query(() => [MatchHistory], { name: 'recentMatchesHistory' })
   async recentMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
-    return this.matchService.getMatchesHistory();
+    const matches = await this.matchService.getMatchesHistory();
+    return plainToInstance(MatchHistoryResponseDto, matches);
   }
 
   @Mutation(() => Match, { name: 'createMatch' })
@@ -51,5 +54,11 @@ export class MatchResolver {
   async deleteMatch(@Args('id') id: string): Promise<MatchResponseDto> {
     const match = await this.matchService.remove(id);
     return plainToInstance(MatchResponseDto, match);
+  }
+
+  @Query(() => [MatchPlayerStanding], { name: 'recentMatches' })
+  async recentMatches(@Args('playerId') playerId: string): Promise<MatchStandingResponseDto[]> {
+    const matches = await this.matchService.getRecentMatchesByPlayer(playerId);
+    return plainToInstance(MatchStandingResponseDto, matches);
   }
 }

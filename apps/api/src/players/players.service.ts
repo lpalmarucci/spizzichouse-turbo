@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IPlayersService } from './players.service.interface';
 import { PlayersRepository } from './players.repository';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -9,6 +9,7 @@ import { plainToInstance } from 'class-transformer';
 import { Prisma } from '@prisma/client/output';
 import { PlayerResponseDto } from './dto/player-response.dto';
 import { PlayerHistoryResponseDto } from './dto/player-history-response.dto';
+import { PlayerStatsResponseDto } from './dto/player-stats-response.dto';
 
 @Injectable()
 export class PlayersService implements IPlayersService {
@@ -51,7 +52,15 @@ export class PlayersService implements IPlayersService {
     return this.playersRepository.getPlayersHistory();
   }
 
-  getPlayersStats(playerId?: string): Promise<PlayerStats[]> {
+  getPlayersStats(playerId?: string): Promise<PlayerStatsResponseDto[]> {
     return this.playersRepository.getPlayersStats(playerId);
+  }
+
+  async getPlayerStats(playerId: string): Promise<PlayerStatsResponseDto> {
+    const player = await this.playersRepository.getPlayersStats(playerId);
+    if (player.length === 0) {
+      throw new NotFoundException('Player not found');
+    }
+    return plainToInstance(PlayerStatsResponseDto, player.at(0));
   }
 }

@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { MatchRepository } from './match.repository';
 import { MatchResponseDto } from './dto/match-response.dto';
 import { MatchHistoryResponseDto } from './dto/match-history-response.dto';
+import { MatchStandingResponseDto } from './dto/match-standing-response.dto';
 
 @Injectable()
 export class MatchService implements IMatchService {
@@ -42,5 +43,10 @@ export class MatchService implements IMatchService {
 
   async getMatchesHistory(): Promise<MatchHistoryResponseDto[]> {
     return this.matchRepository.getMatchesHistory();
+  }
+
+  async getRecentMatchesByPlayer(playerId: string): Promise<MatchStandingResponseDto[]> {
+    const matches = await this.matchRepository.getRecentMatchesByPlayer(playerId);
+    return plainToInstance(MatchStandingResponseDto, matches);
   }
 }

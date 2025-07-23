@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Match as PrismaMatch } from '@prisma/client/output';
+import { MatchStatus, Prisma, Match as PrismaMatch } from '@prisma/client/output';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { MatchHistory } from './models/match-history.model';
 import { MatchHistoryResponseDto } from './dto/match-history-response.dto';
+import { MatchPlayerStanding } from './models/match-player-standing';
+import { plainToInstance } from 'class-transformer';
+import { MatchStandingResponseDto } from './dto/match-standing-response.dto';
 
 @Injectable()
 export class MatchRepository {
@@ -78,5 +81,32 @@ export class MatchRepository {
       LEFT JOIN match_counts mc ON m.month = mc.month
       ORDER BY m.month;
     `;
+  }
+
+  async getRecentMatchesByPlayer(playerId: string): Promise<MatchStandingResponseDto[]> {
+    const matches = await this.prisma.match.findMany({
+      where: { players: { some: { id: playerId } }, status: MatchStatus.COMPLETED },
+      include: { scores: { include: { player: true } } },
+      orderBy: { date: 'desc' },
+    });
+
+    const recentMatches = matches.map((match) => {
+      const roundsByPlayers = match.scores.reduce(
+        (acc, score) => {
+          acc[score.player.id] = (acc[score.player.id] || 0) + score.points;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+      const sortedRoundsByPlayers = Object.entries(roundsByPlayers)
+        .sort((a, b) => b[1] - a[1])
+        .map(([playerId, score]) => playerId);
+      const rankingPosition = sortedRoundsByPlayers.indexOf(playerId) + 1;
+      return {
+        ...match,
+        position: rankingPosition,
+      };
+    });
+    return plainToInstance(MatchStandingResponseDto, recentMatches);
   }
 }

@@ -101,6 +101,7 @@ export class PlayersRepository {
         ON p.id = w."playerId"
       LEFT JOIN total_matches mp
         ON p.id = mp.player_id
+      ${whereCondition}
       GROUP BY p.id, p.full_name, mp.total_matches
     `;
   }

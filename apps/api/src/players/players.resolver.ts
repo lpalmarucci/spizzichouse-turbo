@@ -37,6 +37,12 @@ export class PlayersResolver {
     return plainToInstance(PlayerStatsResponseDto, playersStats);
   }
 
+  @Query(() => PlayerStats)
+  async playerWithStats(@Args('id', { type: () => String }) id: string): Promise<PlayerStatsResponseDto> {
+    const playersStats = await this.playersService.getPlayerStats(id);
+    return plainToInstance(PlayerStatsResponseDto, playersStats);
+  }
+
   @Query(() => [Player])
   async players(): Promise<PlayerResponseDto[]> {
     const players = await this.playersService.findMany({
@@ -53,6 +59,7 @@ export class PlayersResolver {
 
   @Query(() => [Player], { name: 'playersHistory' })
   async playersHistory(): Promise<PlayerHistoryResponseDto[]> {
-    return this.playersService.getPlayersHistory();
+    const playersHistory = await this.playersService.getPlayersHistory();
+    return plainToInstance(PlayerHistoryResponseDto, playersHistory);
   }
 }

@@ -11,4 +11,5 @@ export interface IMatchService {
   update(id: string, dto: UpdateMatchDto): Promise<MatchResponseDto>;
   remove(id: string): Promise<MatchResponseDto>;
   getMatchesHistory(): Promise<MatchHistoryResponseDto[]>;
+  getRecentMatchesByPlayer(playerId: string): Promise<MatchResponseDto[]>;
 }
