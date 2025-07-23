@@ -89,13 +89,18 @@ export class PlayersRepository {
         p.*,
         COUNT(w."matchId")::Int AS wins,
         COALESCE(mp.total_matches, 0)::Int as total_matches,
-        COUNT(w."matchId")::decimal / mp.total_matches * 100 as win_rate
+        
+        COALESCE(
+          CASE
+            WHEN mp.total_matches IS NULL OR mp.total_matches = 0 THEN 0
+            ELSE (COUNT(w."matchId")::Decimal / mp.total_matches * 100)
+          END, 0
+        )::Int as win_rate
       FROM players p
       LEFT JOIN winners w
         ON p.id = w."playerId"
       LEFT JOIN total_matches mp
         ON p.id = mp.player_id
-      ${whereCondition}
       GROUP BY p.id, p.full_name, mp.total_matches
     `;
   }

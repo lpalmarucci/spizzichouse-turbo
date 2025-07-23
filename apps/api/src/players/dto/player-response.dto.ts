@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PlayerLevel, PlayerStatus } from '@prisma/client';
+import { IsDate } from 'class-validator';
 
 export class PlayerResponseDto {
   @ApiProperty()
@@ -15,6 +16,7 @@ export class PlayerResponseDto {
   bio?: string;
 
   @ApiProperty()
+  @IsDate()
   createdAt: Date;
 
   @ApiProperty({ enum: PlayerLevel })

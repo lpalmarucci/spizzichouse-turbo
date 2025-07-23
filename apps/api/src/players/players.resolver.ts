@@ -9,6 +9,8 @@ import { PlayerHistoryResponseDto } from './dto/player-history-response.dto';
 import { Player } from './models/player.model';
 import { CreatePlayer } from './models/create-player.model';
 import { UpdatePlayer } from './models/update-player.model';
+import { PlayerStats } from './models/player-stats.model';
+import { PlayerStatsResponseDto } from './dto/player-stats-response.dto';
 
 @Resolver(() => Player)
 export class PlayersResolver {
@@ -27,6 +29,12 @@ export class PlayersResolver {
   ): Promise<PlayerResponseDto> {
     const player = await this.playersService.update(id, data);
     return plainToInstance(PlayerResponseDto, player);
+  }
+
+  @Query(() => [PlayerStats])
+  async playersWithStats(): Promise<PlayerStatsResponseDto[]> {
+    const playersStats = await this.playersService.getPlayersStats();
+    return plainToInstance(PlayerStatsResponseDto, playersStats);
   }
 
   @Query(() => [Player])
