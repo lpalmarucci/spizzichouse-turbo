@@ -1,48 +1,15 @@
-"use client";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
-import { Button } from "@workspace/ui/components/button";
-import {
-  Calendar,
-  House,
-  MoreHorizontal,
-  Pencil,
-  Star,
-  Trophy,
-} from "lucide-react";
-import Link from "next/link";
-import { Badge } from "@workspace/ui/components/badge";
-import { Progress } from "@workspace/ui/components/progress";
-import {
-  getLevelColor,
-  getStatusColor,
-  getStatusText,
-} from "@/features/player/utils";
-import { PlayerStats } from "@workspace/api/qgl-types";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Avatar, AvatarFallback } from '@workspace/ui/components/avatar';
+import { Button } from '@workspace/ui/components/button';
+import { Calendar, House, Star, Trophy } from 'lucide-react';
+import Link from 'next/link';
+import { Progress } from '@workspace/ui/components/progress';
+import { getInitials } from '@/features/player/utils';
+import { type PlayerStats } from '@workspace/api/qgl-types';
+import { PlayerBadges } from '@/features/player/components/player-badges';
+import { PlayerCardActions } from '@/features/player/components/player-card-actions';
 
 export function PlayerCard({ player }: { player: PlayerStats }) {
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .toUpperCase();
-  };
-
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
       <CardHeader className="pb-2">
@@ -58,28 +25,9 @@ export function PlayerCard({ player }: { player: PlayerStats }) {
               <CardDescription>{player.email}</CardDescription>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href={`/players/${player.id}/edit`}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Modifica
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <PlayerCardActions playerId={player.id} />
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <Badge className={getLevelColor(player.level)}>{player.level}</Badge>
-          <Badge className={getStatusColor(player.status)}>
-            {getStatusText(player.status)}
-          </Badge>
-        </div>
+        <PlayerBadges level={player.level} wins={player.wins} />
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -95,7 +43,6 @@ export function PlayerCard({ player }: { player: PlayerStats }) {
               <span>Win Rate: {player.win_rate.toFixed(0)}%</span>
             </div>
           </div>
-
           <div className="w-full">
             <div className="flex justify-between text-xs mb-1">
               <span>Win Rate</span>
@@ -103,14 +50,10 @@ export function PlayerCard({ player }: { player: PlayerStats }) {
             </div>
             <Progress value={player.win_rate} className="h-2" />
           </div>
-
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span>
-                Iscritto:{" "}
-                {new Date(player.createdAt).toLocaleDateString("en-UK")}
-              </span>
+              <span>Iscritto: {new Date(player.createdAt).toLocaleDateString('en-UK')}</span>
             </div>
             <div className="flex items-center gap-2">
               <House className="h-4 w-4 text-muted-foreground" />

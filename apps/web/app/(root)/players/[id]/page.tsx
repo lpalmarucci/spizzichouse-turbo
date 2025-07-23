@@ -3,26 +3,14 @@ import {
   GET_PLAYER_STATS,
   PLAYER_QUERY_KEY,
   PLAYERS_STATS_QUERY_KEY,
-} from "@/features/player/player.query";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { gqlRequest } from "@/utils/query";
-import React from "react";
-import { PlayerDetail } from "@/features/player/components/player-detail";
-import {
-  GET_RECENT_MATCHES_BY_PLAYER,
-  MATCH_QUERY_KEY,
-  RECENT_MATCH_BY_PLAYER,
-} from "@/features/match/match.query";
+} from '@/features/player/player.query';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { gqlRequest } from '@/utils/query';
+import React from 'react';
+import { PlayerDetail } from '@/features/player/components/player-detail';
+import { GET_RECENT_MATCHES_BY_PLAYER, MATCH_QUERY_KEY, RECENT_MATCH_BY_PLAYER } from '@/features/match/match.query';
 
-export default async function PlayerDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function PlayerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const queryClient = new QueryClient();

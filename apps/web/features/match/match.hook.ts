@@ -1,5 +1,12 @@
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { CreateMatch, Match, MatchHistory, MatchOrderBy, UpdateMatch } from '@workspace/api/qgl-types';
+import {
+  CreateMatch,
+  Match,
+  MatchHistory,
+  MatchOrderBy,
+  MatchPlayerStanding,
+  UpdateMatch,
+} from '@workspace/api/qgl-types';
 import {
   CREATE_MATCH,
   DELETE_MATCH,
@@ -72,7 +79,7 @@ export function useDeleteMatch() {
   });
 }
 export const useGetRecentMatchesByPlayer = (playerId: string) =>
-  useQuery<{ recent_matches: MatchPlayerStanding[] }>({
+  useSuspenseQuery<{ recentMatches: MatchPlayerStanding[] }>({
     queryKey: [MATCH_QUERY_KEY, RECENT_MATCH_BY_PLAYER, playerId],
     queryFn: () => gqlRequest(GET_RECENT_MATCHES_BY_PLAYER, { playerId }),
   });

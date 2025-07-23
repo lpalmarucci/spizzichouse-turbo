@@ -112,8 +112,9 @@ export const DELETE_MATCH = gql`
 `;
 
 export const GET_RECENT_MATCHES_BY_PLAYER = gql`
-  query ($playerId: String!) {
-    recent_matches(id: $playerId) {
+  query recentMatches($playerId: String!) {
+    recentMatches(playerId: $playerId) {
+      id
       title
       date
       position

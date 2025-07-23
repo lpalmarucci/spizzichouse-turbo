@@ -1,23 +1,16 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar";
-import { Badge } from "@workspace/ui/components/badge";
-import { Calendar, House, Mail, Trophy } from "lucide-react";
-import { getInitials, getLevelColor } from "@/features/player/utils";
-import { Separator } from "@workspace/ui/components/separator";
-import {
-  useGetPlayerById,
-  useGetPlayerStats,
-} from "@/features/player/player.hook";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import { ScreenLoader } from "@/components/screen-loader";
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Avatar, AvatarFallback } from '@workspace/ui/components/avatar';
+import { Badge } from '@workspace/ui/components/badge';
+import { Calendar, House, Mail, Trophy } from 'lucide-react';
+import { getInitials, getLevelColor, formatDate } from '@/features/player/utils';
+import { Separator } from '@workspace/ui/components/separator';
+import { useGetPlayerById, useGetPlayerStats } from '@/features/player/player.hook';
+import { toast } from 'sonner';
+import { redirect } from 'next/navigation';
+import { ScreenLoader } from '@/components/screen-loader';
+import { PlayerBadges } from '@/features/player/components/player-badges';
 
 interface PlayerDetailCardProps {
   id: string;
@@ -30,7 +23,7 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   if (error) {
     toast.error(error.message);
     setTimeout(() => {
-      redirect("/");
+      redirect('/');
     }, 500);
     return;
   }
@@ -40,9 +33,9 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
   }
 
   if (!data) {
-    toast.warning("No match found!");
+    toast.warning('No match found!');
     setTimeout(() => {
-      redirect("/");
+      redirect('/');
     }, 500);
     return;
   }
@@ -59,15 +52,7 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
           </Avatar>
           <div>
             <CardTitle className="text-2xl">{player.full_name}</CardTitle>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge className={getLevelColor(player.level)}>
-                {player.level}
-              </Badge>
-              <Badge variant="outline" className="gap-1 font-semibold">
-                <Trophy className="h-3 w-3 text-indigo-500" />
-                {playerStats?.player_stats?.wins} vittorie
-              </Badge>
-            </div>
+            <PlayerBadges level={player.level} wins={playerStats?.player_stats?.wins} />
           </div>
         </div>
       </CardHeader>
@@ -76,39 +61,20 @@ export function PlayerDetailCard({ id }: PlayerDetailCardProps) {
           <Mail className="h-4 w-4 text-muted-foreground" />
           <span>{player.email}</span>
         </div>
-
         <div className="flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span>
-            Iscritto il {new Date(player.createdAt).toLocaleDateString("en-UK")}
-          </span>
+          <span>Iscritto il {formatDate(player.createdAt)}</span>
         </div>
-
         <div className="flex items-center gap-2 text-sm">
           <House className="h-4 w-4 text-muted-foreground" />
           <span>Principato</span>
         </div>
-
         <Separator />
-
         <div>
           <h3 className="text-sm font-medium mb-2">Bio</h3>
           <p className="text-sm text-muted-foreground">{player.bio}</p>
         </div>
-
         <Separator />
-
-        {/*<div>*/}
-        {/*  <h3 className="text-sm font-medium mb-2">Achievements</h3>*/}
-        {/*  <div className="flex flex-wrap gap-2">*/}
-        {/*    {player.achievements.map((achievement, i) => (*/}
-        {/*      <Badge key={i} variant="outline" className="gap-1">*/}
-        {/*        <Medal className="h-3 w-3 text-primary" />*/}
-        {/*        {achievement}*/}
-        {/*      </Badge>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*</div>*/}
       </CardContent>
     </Card>
   );

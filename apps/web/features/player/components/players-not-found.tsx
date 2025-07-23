@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Filter, Users } from "lucide-react";
-import { Button } from "@workspace/ui/components/button";
-import { PlayerLevel, PlayerStatus } from "@workspace/api/qgl-types";
+import { Filter, Users } from 'lucide-react';
+import { Button } from '@workspace/ui/components/button';
+import { PlayerLevel, PlayerStatus } from '@workspace/api/qgl-types';
 
 interface PlayerNotFoundProps {
   searchQuery: string;
@@ -22,7 +22,7 @@ export function PlayersNotFound({
   onResetAll,
 }: PlayerNotFoundProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+    <div className="flex flex-col items-center justify-center py-16 px-4 text-center" role="status" aria-live="polite">
       <div className="relative mb-6">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-xl opacity-50"></div>
         <div className="relative bg-background/80 backdrop-blur-sm border border-border/50 rounded-full p-6 shadow-xl">
@@ -31,21 +31,13 @@ export function PlayersNotFound({
       </div>
       <h3 className="text-xl font-semibold mb-2">No players found</h3>
       <p className="text-muted-foreground max-w-md mb-6 flex flex-col gap-2">
-        <span>
-          {searchQuery
-            ? `No players match "${searchQuery}"`
-            : "No players match your current filters"}
-        </span>
+        <span>{searchQuery ? `No players match "${searchQuery}"` : 'No players match your current filters'}</span>
         {levelFilter && <span>{`Level: ${levelFilter}`}</span>}
         {statusFilter && <span>{`Status: ${statusFilter}`}</span>}
       </p>
       <div className="flex flex-wrap gap-3 justify-center">
         {searchQuery && (
-          <Button
-            variant="outline"
-            onClick={() => onClearSearch()}
-            className="gap-2"
-          >
+          <Button variant="outline" onClick={() => onClearSearch()} className="gap-2" aria-label="Clear search">
             <svg
               width="15"
               height="15"
@@ -64,15 +56,11 @@ export function PlayersNotFound({
             Clear search
           </Button>
         )}
-        <Button
-          variant="outline"
-          onClick={() => onClearFilters()}
-          className="gap-2"
-        >
+        <Button variant="outline" onClick={() => onClearFilters()} className="gap-2" aria-label="Clear filters">
           <Filter className="h-4 w-4" />
           Clear filters
         </Button>
-        <Button onClick={() => onResetAll()} className="gap-2">
+        <Button onClick={() => onResetAll()} className="gap-2" aria-label="Show all players">
           <Users className="h-4 w-4" />
           Show all players
         </Button>

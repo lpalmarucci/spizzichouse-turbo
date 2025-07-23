@@ -1,8 +1,8 @@
-import { gql } from "graphql-request";
+import { gql } from 'graphql-request';
 
-export const PLAYER_QUERY_KEY = "players";
-export const PLAYERS_HISTORY_QUERY_KEY = "players_history";
-export const PLAYERS_STATS_QUERY_KEY = "players_stats";
+export const PLAYER_QUERY_KEY = 'players';
+export const PLAYERS_HISTORY_QUERY_KEY = 'players_history';
+export const PLAYERS_STATS_QUERY_KEY = 'players_stats';
 
 export const GET_PLAYERS = gql`
   query getPlayers($status: String) {
@@ -33,8 +33,8 @@ export const GET_PLAYER_BY_ID = gql`
 `;
 
 export const GET_PLAYERS_STATS = gql`
-  query getPlayersStats {
-    players_stats {
+  query playersWithStats {
+    playersWithStats {
       wins
       total_matches
       full_name
@@ -50,8 +50,8 @@ export const GET_PLAYERS_STATS = gql`
 `;
 
 export const GET_PLAYER_STATS = gql`
-  query player_stats($id: String!) {
-    player_stats(id: $id) {
+  query playerWithStats($id: String!) {
+    playerWithStats(id: $id) {
       wins
       total_matches
       bio
@@ -66,8 +66,8 @@ export const GET_PLAYER_STATS = gql`
 `;
 
 export const GET_PLAYERS_HISTORY = gql`
-  query players_history {
-    players_history {
+  query playersHistory {
+    playersHistory {
       month
       total
     }
@@ -75,8 +75,8 @@ export const GET_PLAYERS_HISTORY = gql`
 `;
 
 export const UPDATE_PLAYER = gql`
-  mutation UpdatePlayer($id: String!, $player: UpdatePlayer!) {
-    updatePlayer(id: $id, player: $player) {
+  mutation updatePlayer($id: String!, $player: UpdatePlayer!) {
+    updatePlayer(id: $id, data: $player) {
       bio
       createdAt
       email
