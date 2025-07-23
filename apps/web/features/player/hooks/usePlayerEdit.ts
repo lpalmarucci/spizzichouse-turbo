@@ -1,13 +1,10 @@
 'use client';
 
-import { useGetPlayerById, useUpdatePlayer } from '@/features/player/player.hook';
-import { updatePlayerAction } from '@/features/player/player.actions';
-import { useRouter, redirect } from 'next/navigation';
+import { useUpdatePlayer } from '@/features/player/player.hook';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@workspace/ui/zod-resolver';
 import { Player, PlayerLevel, PlayerStatus } from '@workspace/api/qgl-types';
-import { toast } from 'sonner';
 
 const playerSchema = z.object({
   full_name: z.string(),
