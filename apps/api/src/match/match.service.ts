@@ -33,7 +33,7 @@ export class MatchService implements IMatchService {
   }
 
   async update(id: string, dto: UpdateMatchDto): Promise<MatchResponseDto> {
-    const match = await this.matchRepository.update(id, { ...dto });
+    const match = await this.matchRepository.update(id, dto);
     return plainToInstance(MatchResponseDto, match);
   }
 

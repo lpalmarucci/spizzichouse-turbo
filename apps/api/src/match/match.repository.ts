@@ -36,26 +36,42 @@ export class MatchRepository {
   findMany(options: Prisma.MatchFindManyArgs): Promise<PrismaMatch[]> {
     return this.prisma.match.findMany(options);
   }
-
+  /**
+   * Aggiorna un match e sincronizza la relazione con gli utenti (players).
+   * - Aggiorna i dati del match.
+   * - Aggiorna la relazione con i giocatori: collega nuovi playerIds, scollega quelli rimossi.
+   * - Restituisce il match aggiornato con i dettagli dei giocatori.
+   */
   async update(id: string, data: UpdateMatchDto): Promise<PrismaMatch> {
-    const match = await this.findOne(id);
-    const currentPlayerIds = match.players.map((player: any) => player.id);
+    // Recupera il match attuale per ottenere i player collegati
+    const match = await this.prisma.match.findUnique({
+      where: { id },
+      include: { players: true },
+    });
+    if (!match) throw new NotFoundException(`Match with id ${id} not found`);
+
+    const currentPlayerIds = match.players.map((player) => player.id);
     const newPlayerIds = data.playerIds ?? [];
-    const playersToDisconnect = currentPlayerIds.filter((pid) => !newPlayerIds.includes(pid)).map((id) => ({ id }));
+
+    // Determina chi scollegare e chi collegare
+    const playersToDisconnect =
+      newPlayerIds.length > 0
+        ? currentPlayerIds.filter((pid) => !newPlayerIds.includes(pid)).map((id) => ({ id }))
+        : [];
+
     const playersToConnect = newPlayerIds.filter((pid) => !currentPlayerIds.includes(pid)).map((id) => ({ id }));
+
+    // Rimuovi playerIds dal payload per evitare errori Prisma
     const { playerIds, ...matchData } = data;
+
     return this.prisma.match.update({
       where: { id },
       data: {
         ...matchData,
-        ...(playersToConnect.length > 0 || playersToDisconnect.length > 0
-          ? {
-              players: {
-                disconnect: playersToDisconnect,
-                connect: playersToConnect,
-              },
-            }
-          : undefined),
+        players: {
+          ...(playersToDisconnect.length > 0 ? { disconnect: playersToDisconnect } : {}),
+          ...(playersToConnect.length > 0 ? { connect: playersToConnect } : {}),
+        },
       },
       include: { players: true },
     });
