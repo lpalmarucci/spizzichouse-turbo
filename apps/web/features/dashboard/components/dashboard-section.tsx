@@ -3,7 +3,6 @@
 import { Suspense } from 'react';
 import { MatchHistoryChart } from '@/features/dashboard/components/match-history-chart';
 import { PlayersHistory } from '@/features/dashboard/components/players-history';
-import { Skeleton } from '@workspace/ui/components/skeleton';
 import { RecentPlayersSection } from '@/features/dashboard/components/recent-players-section';
 import { AnalyticsSection } from '@/features/dashboard/components/analytics-section';
 import { SkeletonAnalyticsSection } from '@/features/dashboard/components/skeleton-analytics-section';
