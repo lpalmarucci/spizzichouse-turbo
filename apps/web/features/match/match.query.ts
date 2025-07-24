@@ -70,7 +70,7 @@ export const GET_MATCHES_HISTORY = gql`
 
 export const UPDATE_MATCH = gql`
   mutation UpdateMatch($id: String!, $match: UpdateMatch!) {
-    updateMatch(id: $id, match: $match) {
+    updateMatch(id: $id, data: $match) {
       date
       description
       duration

@@ -33,7 +33,7 @@ export const useGetMatches = (
   });
 
 export const useGetMatch = (id: string) =>
-  useQuery<{ match: Match }>({
+  useSuspenseQuery<{ match: Match }>({
     queryKey: [MATCH_QUERY_KEY, id],
     queryFn: () => gqlRequest(GET_MATCH_BY_ID, { id }),
   });
@@ -52,7 +52,7 @@ export const useCreateMatch = () =>
 export const useUpdateMatch = () =>
   useMutation({
     mutationKey: [MATCH_QUERY_KEY],
-    mutationFn: ({ id, match }: { id: string; match: UpdateMatch }) => gqlRequest(UPDATE_MATCH, { match }),
+    mutationFn: ({ id, match }: { id: string; match: UpdateMatch }) => gqlRequest(UPDATE_MATCH, { match, id }),
   });
 
 export function useDeleteMatch() {

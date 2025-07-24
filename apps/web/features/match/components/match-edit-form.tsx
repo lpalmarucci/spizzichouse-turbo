@@ -1,114 +1,47 @@
-"use client";
+'use client';
 
-import React, { useTransition } from "react";
-import { redirect, useRouter } from "next/navigation";
+import React from 'react';
+import { useRouter } from 'next/navigation';
 
-import { Button } from "@workspace/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { Input } from "@workspace/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@workspace/ui/components/select";
-import { Textarea } from "@workspace/ui/components/textarea";
-import { DateTimePicker } from "@/components/date-time-picker";
-import { useGetMatch } from "@/features/match/match.hook";
-import { useForm } from "react-hook-form";
-import { matchSchema, MatchSchemaType } from "@/features/match/match.schema";
-import { zodResolver } from "@workspace/ui/zod-resolver";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@workspace/ui/components/form";
-import { SubmitButton } from "@/components/submit-button";
-import { SelectAvailablePlayers } from "@/features/match/components/select-available-players";
-import { MatchStatus } from "@workspace/api/qgl-types";
-import { toast } from "sonner";
-import { updateMatchAction } from "@/features/match/match.actions";
-import { ScreenLoader } from "@/components/screen-loader";
+import { Button } from '@workspace/ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Input } from '@workspace/ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui/components/select';
+import { Textarea } from '@workspace/ui/components/textarea';
+import { DateTimePicker } from '@/components/date-time-picker';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui/components/form';
+import { SubmitButton } from '@/components/submit-button';
+import { SelectAvailablePlayers } from '@/features/match/components/select-available-players';
+import { MatchStatus } from '@workspace/api/qgl-types';
+import { toast } from 'sonner';
+import { useMatchEditForm } from '@/features/match/hooks/useMatchEditForm';
 
 interface MatchEditFormProps {
   id: string;
 }
 
 export function MatchEditForm({ id }: MatchEditFormProps) {
-  const { data, isLoading, error } = useGetMatch(id);
-
-  if (error) {
-    toast.error(error.message);
-    setTimeout(() => {
-      redirect("/matches");
-    }, 500);
-    return;
-  }
-
-  if (isLoading) {
-    return <ScreenLoader />;
-  }
-
-  if (!data) {
-    toast.warning("No match found!");
-    setTimeout(() => {
-      redirect("/matches");
-    }, 500);
-    return;
-  }
-
-  const { match } = data;
+  const { form, isPending, handleSubmit } = useMatchEditForm(id);
   const router = useRouter();
 
-  const form = useForm<MatchSchemaType>({
-    mode: "onChange",
-    resolver: zodResolver(matchSchema),
-    defaultValues: {
-      title: match?.title ?? "",
-      description: match?.description,
-      duration: match?.duration,
-      date: match?.date ? new Date(match?.date) : new Date(),
-      status: match?.status,
-      playerIds: match?.players?.map((p) => p.id) ?? [],
-    },
-  });
-
-  const [isPending, startTransition] = useTransition();
-
-  async function onFormAction() {
-    startTransition(async () => {
-      const { error } = await updateMatchAction(id, form.getValues());
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      toast.info("Match updated successfully");
+  const handleFormSubmit = async () => {
+    try {
+      await handleSubmit();
+      toast.info('Match updated successfully');
       router.push(`/matches/${id}`);
-    });
-  }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'An error occurred');
+    }
+  };
 
   return (
     <Form {...form}>
-      <form action={onFormAction}>
+      <form action={handleFormSubmit}>
         <div className="grid gap-6">
           <Card>
             <CardHeader>
               <CardTitle>Match Details</CardTitle>
-              <CardDescription>
-                Update the basic information for your card game match.
-              </CardDescription>
+              <CardDescription>Update the basic information for your card game match.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -138,10 +71,7 @@ export function MatchEditForm({ id }: MatchEditFormProps) {
                     <FormItem>
                       <FormLabel>Date</FormLabel>
                       <FormControl>
-                        <DateTimePicker
-                          date={field.value}
-                          setDate={(date) => field.onChange(date)}
-                        />
+                        <DateTimePicker date={field.value} setDate={(date) => field.onChange(date)} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -155,27 +85,18 @@ export function MatchEditForm({ id }: MatchEditFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        {...field}
-                      >
+                      <Select defaultValue={field.value} onValueChange={field.onChange} {...field}>
                         <FormControl>
-                          <SelectTrigger
-                            id="level"
-                            className="border-primary/20 focus:ring-primary/30 w-full"
-                          >
+                          <SelectTrigger id="level" className="border-primary/20 focus:ring-primary/30 w-full">
                             <SelectValue placeholder="Seleziona un livello" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {Object.values(MatchStatus).map(
-                            (value: MatchStatus) => (
-                              <SelectItem value={value!} key={value}>
-                                {value}
-                              </SelectItem>
-                            ),
-                          )}
+                          {Object.values(MatchStatus).map((value: MatchStatus) => (
+                            <SelectItem value={value!} key={value}>
+                              {value}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -193,7 +114,7 @@ export function MatchEditForm({ id }: MatchEditFormProps) {
                         {...field}
                         defaultValue={field.value?.toString()}
                         onValueChange={(v) => field.onChange(Number(v))}
-                        value={field.value?.toString() ?? "0"}
+                        value={field.value?.toString() ?? '0'}
                       >
                         <FormControl>
                           <SelectTrigger className="w-full">
@@ -239,9 +160,7 @@ export function MatchEditForm({ id }: MatchEditFormProps) {
           <Card>
             <CardHeader>
               <CardTitle>Players</CardTitle>
-              <CardDescription>
-                Update the players who will participate in this match.
-              </CardDescription>
+              <CardDescription>Update the players who will participate in this match.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <FormField
@@ -263,13 +182,15 @@ export function MatchEditForm({ id }: MatchEditFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.back()}
+              onClick={() => {
+                form.reset();
+                router.back();
+              }}
+              disabled={isPending}
             >
               Cancel
             </Button>
-            <SubmitButton disabled={isPending || !form.formState.isValid}>
-              Save changes
-            </SubmitButton>
+            <SubmitButton disabled={isPending || !form.formState.isValid}>Save changes</SubmitButton>
           </div>
         </div>
       </form>
