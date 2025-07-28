@@ -59,10 +59,10 @@ export function RecentPlayersMatchesTable() {
                   ))}
                 </div>
               </TableCell>
-              <TableCell>{match.status === MatchStatus.Completed ? winner : '-'}</TableCell>
               <TableCell>
                 <Badge className={getStatusColor(match.status)}>{getStatusText(match.status)}</Badge>
               </TableCell>
+              <TableCell>{match.status === MatchStatus.Completed ? winner : '-'}</TableCell>
               <TableCell>
                 <Button variant="link" asChild>
                   <Link href={`/matches/${match.id}`}>View</Link>
