@@ -9,12 +9,13 @@ export function useCreateMatchDialog() {
     resolver: zodResolver(matchSchema),
     defaultValues: MATCH_FORM_INITIAL_VALUES,
   });
-  const { mutateAsync: createMatch, isPending: isCreatingMatch } = useCreateMatch();
+  const { mutateAsync: createMatchMutation, isPending: isCreatingMatch, data } = useCreateMatch();
 
-  const handleSubmit = async () => {
+  const createMatch = async () => {
     try {
-      await createMatch(form.getValues());
+      const newMatch = await createMatchMutation(form.getValues());
       form.reset();
+      return Promise.resolve(newMatch.createMatch);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -27,7 +28,7 @@ export function useCreateMatchDialog() {
   return {
     form,
     isCreatingMatch,
-    handleSubmit,
+    createMatch,
     resetFormFields,
   };
 }

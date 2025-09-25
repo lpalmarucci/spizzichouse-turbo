@@ -11,11 +11,14 @@ import ConfirmationDialog from '@/components/confirmation-dialog';
 import CreateMatchDialog from './create-match-dialog';
 import { useMatches } from '../hooks/useMatches';
 import ErrorState from '@/components/error-state';
+import { Match } from '@workspace/api/qgl-types';
+import { useRouter } from 'next/navigation';
 
 export function MatchesSection() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [matchIdToDelete, setMatchIdToDelete] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     searchQuery,
@@ -35,11 +38,16 @@ export function MatchesSection() {
   if (isLoading) return <ScreenLoader />;
   if (error) return <ErrorState message="Errore nel caricamento delle partite" />;
 
-  const handleOpenChange = (open: boolean, shouldRefresh?: boolean) => {
-    setShowCreateDialog(open);
+  const handleCloseCreateMatchDialog = (shouldRefresh?: boolean) => {
+    setShowCreateDialog(false);
     if (shouldRefresh) {
       refetchMatches();
     }
+  };
+
+  const handleSubmitCreateMatchDialog = (match: Match) => {
+    router.push(`/matches/${match.id}`);
+    handleCloseCreateMatchDialog(false);
   };
 
   const handleConfirmDelete = useCallback(async () => {
@@ -95,7 +103,13 @@ export function MatchesSection() {
         </div>
       </div>
 
-      {showCreateDialog && <CreateMatchDialog open={showCreateDialog} onOpenChange={handleOpenChange} />}
+      {showCreateDialog && (
+        <CreateMatchDialog
+          open={showCreateDialog}
+          onClose={handleCloseCreateMatchDialog}
+          onSubmit={handleSubmitCreateMatchDialog}
+        />
+      )}
 
       {showDeleteDialog && (
         <ConfirmationDialog

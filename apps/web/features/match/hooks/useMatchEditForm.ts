@@ -1,12 +1,10 @@
-import { useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@workspace/ui/zod-resolver';
 import { useGetMatch } from '@/features/match/match.hook';
 import { matchSchema, MatchSchemaType } from '@/features/match/match.schema';
-import { updateMatchAction } from '@/features/match/match.actions';
 import { useUpdateMatch } from '../match.hook';
+import { MatchStatus } from '@workspace/api/qgl-types';
+import { redirect } from 'next/navigation';
 
 export const useMatchEditForm = (id: string) => {
   const {
@@ -14,9 +12,10 @@ export const useMatchEditForm = (id: string) => {
     isLoading,
     error,
   } = useGetMatch(id);
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const { mutateAsync: mutateUpdateMatch } = useUpdateMatch();
+
+  if (match.status === MatchStatus.Completed) return redirect(`/matches/${id}`);
+
+  const { mutateAsync: mutateUpdateMatch, isPending } = useUpdateMatch();
 
   const form = useForm<MatchSchemaType>({
     mode: 'onChange',

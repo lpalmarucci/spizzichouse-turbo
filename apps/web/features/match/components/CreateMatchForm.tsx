@@ -1,4 +1,4 @@
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@workspace/ui/components/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui/components/form';
 import { Input } from '@workspace/ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui/components/select';
 import { DateTimePicker } from '@/components/date-time-picker';
@@ -10,22 +10,24 @@ import React from 'react';
 import { useCreateMatchDialog } from '../hooks/useCreateMatchDialog';
 import { toast } from 'sonner';
 import { DialogClose, DialogFooter } from '@workspace/ui/components/dialog';
-import { useQueryClient } from '@tanstack/react-query';
-import { MATCH_QUERY_KEY } from '../match.query';
+import { Match } from '@workspace/api/qgl-types';
 
 interface CreateMatchFormProps {
-  onClose: (shouldRefresh?: boolean) => void;
+  onClose: () => void;
+  onSubmit: (match: Match) => void;
 }
 
-export function CreateMatchForm({ onClose }: CreateMatchFormProps) {
-  const { form, isCreatingMatch, handleSubmit } = useCreateMatchDialog();
+export function CreateMatchForm({ onSubmit, onClose }: CreateMatchFormProps) {
+  const { form, isCreatingMatch, createMatch } = useCreateMatchDialog();
 
   const handleFormSubmit = async () => {
     try {
-      await handleSubmit();
+      const match = await createMatch();
+      if (!match) return;
       toast.success('Match created successfully');
-      onClose(true);
+      onSubmit(match);
     } catch (error) {
+      debugger;
       toast.error('Failed to create match');
     }
   };
@@ -135,7 +137,7 @@ export function CreateMatchForm({ onClose }: CreateMatchFormProps) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline" onClick={() => onClose(false)}>
+            <Button type="button" variant="outline" onClick={() => onClose()}>
               Cancel
             </Button>
           </DialogClose>

@@ -1,5 +1,3 @@
-import { MatchEditForm } from '@/features/match/components/match-edit-form';
-import { Detail, DetailHeader } from '@/components/detail';
 import { GET_MATCH_BY_ID, MATCH_QUERY_KEY } from '@/features/match/match.query';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '@/utils/query';

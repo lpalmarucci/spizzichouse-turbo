@@ -44,11 +44,17 @@ export const useGetMatchesHistory = () =>
     queryFn: () => gqlRequest(GET_MATCHES_HISTORY),
   });
 
-export const useCreateMatch = () =>
-  useMutation({
+export const useCreateMatch = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationKey: [MATCH_QUERY_KEY],
-    mutationFn: (match: CreateMatch) => gqlRequest(CREATE_MATCH, { match }),
+    mutationFn: (match: CreateMatch) => gqlRequest<{ createMatch: Match }>(CREATE_MATCH, { match }),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: [MATCH_QUERY_KEY] });
+      return data;
+    },
   });
+};
 export const useUpdateMatch = () =>
   useMutation({
     mutationKey: [MATCH_QUERY_KEY],
